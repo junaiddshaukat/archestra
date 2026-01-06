@@ -37,6 +37,12 @@ export function detectProviderFromModel(model: string): SupportedChatProvider {
     return "openai";
   }
 
+  // Cerebras models: require "cerebras" indicator in model name
+  // Note: llama/deepseek/qwen alone could conflict with OpenAI's support for these models
+  if (lowerModel.includes("cerebras")) {
+    return "cerebras";
+  }
+
   // Default to anthropic for backwards compatibility
   return "anthropic";
 }
@@ -86,6 +92,9 @@ export async function resolveProviderApiKey(params: {
   if (!providerApiKey) {
     if (provider === "anthropic" && config.chat.anthropic.apiKey) {
       providerApiKey = config.chat.anthropic.apiKey;
+      apiKeySource = "environment";
+    } else if (provider === "cerebras" && config.chat.cerebras.apiKey) {
+      providerApiKey = config.chat.cerebras.apiKey;
       apiKeySource = "environment";
     } else if (provider === "openai" && config.chat.openai.apiKey) {
       providerApiKey = config.chat.openai.apiKey;
@@ -164,6 +173,19 @@ export function createLLMModel(params: {
     const client = createOpenAI({
       apiKey,
       baseURL: `http://localhost:${config.api.port}/v1/openai/${agentId}`,
+      headers,
+    });
+    // Use .chat() to force Chat Completions API (not Responses API)
+    // so our proxy's tool policy evaluation is applied
+    return client.chat(modelName);
+  }
+
+  if (provider === "cerebras") {
+    // URL format: /v1/cerebras/:agentId (SDK appends /chat/completions)
+    // Cerebras uses OpenAI-compatible API
+    const client = createOpenAI({
+      apiKey,
+      baseURL: `http://localhost:${config.api.port}/v1/cerebras/${agentId}`,
       headers,
     });
     // Use .chat() to force Chat Completions API (not Responses API)

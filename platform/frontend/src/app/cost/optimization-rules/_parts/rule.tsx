@@ -46,9 +46,10 @@ function sortModelsByPrice(tokenPrices: TokenPrices): TokenPrices {
 }
 
 const providerDictionary: Record<SupportedProvider, string> = {
-  openai: "OpenAI",
   anthropic: "Anthropic",
+  cerebras: "Cerebras",
   gemini: "Gemini",
+  openai: "OpenAI",
 };
 
 // Helper to get entity display name

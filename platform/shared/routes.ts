@@ -140,6 +140,11 @@ export const RouteId = {
   AnthropicMessagesWithDefaultAgent: "anthropicMessagesWithDefaultAgent",
   AnthropicMessagesWithAgent: "anthropicMessagesWithAgent",
 
+  // Proxy Routes - Cerebras
+  CerebrasChatCompletionsWithDefaultAgent:
+    "cerebrasChatCompletionsWithDefaultAgent",
+  CerebrasChatCompletionsWithAgent: "cerebrasChatCompletionsWithAgent",
+
   // Chat Routes
   StreamChat: "streamChat",
   GetChatConversations: "getChatConversations",

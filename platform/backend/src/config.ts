@@ -235,6 +235,11 @@ export default {
           process.env.ARCHESTRA_GEMINI_VERTEX_AI_CREDENTIALS_FILE || "",
       },
     },
+    cerebras: {
+      baseUrl:
+        process.env.ARCHESTRA_CEREBRAS_BASE_URL || "https://api.cerebras.ai/v1",
+      useV2Routes: process.env.ARCHESTRA_CEREBRAS_USE_V2_ROUTES !== "false",
+    },
   },
   chat: {
     openai: {
@@ -254,6 +259,12 @@ export default {
       baseUrl:
         process.env.ARCHESTRA_CHAT_GEMINI_BASE_URL ||
         "https://generativelanguage.googleapis.com",
+    },
+    cerebras: {
+      apiKey: process.env.ARCHESTRA_CHAT_CEREBRAS_API_KEY || "",
+      baseUrl:
+        process.env.ARCHESTRA_CHAT_CEREBRAS_BASE_URL ||
+        "https://api.cerebras.ai/v1",
     },
     mcp: {
       remoteServerUrl: process.env.ARCHESTRA_CHAT_MCP_SERVER_URL || "",

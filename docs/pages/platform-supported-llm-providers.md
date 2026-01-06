@@ -126,3 +126,31 @@ With this configuration, Application Default Credentials (ADC) will automaticall
 
 For non-GKE environments or when Workload Identity isn't available, set `ARCHESTRA_GEMINI_VERTEX_AI_CREDENTIALS_FILE` to the path of a service account JSON key file.
 
+## Cerebras
+
+[Cerebras](https://www.cerebras.ai/) provides fast inference for open-source AI models through an OpenAI-compatible API.
+
+### Supported Cerebras APIs
+
+- **Chat Completions API** (`/chat/completions`) - ✅ Fully supported
+
+### Cerebras Connection Details
+
+- **Base URL**: `http://localhost:9000/v1/cerebras/{agent-id}`
+- **Authentication**: Pass your Cerebras API key in the `Authorization` header as `Bearer <your-api-key>`
+
+### Supported Models
+
+Cerebras supports various open-source models including:
+
+- **Llama models** (e.g., `llama-4-scout-17b-16e-instruct`, `llama-3.3-70b`)
+- **DeepSeek models** (e.g., `deepseek-r1-distill-llama-70b`)
+- **Qwen models** (e.g., `qwen-3-32b`)
+
+### Important Notes
+
+- **OpenAI-Compatible**: Cerebras uses an OpenAI-compatible API, so you can use OpenAI SDK libraries with the Cerebras base URL.
+- **Tool Support**: Function calling (tool use) is fully supported, including tool invocation policies and trusted data policies.
+- **Streaming**: Cerebras streaming responses are fully supported.
+- **Getting an API Key**: You can get a Cerebras API key from the [Cerebras Cloud](https://cloud.cerebras.ai/platform) platform.
+

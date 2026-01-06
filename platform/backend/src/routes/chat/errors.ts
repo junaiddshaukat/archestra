@@ -674,6 +674,7 @@ const providerParsers: Record<SupportedProvider, ErrorParser> = {
   openai: parseOpenAIError,
   anthropic: parseAnthropicError,
   gemini: parseGeminiError,
+  cerebras: parseOpenAIError, // Cerebras uses OpenAI-compatible API
 };
 
 /**
@@ -685,6 +686,7 @@ const providerMappers: Record<SupportedProvider, ErrorMapper> = {
   openai: mapOpenAIErrorWrapper,
   anthropic: mapAnthropicErrorWrapper,
   gemini: mapGeminiErrorWrapper,
+  cerebras: mapOpenAIErrorWrapper, // Cerebras uses OpenAI-compatible API
 };
 
 // =============================================================================

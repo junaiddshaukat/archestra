@@ -1,6 +1,7 @@
 import type { SupportedProvider } from "@shared";
 import type { PartialUIMessage } from "@/components/chatbot-demo";
 import AnthropicMessagesInteraction from "./llmProviders/anthropic";
+import CerebrasChatCompletionInteraction from "./llmProviders/cerebras";
 import type {
   DualLlmResult,
   Interaction,
@@ -112,10 +113,14 @@ export class DynamicInteraction implements InteractionUtils {
   }
 
   private getInteractionClass(interaction: Interaction): InteractionUtils {
-    if (this.type === "openai:chatCompletions") {
+    // Use string comparison since provider discriminator types are determined at runtime
+    const type = this.type as string;
+    if (type === "openai:chatCompletions") {
       return new OpenAiChatCompletionInteraction(interaction);
-    } else if (this.type === "anthropic:messages") {
+    } else if (type === "anthropic:messages") {
       return new AnthropicMessagesInteraction(interaction);
+    } else if (type === "cerebras:chatCompletions") {
+      return new CerebrasChatCompletionInteraction(interaction);
     }
     return new GeminiGenerateContentInteraction(interaction);
   }

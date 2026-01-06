@@ -41,6 +41,7 @@ import AgentLabelModel from "@/models/agent-label";
 import {
   Anthropic,
   ApiError,
+  Cerebras,
   Gemini,
   OpenAi,
   WebSocketMessageSchema,
@@ -90,6 +91,12 @@ export function registerOpenApiSchemas() {
   });
   z.globalRegistry.add(Anthropic.API.MessagesResponseSchema, {
     id: "AnthropicMessagesResponse",
+  });
+  z.globalRegistry.add(Cerebras.API.ChatCompletionRequestSchema, {
+    id: "CerebrasChatCompletionRequest",
+  });
+  z.globalRegistry.add(Cerebras.API.ChatCompletionResponseSchema, {
+    id: "CerebrasChatCompletionResponse",
   });
   z.globalRegistry.add(WebSocketMessageSchema, {
     id: "WebSocketMessage",

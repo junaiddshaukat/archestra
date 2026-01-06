@@ -18120,6 +18120,7 @@
                         "type": "string",
                         "enum": [
                           "anthropic",
+                          "cerebras",
                           "openai",
                           "gemini"
                         ]
@@ -18430,6 +18431,7 @@
                     "type": "string",
                     "enum": [
                       "anthropic",
+                      "cerebras",
                       "openai",
                       "gemini"
                     ]
@@ -18491,6 +18493,7 @@
                       "type": "string",
                       "enum": [
                         "anthropic",
+                        "cerebras",
                         "openai",
                         "gemini"
                       ]
@@ -18769,6 +18772,7 @@
               "type": "string",
               "enum": [
                 "anthropic",
+                "cerebras",
                 "openai",
                 "gemini"
               ]
@@ -18803,6 +18807,7 @@
                         "type": "string",
                         "enum": [
                           "anthropic",
+                          "cerebras",
                           "openai",
                           "gemini"
                         ]
@@ -19136,6 +19141,7 @@
                       "type": "string",
                       "enum": [
                         "anthropic",
+                        "cerebras",
                         "openai",
                         "gemini"
                       ]
@@ -19507,6 +19513,7 @@
                       "type": "string",
                       "enum": [
                         "anthropic",
+                        "cerebras",
                         "openai",
                         "gemini"
                       ]
@@ -20035,6 +20042,7 @@
               "type": "string",
               "enum": [
                 "anthropic",
+                "cerebras",
                 "openai",
                 "gemini"
               ]
@@ -20064,6 +20072,7 @@
                         "type": "string",
                         "enum": [
                           "anthropic",
+                          "cerebras",
                           "openai",
                           "gemini"
                         ]
@@ -44621,7 +44630,8 @@
                         "enum": [
                           "openai",
                           "gemini",
-                          "anthropic"
+                          "anthropic",
+                          "cerebras"
                         ]
                       },
                       "targetModel": {
@@ -44932,7 +44942,8 @@
                     "enum": [
                       "openai",
                       "gemini",
-                      "anthropic"
+                      "anthropic",
+                      "cerebras"
                     ]
                   },
                   "targetModel": {
@@ -45018,7 +45029,8 @@
                       "enum": [
                         "openai",
                         "gemini",
-                        "anthropic"
+                        "anthropic",
+                        "cerebras"
                       ]
                     },
                     "targetModel": {
@@ -45330,7 +45342,8 @@
                     "enum": [
                       "openai",
                       "gemini",
-                      "anthropic"
+                      "anthropic",
+                      "cerebras"
                     ]
                   },
                   "targetModel": {
@@ -45420,7 +45433,8 @@
                       "enum": [
                         "openai",
                         "gemini",
-                        "anthropic"
+                        "anthropic",
+                        "cerebras"
                       ]
                     },
                     "targetModel": {
@@ -56305,7 +56319,8 @@
                         "enum": [
                           "openai",
                           "gemini",
-                          "anthropic"
+                          "anthropic",
+                          "cerebras"
                         ]
                       },
                       "model": {
@@ -56571,7 +56586,8 @@
                     "enum": [
                       "openai",
                       "gemini",
-                      "anthropic"
+                      "anthropic",
+                      "cerebras"
                     ]
                   },
                   "model": {
@@ -56614,7 +56630,8 @@
                       "enum": [
                         "openai",
                         "gemini",
-                        "anthropic"
+                        "anthropic",
+                        "cerebras"
                       ]
                     },
                     "model": {
@@ -56900,7 +56917,8 @@
                       "enum": [
                         "openai",
                         "gemini",
-                        "anthropic"
+                        "anthropic",
+                        "cerebras"
                       ]
                     },
                     "model": {
@@ -57165,7 +57183,8 @@
                     "enum": [
                       "openai",
                       "gemini",
-                      "anthropic"
+                      "anthropic",
+                      "cerebras"
                     ]
                   },
                   "model": {
@@ -57213,7 +57232,8 @@
                       "enum": [
                         "openai",
                         "gemini",
-                        "anthropic"
+                        "anthropic",
+                        "cerebras"
                       ]
                     },
                     "model": {

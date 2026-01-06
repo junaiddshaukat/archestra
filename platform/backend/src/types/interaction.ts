@@ -2,7 +2,7 @@ import { SupportedProvidersDiscriminatorSchema } from "@shared";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { schema } from "@/database";
-import { Anthropic, Gemini, OpenAi } from "./llm-providers";
+import { Anthropic, Cerebras, Gemini, OpenAi } from "./llm-providers";
 
 export const UserInfoSchema = z.object({
   id: z.string(),
@@ -17,12 +17,14 @@ export const InteractionRequestSchema = z.union([
   OpenAi.API.ChatCompletionRequestSchema,
   Gemini.API.GenerateContentRequestSchema,
   Anthropic.API.MessagesRequestSchema,
+  Cerebras.API.ChatCompletionRequestSchema,
 ]);
 
 export const InteractionResponseSchema = z.union([
   OpenAi.API.ChatCompletionResponseSchema,
   Gemini.API.GenerateContentResponseSchema,
   Anthropic.API.MessagesResponseSchema,
+  Cerebras.API.ChatCompletionResponseSchema,
 ]);
 
 /**
@@ -57,6 +59,13 @@ export const SelectInteractionSchema = z.discriminatedUnion("type", [
     request: Anthropic.API.MessagesRequestSchema,
     processedRequest: Anthropic.API.MessagesRequestSchema.nullable().optional(),
     response: Anthropic.API.MessagesResponseSchema,
+  }),
+  BaseSelectInteractionSchema.extend({
+    type: z.enum(["cerebras:chatCompletions"]),
+    request: Cerebras.API.ChatCompletionRequestSchema,
+    processedRequest:
+      Cerebras.API.ChatCompletionRequestSchema.nullable().optional(),
+    response: Cerebras.API.ChatCompletionResponseSchema,
   }),
 ]);
 
