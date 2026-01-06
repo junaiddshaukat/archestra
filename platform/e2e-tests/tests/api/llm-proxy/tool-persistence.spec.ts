@@ -130,6 +130,30 @@ const geminiConfig: ToolPersistenceTestConfig = {
   }),
 };
 
+const cerebrasConfig: ToolPersistenceTestConfig = {
+  providerName: "Cerebras",
+
+  endpoint: (agentId) => `/v1/cerebras/${agentId}/chat/completions`,
+
+  headers: (wiremockStub) => ({
+    Authorization: `Bearer ${wiremockStub}`,
+    "Content-Type": "application/json",
+  }),
+
+  buildRequest: (content, tools) => ({
+    model: "llama-4-scout-17b-16e-instruct",
+    messages: [{ role: "user", content }],
+    tools: tools.map((t) => ({
+      type: "function",
+      function: {
+        name: t.name,
+        description: t.description,
+        parameters: t.parameters,
+      },
+    })),
+  }),
+};
+
 // =============================================================================
 // Test Suite
 // =============================================================================
@@ -138,6 +162,7 @@ const testConfigs: ToolPersistenceTestConfig[] = [
   openaiConfig,
   anthropicConfig,
   geminiConfig,
+  cerebrasConfig,
 ];
 
 for (const config of testConfigs) {
