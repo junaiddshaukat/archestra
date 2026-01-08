@@ -4559,6 +4559,7 @@ export type GetAllAgentToolsData = {
         excludeArchestraTools?: boolean;
         sortBy?: 'name' | 'agent' | 'origin' | 'createdAt';
         sortDirection?: 'asc' | 'desc';
+        skipPagination?: boolean;
         limit?: number;
         offset?: number;
     };
@@ -7568,6 +7569,7 @@ export type GetChatConversationsResponses = {
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
+        selectedProvider: string | null;
         hasCustomToolSelection: boolean;
         todoList: string | number | boolean | null | {
             [key: string]: unknown;
@@ -7591,6 +7593,7 @@ export type CreateChatConversationData = {
         promptId?: string | null;
         title?: string | null;
         selectedModel?: string;
+        selectedProvider?: 'anthropic' | 'openai' | 'gemini';
         chatApiKeyId?: string | null;
     };
     path?: never;
@@ -7670,6 +7673,7 @@ export type CreateChatConversationResponses = {
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
+        selectedProvider: string | null;
         hasCustomToolSelection: boolean;
         todoList: string | number | boolean | null | {
             [key: string]: unknown;
@@ -7847,6 +7851,7 @@ export type GetChatConversationResponses = {
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
+        selectedProvider: string | null;
         hasCustomToolSelection: boolean;
         todoList: string | number | boolean | null | {
             [key: string]: unknown;
@@ -7868,6 +7873,7 @@ export type UpdateChatConversationData = {
     body?: {
         title?: string | null;
         selectedModel?: string;
+        selectedProvider?: 'anthropic' | 'openai' | 'gemini';
         chatApiKeyId?: string | null;
         agentId?: string;
         artifact?: string | null;
@@ -7951,6 +7957,7 @@ export type UpdateChatConversationResponses = {
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
+        selectedProvider: string | null;
         hasCustomToolSelection: boolean;
         todoList: string | number | boolean | null | {
             [key: string]: unknown;
@@ -8137,6 +8144,7 @@ export type GenerateChatConversationTitleResponses = {
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
+        selectedProvider: string | null;
         hasCustomToolSelection: boolean;
         todoList: string | number | boolean | null | {
             [key: string]: unknown;
@@ -8239,6 +8247,7 @@ export type UpdateChatMessageResponses = {
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
+        selectedProvider: string | null;
         hasCustomToolSelection: boolean;
         todoList: string | number | boolean | null | {
             [key: string]: unknown;
@@ -9200,6 +9209,7 @@ export type GetFeaturesResponses = {
         byosEnabled: boolean;
         byosVaultKvVersion: '1' | '2';
         geminiVertexAiEnabled: boolean;
+        globalToolPolicy: 'permissive' | 'restrictive';
     };
 };
 
@@ -14717,6 +14727,7 @@ export type GetOrganizationResponses = {
         convertToolResultsToToon: boolean;
         compressionScope: 'organization' | 'team';
         autoConfigureNewTools: boolean;
+        globalToolPolicy: 'permissive' | 'restrictive';
     };
 };
 
@@ -14728,6 +14739,7 @@ export type UpdateOrganizationData = {
         customFont?: 'lato' | 'inter' | 'open-sans' | 'roboto' | 'source-sans-pro';
         limitCleanupInterval?: '1h' | '12h' | '24h' | '1w' | '1m';
         compressionScope?: 'organization' | 'team';
+        globalToolPolicy?: 'permissive' | 'restrictive';
         logo?: string | null;
         onboardingComplete?: boolean;
         convertToolResultsToToon?: boolean;
@@ -14815,6 +14827,7 @@ export type UpdateOrganizationResponses = {
         convertToolResultsToToon: boolean;
         compressionScope: 'organization' | 'team';
         autoConfigureNewTools: boolean;
+        globalToolPolicy: 'permissive' | 'restrictive';
     };
 };
 
@@ -15380,8 +15393,9 @@ export type GetPromptsResponses = {
         userPrompt: string | null;
         systemPrompt: string | null;
         version: number;
-        parentPromptId: string | null;
-        isActive: boolean;
+        history: string | number | boolean | null | {
+            [key: string]: unknown;
+        } | Array<unknown>;
         createdAt: string;
         updatedAt: string;
     }>;
@@ -15396,8 +15410,6 @@ export type CreatePromptData = {
         userPrompt?: string | null;
         systemPrompt?: string | null;
         version?: number;
-        parentPromptId?: string | null;
-        isActive?: boolean;
     };
     path?: never;
     query?: never;
@@ -15475,8 +15487,9 @@ export type CreatePromptResponses = {
         userPrompt: string | null;
         systemPrompt: string | null;
         version: number;
-        parentPromptId: string | null;
-        isActive: boolean;
+        history: string | number | boolean | null | {
+            [key: string]: unknown;
+        } | Array<unknown>;
         createdAt: string;
         updatedAt: string;
     };
@@ -15643,8 +15656,9 @@ export type GetPromptResponses = {
         userPrompt: string | null;
         systemPrompt: string | null;
         version: number;
-        parentPromptId: string | null;
-        isActive: boolean;
+        history: string | number | boolean | null | {
+            [key: string]: unknown;
+        } | Array<unknown>;
         createdAt: string;
         updatedAt: string;
     };
@@ -15737,8 +15751,9 @@ export type UpdatePromptResponses = {
         userPrompt: string | null;
         systemPrompt: string | null;
         version: number;
-        parentPromptId: string | null;
-        isActive: boolean;
+        history: string | number | boolean | null | {
+            [key: string]: unknown;
+        } | Array<unknown>;
         createdAt: string;
         updatedAt: string;
     };
@@ -15818,19 +15833,28 @@ export type GetPromptVersionsResponses = {
     /**
      * Default Response
      */
-    200: Array<{
-        id: string;
-        organizationId: string;
-        name: string;
-        agentId: string;
-        userPrompt: string | null;
-        systemPrompt: string | null;
-        version: number;
-        parentPromptId: string | null;
-        isActive: boolean;
-        createdAt: string;
-        updatedAt: string;
-    }>;
+    200: {
+        current: {
+            id: string;
+            organizationId: string;
+            name: string;
+            agentId: string;
+            userPrompt: string | null;
+            systemPrompt: string | null;
+            version: number;
+            history: string | number | boolean | null | {
+                [key: string]: unknown;
+            } | Array<unknown>;
+            createdAt: string;
+            updatedAt: string;
+        };
+        history: Array<{
+            version: number;
+            userPrompt: string | null;
+            systemPrompt: string | null;
+            createdAt: string;
+        }>;
+    };
 };
 
 export type GetPromptVersionsResponse = GetPromptVersionsResponses[keyof GetPromptVersionsResponses];
@@ -15940,7 +15964,7 @@ export type GetPromptToolsResponse = GetPromptToolsResponses[keyof GetPromptTool
 
 export type RollbackPromptData = {
     body: {
-        versionId: string;
+        version: number;
     };
     path: {
         id: string;
@@ -16020,8 +16044,9 @@ export type RollbackPromptResponses = {
         userPrompt: string | null;
         systemPrompt: string | null;
         version: number;
-        parentPromptId: string | null;
-        isActive: boolean;
+        history: string | number | boolean | null | {
+            [key: string]: unknown;
+        } | Array<unknown>;
         createdAt: string;
         updatedAt: string;
     };
