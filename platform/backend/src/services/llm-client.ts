@@ -1,4 +1,5 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
+import { createCerebras } from "@ai-sdk/cerebras";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
 import { EXTERNAL_AGENT_ID_HEADER, USER_ID_HEADER } from "@shared";
@@ -196,15 +197,12 @@ export function createLLMModel(params: {
 
   if (provider === "cerebras") {
     // URL format: /v1/cerebras/:agentId (SDK appends /chat/completions)
-    // Cerebras uses OpenAI-compatible API
-    const client = createOpenAI({
+    const client = createCerebras({
       apiKey,
       baseURL: `http://localhost:${config.api.port}/v1/cerebras/${agentId}`,
       headers,
     });
-    // Use .chat() to force Chat Completions API (not Responses API)
-    // so our proxy's tool policy evaluation is applied
-    return client.chat(modelName);
+    return client(modelName);
   }
 
   throw new Error(`Unsupported provider: ${provider}`);

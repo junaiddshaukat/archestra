@@ -24318,8 +24318,9 @@
                     "type": "string",
                     "enum": [
                       "anthropic",
-                      "openai",
-                      "gemini"
+                      "cerebras",
+                      "gemini",
+                      "openai"
                     ]
                   },
                   "chatApiKeyId": {
@@ -25083,8 +25084,9 @@
                     "type": "string",
                     "enum": [
                       "anthropic",
-                      "openai",
-                      "gemini"
+                      "cerebras",
+                      "gemini",
+                      "openai"
                     ]
                   },
                   "chatApiKeyId": {

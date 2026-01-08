@@ -7593,7 +7593,7 @@ export type CreateChatConversationData = {
         promptId?: string | null;
         title?: string | null;
         selectedModel?: string;
-        selectedProvider?: 'anthropic' | 'openai' | 'gemini';
+        selectedProvider?: 'anthropic' | 'cerebras' | 'gemini' | 'openai';
         chatApiKeyId?: string | null;
     };
     path?: never;
@@ -7873,7 +7873,7 @@ export type UpdateChatConversationData = {
     body?: {
         title?: string | null;
         selectedModel?: string;
-        selectedProvider?: 'anthropic' | 'openai' | 'gemini';
+        selectedProvider?: 'anthropic' | 'cerebras' | 'gemini' | 'openai';
         chatApiKeyId?: string | null;
         agentId?: string;
         artifact?: string | null;
