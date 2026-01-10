@@ -93,6 +93,7 @@ export const RouteId = {
 
   // Tool Routes
   GetTools: "getTools",
+  GetToolsWithAssignments: "getToolsWithAssignments",
   GetUnassignedTools: "getUnassignedTools",
 
   // Interaction Routes
@@ -203,6 +204,9 @@ export const RouteId = {
   GetOrganization: "getOrganization",
   UpdateOrganization: "updateOrganization",
   GetOnboardingStatus: "getOnboardingStatus",
+
+  // Appearance Routes (public/unauthenticated)
+  GetPublicAppearance: "getPublicAppearance",
 
   // SSO Provider Routes
   GetPublicSsoProviders: "getPublicSsoProviders",

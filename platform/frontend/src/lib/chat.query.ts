@@ -1,4 +1,8 @@
-import { archestraApiSdk, type SupportedProvider } from "@shared";
+import {
+  archestraApiSdk,
+  isBrowserMcpTool,
+  type SupportedProvider,
+} from "@shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -280,11 +284,12 @@ export function useClearConversationEnabledTools() {
  */
 export function useProfileToolsWithIds(agentId: string | undefined) {
   return useQuery({
-    queryKey: ["agents", agentId, "tools"],
+    queryKey: ["agents", agentId, "tools", "mcp-only"],
     queryFn: async () => {
       if (!agentId) return [];
       const { data, error } = await getAgentTools({
         path: { agentId },
+        query: { excludeLlmProxyOrigin: true },
       });
       if (error) throw new Error("Failed to fetch profile tools");
       return data;
@@ -314,4 +319,15 @@ export function usePromptTools(promptId: string | undefined) {
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000,
   });
+}
+
+export function useHasPlaywrightMcpTools(agentId: string | undefined) {
+  const toolsQuery = useChatProfileMcpTools(agentId);
+
+  return (
+    toolsQuery.data?.some((tool) => {
+      const toolName = tool.name;
+      return typeof toolName === "string" && isBrowserMcpTool(toolName);
+    }) ?? false
+  );
 }

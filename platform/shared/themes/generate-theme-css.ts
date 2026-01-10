@@ -30,18 +30,51 @@ interface ThemeItem {
   };
 }
 
+// Variables to include from themes (in addition to oklch colors)
+const INCLUDED_VARS = [
+  // Border radius
+  "radius",
+  // Fonts
+  "font-sans",
+  "font-mono",
+  "font-serif",
+  // Spacing
+  "spacing",
+  // Letter spacing / tracking
+  "letter-spacing",
+  "tracking-tighter",
+  "tracking-tight",
+  "tracking-normal",
+  "tracking-wide",
+  "tracking-wider",
+  "tracking-widest",
+  // Shadows
+  "shadow-2xs",
+  "shadow-xs",
+  "shadow-sm",
+  "shadow",
+  "shadow-md",
+  "shadow-lg",
+  "shadow-xl",
+  "shadow-2xl",
+];
+
 /**
  * Generate CSS variables for a theme
- * Only OKLCH color values are active - all other variables are commented out
+ * Includes OKLCH color values, fonts, spacing, tracking, radius, and shadows
  */
 function generateCSSVars(vars: Record<string, string>): string {
   return Object.entries(vars)
     .map(([key, value]) => {
-      // Only keep variables with oklch values (colors)
+      // Keep variables with oklch values (colors)
       if (value.includes("oklch")) {
         return `  --${key}: ${value};`;
       }
-      // ignore everything else (fonts, radius, shadows, etc.)
+      // Keep other included variables
+      if (INCLUDED_VARS.includes(key)) {
+        return `  --${key}: ${value};`;
+      }
+      // ignore everything else
       return undefined;
     })
     .filter(Boolean)
@@ -50,15 +83,16 @@ function generateCSSVars(vars: Record<string, string>): string {
 
 /**
  * Generate CSS class for a theme
+ * Uses html.theme-* selector for higher specificity to override :root defaults
  */
 function generateThemeCSS(theme: ThemeItem): string {
   const className = `theme-${theme.name}`;
 
-  // Generate light mode CSS
-  const lightCSS = `.${className} {\n${generateCSSVars(theme.cssVars.light)}\n}`;
+  // Generate light mode CSS - use html.class for higher specificity than :root
+  const lightCSS = `html.${className} {\n${generateCSSVars(theme.cssVars.light)}\n}`;
 
   // Generate dark mode CSS
-  const darkCSS = `.dark.${className} {\n${generateCSSVars(theme.cssVars.dark)}\n}`;
+  const darkCSS = `html.dark.${className} {\n${generateCSSVars(theme.cssVars.dark)}\n}`;
 
   return `/* ${theme.title} */\n${lightCSS}\n\n${darkCSS}`;
 }
