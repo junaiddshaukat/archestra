@@ -21,8 +21,7 @@ describe("parseThinkingTags", () => {
   });
 
   it("should handle think block at the end", () => {
-    const text =
-      "Here is my response.<think>That was a good answer.</think>";
+    const text = "Here is my response.<think>That was a good answer.</think>";
     const result = parseThinkingTags(text);
 
     expect(result).toEqual([
