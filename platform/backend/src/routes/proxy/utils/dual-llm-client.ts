@@ -235,7 +235,7 @@ export class CerebrasDualLlmClient implements DualLlmClient {
   private client: OpenAI;
   private model: string;
 
-  constructor(apiKey: string, model = "llama-4-scout-17b-16e-instruct") {
+  constructor(apiKey: string, model = "gpt-oss-120b") {
     logger.debug({ model }, "[dualLlmClient] Cerebras: initializing client");
     this.client = new OpenAI({
       apiKey,
