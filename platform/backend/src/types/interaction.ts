@@ -2,7 +2,14 @@ import { SupportedProvidersDiscriminatorSchema } from "@shared";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { schema } from "@/database";
-import { Anthropic, Cerebras, Gemini, Ollama, OpenAi, Vllm } from "./llm-providers";
+import {
+  Anthropic,
+  Cerebras,
+  Gemini,
+  Ollama,
+  OpenAi,
+  Vllm,
+} from "./llm-providers";
 
 export const UserInfoSchema = z.object({
   id: z.string(),
@@ -86,6 +93,9 @@ export const SelectInteractionSchema = z.discriminatedUnion("type", [
     processedRequest:
       Cerebras.API.ChatCompletionRequestSchema.nullable().optional(),
     response: Cerebras.API.ChatCompletionResponseSchema,
+    requestType: RequestTypeSchema.optional(),
+    /** Resolved prompt name if externalAgentId matches a prompt ID */
+    externalAgentIdLabel: z.string().nullable().optional(),
   }),
   BaseSelectInteractionSchema.extend({
     type: z.enum(["vllm:chatCompletions"]),
