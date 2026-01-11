@@ -9,6 +9,10 @@
 import { encode as toonEncode } from "@toon-format/toon";
 import { get } from "lodash-es";
 import OpenAIProvider from "openai";
+import type {
+  ChatCompletionCreateParamsNonStreaming,
+  ChatCompletionCreateParamsStreaming,
+} from "openai/resources/chat/completions/completions";
 import config from "@/config";
 import { getObservableFetch } from "@/llm-metrics";
 import logger from "@/logging";
@@ -30,7 +34,19 @@ import type {
   ToonCompressionResult,
   UsageView,
 } from "@/types";
+import { estimateMessagesSize } from "@/utils/message-size";
+import {
+  estimateToolResultContentLength,
+  previewToolResultContent,
+} from "@/utils/tool-result-preview";
 import { MockOpenAIClient } from "../mock-openai-client";
+import {
+  doesModelSupportImages,
+  hasImageContent,
+  isImageTooLarge,
+  isMcpImageBlock,
+} from "../utils/mcp-image";
+import { stripBrowserToolsResults } from "../utils/summarize-tool-results";
 import type { CompressionStats } from "../utils/toon-conversion";
 import { unwrapToolContent } from "../utils/unwrap-tool-content";
 
@@ -43,6 +59,25 @@ type CerebrasResponse = Cerebras.Types.ChatCompletionsResponse;
 type CerebrasMessages = Cerebras.Types.ChatCompletionsRequest["messages"];
 type CerebrasHeaders = Cerebras.Types.ChatCompletionsHeaders;
 type CerebrasStreamChunk = Cerebras.Types.ChatCompletionChunk;
+
+type CerebrasToolResultImageBlock = {
+  type: "image_url";
+  image_url: {
+    url: string;
+    detail?: "auto" | "low" | "high";
+  };
+};
+
+type CerebrasToolResultTextBlock = {
+  type: "text";
+  text: string;
+};
+
+type CerebrasToolResultContentBlock =
+  | CerebrasToolResultImageBlock
+  | CerebrasToolResultTextBlock;
+
+type CerebrasToolResultContent = string | CerebrasToolResultContentBlock[];
 
 // =============================================================================
 // REQUEST ADAPTER
@@ -167,6 +202,120 @@ class CerebrasRequestAdapter
     };
   }
 
+  convertToolResultContent(messages: CerebrasMessages): CerebrasMessages {
+    const model = this.getModel();
+    const modelSupportsImages = doesModelSupportImages(model);
+    let toolMessagesWithImages = 0;
+    let strippedImageCount = 0;
+
+    // First, analyze all tool messages to understand what we're dealing with
+    for (const message of messages) {
+      if (message.role === "tool") {
+        const contentLength = estimateToolResultContentLength(message.content);
+        const contentSizeKB = Math.round(contentLength.length / 1024);
+        const contentPatternSample = previewToolResultContent(
+          message.content,
+          2000,
+        );
+        const contentPreview = contentPatternSample.slice(0, 200);
+
+        // Check for base64 patterns in preview to avoid full serialization.
+        const hasBase64 =
+          contentPatternSample.includes("data:image") ||
+          contentPatternSample.includes('"type":"image"') ||
+          contentPatternSample.includes('"data":"');
+
+        // Find tool name from previous assistant message
+        const toolName = this.findToolNameInMessages(
+          messages,
+          message.tool_call_id,
+        );
+
+        logger.info(
+          {
+            toolCallId: message.tool_call_id,
+            toolName,
+            contentSizeKB,
+            hasBase64,
+            contentLengthEstimated: contentLength.isEstimated,
+            isArray: Array.isArray(message.content),
+            contentPreview,
+          },
+          "[CerebrasAdapter] Analyzing tool result content",
+        );
+
+        // If it's an array, analyze each item
+        if (Array.isArray(message.content)) {
+          for (const [idx, item] of message.content.entries()) {
+            if (typeof item === "object" && item !== null) {
+              const itemType = (item as Record<string, unknown>).type;
+              const itemLength = estimateToolResultContentLength(item);
+              logger.info(
+                {
+                  toolCallId: message.tool_call_id,
+                  itemIndex: idx,
+                  itemType,
+                  itemSizeKB: Math.round(itemLength.length / 1024),
+                  itemLengthEstimated: itemLength.isEstimated,
+                  isMcpImage: isMcpImageBlock(item),
+                },
+                "[CerebrasAdapter] Tool result array item",
+              );
+            }
+          }
+        }
+      }
+    }
+
+    const result = messages.map((message) => {
+      if (message.role !== "tool") {
+        return message;
+      }
+
+      // Check if this tool message contains images
+      if (!hasImageContent(message.content)) {
+        return message;
+      }
+
+      // If model doesn't support images, strip image blocks from content
+      if (!modelSupportsImages) {
+        strippedImageCount++;
+        const strippedContent = stripImageBlocksFromContent(message.content);
+        return {
+          ...message,
+          content: strippedContent,
+        };
+      }
+
+      // Model supports images - convert MCP image blocks to Cerebras format
+      const convertedContent = convertMcpImageBlocksToCerebras(message.content);
+      if (!convertedContent) {
+        return message;
+      }
+
+      toolMessagesWithImages++;
+      return {
+        ...message,
+        content: convertedContent,
+      };
+    });
+
+    if (toolMessagesWithImages > 0 || strippedImageCount > 0) {
+      logger.info(
+        {
+          model,
+          modelSupportsImages,
+          totalMessages: messages.length,
+          toolMessagesWithImages,
+          strippedImageCount,
+        },
+        "[CerebrasAdapter] Processed tool messages with image content",
+      );
+    }
+
+    return result;
+  }
+
   // ---------------------------------------------------------------------------
   // Build Modified Request
   // ---------------------------------------------------------------------------
@@ -176,6 +325,26 @@ class CerebrasRequestAdapter
 
     if (Object.keys(this.toolResultUpdates).length > 0) {
       messages = this.applyUpdates(messages, this.toolResultUpdates);
+    }
+
+    if (config.features.browserStreamingEnabled) {
+      messages = this.convertToolResultContent(messages);
+      const sizeBeforeStrip = estimateMessagesSize(messages);
+      messages = stripBrowserToolsResults(messages);
+      const sizeAfterStrip = estimateMessagesSize(messages);
+
+      if (sizeBeforeStrip.length !== sizeAfterStrip.length) {
+        logger.info(
+          {
+            sizeBeforeKB: Math.round(sizeBeforeStrip.length / 1024),
+            sizeAfterKB: Math.round(sizeAfterStrip.length / 1024),
+            savedKB: Math.round(
+              (sizeBeforeStrip.length - sizeAfterStrip.length) / 1024,
+            ),
+          },
+          "[CerebrasAdapter] Stripped browser tool results from messages",
+        );
+      }
     }
 
     return {
@@ -305,6 +474,130 @@ class CerebrasRequestAdapter
     );
     return result;
   }
+}
+
+// =============================================================================
+// IMAGE CONVERSION HELPERS
+// =============================================================================
+
+function convertMcpImageBlocksToCerebras(
+  content: unknown,
+): CerebrasToolResultContent | null {
+  if (!Array.isArray(content)) {
+    return null;
+  }
+
+  if (!hasImageContent(content)) {
+    return null;
+  }
+
+  const cerebrasContent: CerebrasToolResultContentBlock[] = [];
+  const imageTooLargePlaceholder = "[Image omitted due to size]";
+
+  for (const item of content) {
+    if (typeof item !== "object" || item === null) continue;
+    const candidate = item as Record<string, unknown>;
+
+    if (isMcpImageBlock(item)) {
+      const mimeType = item.mimeType ?? "image/png";
+      const base64Length = typeof item.data === "string" ? item.data.length : 0;
+      const estimatedSizeKB = Math.round((base64Length * 3) / 4 / 1024);
+      const shouldStripImage = isImageTooLarge(item);
+
+      if (shouldStripImage) {
+        logger.info(
+          {
+            mimeType,
+            base64Length,
+            estimatedSizeKB,
+          },
+          "[CerebrasAdapter] Stripping MCP image block due to size limit",
+        );
+        cerebrasContent.push({
+          type: "text",
+          text: imageTooLargePlaceholder,
+        });
+        continue;
+      }
+
+      logger.info(
+        {
+          mimeType,
+          base64Length,
+          estimatedSizeKB,
+          estimatedBase64Tokens: Math.round(base64Length / 4),
+        },
+        "[CerebrasAdapter] Converting MCP image block to Cerebras format",
+      );
+
+      cerebrasContent.push({
+        type: "image_url",
+        image_url: {
+          url: `data:${mimeType};base64,${item.data}`,
+        },
+      });
+    } else if (candidate.type === "text" && "text" in candidate) {
+      cerebrasContent.push({
+        type: "text",
+        text:
+          typeof candidate.text === "string"
+            ? candidate.text
+            : JSON.stringify(candidate),
+      });
+    }
+  }
+
+  logger.info(
+    {
+      totalBlocks: cerebrasContent.length,
+      imageBlocks: cerebrasContent.filter((b) => b.type === "image_url").length,
+      textBlocks: cerebrasContent.filter((b) => b.type === "text").length,
+    },
+    "[CerebrasAdapter] Converted MCP content to Cerebras format",
+  );
+
+  return cerebrasContent.length > 0 ? cerebrasContent : null;
+}
+
+/**
+ * Strip image blocks from MCP content when model doesn't support images.
+ * Keeps text blocks and replaces image blocks with a placeholder message.
+ */
+function stripImageBlocksFromContent(content: unknown): string {
+  if (!Array.isArray(content)) {
+    return typeof content === "string" ? content : JSON.stringify(content);
+  }
+
+  const textParts: string[] = [];
+  let imageCount = 0;
+
+  for (const item of content) {
+    if (typeof item !== "object" || item === null) continue;
+    const candidate = item as Record<string, unknown>;
+
+    if (isMcpImageBlock(item)) {
+      imageCount++;
+    } else if (candidate.type === "text" && "text" in candidate) {
+      textParts.push(
+        typeof candidate.text === "string"
+          ? candidate.text
+          : JSON.stringify(candidate.text),
+      );
+    }
+  }
+
+  // Add placeholder for stripped images
+  if (imageCount > 0) {
+    textParts.push(
+      `[${imageCount} image(s) removed - model does not support image inputs]`,
+    );
+    logger.info(
+      { imageCount },
+      "[CerebrasAdapter] Stripped image blocks from tool result",
+    );
+  }
+
+  return textParts.join("\n");
 }
 
 // =============================================================================
@@ -781,7 +1074,7 @@ export const cerebrasAdapterFactory: LLMProvider<
     return config.llm.cerebras.baseUrl;
   },
 
-  getSpanName(): string {
+  getSpanName(_streaming: boolean): string {
     return "cerebras.chat.completions";
   },
 
@@ -811,10 +1104,13 @@ export const cerebrasAdapterFactory: LLMProvider<
     request: CerebrasRequest,
   ): Promise<CerebrasResponse> {
     const cerebrasClient = client as OpenAIProvider;
-    return cerebrasClient.chat.completions.create({
+    const cerebrasRequest = {
       ...request,
       stream: false,
-    }) as Promise<CerebrasResponse>;
+    } as unknown as ChatCompletionCreateParamsNonStreaming;
+    return cerebrasClient.chat.completions.create(
+      cerebrasRequest,
+    ) as Promise<CerebrasResponse>;
   },
 
   async executeStream(
@@ -822,11 +1118,13 @@ export const cerebrasAdapterFactory: LLMProvider<
     request: CerebrasRequest,
   ): Promise<AsyncIterable<CerebrasStreamChunk>> {
     const cerebrasClient = client as OpenAIProvider;
-    const stream = await cerebrasClient.chat.completions.create({
+    const cerebrasRequest = {
       ...request,
       stream: true,
       stream_options: { include_usage: true },
-    });
+    } as unknown as ChatCompletionCreateParamsStreaming;
+    const stream =
+      await cerebrasClient.chat.completions.create(cerebrasRequest);
 
     return {
       [Symbol.asyncIterator]: async function* () {
