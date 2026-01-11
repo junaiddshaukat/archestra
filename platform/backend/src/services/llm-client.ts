@@ -53,23 +53,6 @@ export function detectProviderFromModel(model: string): SupportedChatProvider {
     return "openai";
   }
 
-  // Cerebras models: explicit "cerebras" indicator or known model patterns
-  // Cerebras serves llama, qwen, and deepseek models with specific naming patterns
-  if (lowerModel.includes("cerebras")) {
-    return "cerebras";
-  }
-
-  // Detect Cerebras model patterns: llama3.x-*, llama-3.x-*, qwen*, deepseek*
-  // These are the model IDs returned by Cerebras API
-  if (
-    lowerModel.startsWith("llama3") ||
-    lowerModel.startsWith("llama-3") ||
-    lowerModel.startsWith("qwen") ||
-    lowerModel.startsWith("deepseek")
-  ) {
-    return "cerebras";
-  }
-
   // Default to anthropic for backwards compatibility
   // Note: vLLM and Ollama cannot be auto-detected as they can serve any model
   return "anthropic";
