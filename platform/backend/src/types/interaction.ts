@@ -2,7 +2,7 @@ import { SupportedProvidersDiscriminatorSchema } from "@shared";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { schema } from "@/database";
-import { Anthropic, Cerebras, Gemini, OpenAi } from "./llm-providers";
+import { Anthropic, Cerebras, Gemini, Ollama, OpenAi, Vllm } from "./llm-providers";
 
 export const UserInfoSchema = z.object({
   id: z.string(),
@@ -18,6 +18,8 @@ export const InteractionRequestSchema = z.union([
   Gemini.API.GenerateContentRequestSchema,
   Anthropic.API.MessagesRequestSchema,
   Cerebras.API.ChatCompletionRequestSchema,
+  Vllm.API.ChatCompletionRequestSchema,
+  Ollama.API.ChatCompletionRequestSchema,
 ]);
 
 export const InteractionResponseSchema = z.union([
@@ -25,6 +27,8 @@ export const InteractionResponseSchema = z.union([
   Gemini.API.GenerateContentResponseSchema,
   Anthropic.API.MessagesResponseSchema,
   Cerebras.API.ChatCompletionResponseSchema,
+  Vllm.API.ChatCompletionResponseSchema,
+  Ollama.API.ChatCompletionResponseSchema,
 ]);
 
 /**
@@ -66,6 +70,20 @@ export const SelectInteractionSchema = z.discriminatedUnion("type", [
     processedRequest:
       Cerebras.API.ChatCompletionRequestSchema.nullable().optional(),
     response: Cerebras.API.ChatCompletionResponseSchema,
+  }),
+  BaseSelectInteractionSchema.extend({
+    type: z.enum(["vllm:chatCompletions"]),
+    request: Vllm.API.ChatCompletionRequestSchema,
+    processedRequest:
+      Vllm.API.ChatCompletionRequestSchema.nullable().optional(),
+    response: Vllm.API.ChatCompletionResponseSchema,
+  }),
+  BaseSelectInteractionSchema.extend({
+    type: z.enum(["ollama:chatCompletions"]),
+    request: Ollama.API.ChatCompletionRequestSchema,
+    processedRequest:
+      Ollama.API.ChatCompletionRequestSchema.nullable().optional(),
+    response: Ollama.API.ChatCompletionResponseSchema,
   }),
 ]);
 

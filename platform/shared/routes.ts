@@ -148,6 +148,15 @@ export const RouteId = {
     "cerebrasChatCompletionsWithDefaultAgent",
   CerebrasChatCompletionsWithAgent: "cerebrasChatCompletionsWithAgent",
 
+  // Proxy Routes - vLLM
+  VllmChatCompletionsWithDefaultAgent: "vllmChatCompletionsWithDefaultAgent",
+  VllmChatCompletionsWithAgent: "vllmChatCompletionsWithAgent",
+
+  // Proxy Routes - Ollama
+  OllamaChatCompletionsWithDefaultAgent:
+    "ollamaChatCompletionsWithDefaultAgent",
+  OllamaChatCompletionsWithAgent: "ollamaChatCompletionsWithAgent",
+
   // Chat Routes
   StreamChat: "streamChat",
   GetChatConversations: "getChatConversations",

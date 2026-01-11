@@ -45,6 +45,8 @@ const providerToLogoProvider: Record<SupportedProvider, string> = {
   anthropic: "anthropic",
   gemini: "google",
   cerebras: "cerebras",
+  vllm: "vllm",
+  ollama: "ollama",
 };
 
 /**

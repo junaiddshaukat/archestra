@@ -8,7 +8,9 @@ import type {
   InteractionUtils,
 } from "./llmProviders/common";
 import GeminiGenerateContentInteraction from "./llmProviders/gemini";
+import OllamaChatCompletionInteraction from "./llmProviders/ollama";
 import OpenAiChatCompletionInteraction from "./llmProviders/openai";
+import VllmChatCompletionInteraction from "./llmProviders/vllm";
 
 export interface CostSavingsInput {
   cost: string | null | undefined;
@@ -113,15 +115,24 @@ export class DynamicInteraction implements InteractionUtils {
   }
 
   private getInteractionClass(interaction: Interaction): InteractionUtils {
-    // Use string comparison since provider discriminator types are determined at runtime
+    // Note: Type discriminator stored in database determines the interaction type
     const type = this.type as string;
     if (type === "openai:chatCompletions") {
       return new OpenAiChatCompletionInteraction(interaction);
-    } else if (type === "anthropic:messages") {
+    }
+    if (type === "anthropic:messages") {
       return new AnthropicMessagesInteraction(interaction);
-    } else if (type === "cerebras:chatCompletions") {
+    }
+    if (type === "cerebras:chatCompletions") {
       return new CerebrasChatCompletionInteraction(interaction);
     }
+    if (type === "vllm:chatCompletions") {
+      return new VllmChatCompletionInteraction(interaction);
+    }
+    if (type === "ollama:chatCompletions") {
+      return new OllamaChatCompletionInteraction(interaction);
+    }
+    // Default to Gemini for any other provider
     return new GeminiGenerateContentInteraction(interaction);
   }
 

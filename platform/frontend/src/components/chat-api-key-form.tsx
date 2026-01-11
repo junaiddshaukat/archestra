@@ -98,6 +98,22 @@ const PROVIDER_CONFIG: Record<
     consoleUrl: "https://cloud.cerebras.ai/platform",
     consoleName: "Cerebras Cloud",
   },
+  vllm: {
+    name: "vLLM",
+    icon: "/icons/vllm.png",
+    placeholder: "optional-api-key",
+    enabled: true,
+    consoleUrl: "https://docs.vllm.ai/",
+    consoleName: "vLLM Docs",
+  },
+  ollama: {
+    name: "Ollama",
+    icon: "/icons/ollama.png",
+    placeholder: "optional-api-key",
+    enabled: true,
+    consoleUrl: "https://ollama.ai/",
+    consoleName: "Ollama",
+  },
 } as const;
 
 export { PROVIDER_CONFIG };

@@ -5,7 +5,9 @@ import openAiProxyRoutesV1 from "./proxy/openai";
 import anthropicProxyRoutesV2 from "./proxy/routesv2/anthropic";
 import cerebrasProxyRoutesV2 from "./proxy/routesv2/cerebras";
 import geminiProxyRoutesV2 from "./proxy/routesv2/gemini";
+import ollamaProxyRoutesV2 from "./proxy/routesv2/ollama";
 import openAiProxyRoutesV2 from "./proxy/routesv2/openai";
+import vllmProxyRoutesV2 from "./proxy/routesv2/vllm";
 
 export { default as a2aRoutes } from "./a2a";
 export { default as agentRoutes } from "./agent";
@@ -47,6 +49,14 @@ export const geminiProxyRoutes = config.llm.gemini.useV2Routes
 export const openAiProxyRoutes = config.llm.openai.useV2Routes
   ? openAiProxyRoutesV2
   : openAiProxyRoutesV1;
+// vLLM proxy routes - V2 only (unified handler, OpenAI-compatible)
+export const vllmProxyRoutes = config.llm.vllm.useV2Routes
+  ? vllmProxyRoutesV2
+  : vllmProxyRoutesV2; // vLLM only has V2 since it was added after the unified handler
+// Ollama proxy routes - V2 only (unified handler, OpenAI-compatible)
+export const ollamaProxyRoutes = config.llm.ollama.useV2Routes
+  ? ollamaProxyRoutesV2
+  : ollamaProxyRoutesV2; // Ollama only has V2 since it was added after the unified handler
 export { default as secretsRoutes } from "./secrets";
 export { default as statisticsRoutes } from "./statistics";
 export { default as teamRoutes } from "./team";
