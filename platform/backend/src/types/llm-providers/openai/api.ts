@@ -40,8 +40,7 @@ const ChoiceSchema = z
     logprobs: z.any().nullable(),
     message: z
       .object({
-        // content can be omitted when tool_calls are present (Cerebras, OpenAI)
-        content: z.string().nullable().optional(),
+        content: z.string().nullable(),
         refusal: z.string().nullable().optional(),
         role: z.enum(["assistant"]),
         annotations: z.array(z.any()).optional(),
