@@ -2,7 +2,11 @@ import { createAnthropic } from "@ai-sdk/anthropic";
 import { createCerebras } from "@ai-sdk/cerebras";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
-import { EXTERNAL_AGENT_ID_HEADER, USER_ID_HEADER } from "@shared";
+import {
+  EXTERNAL_AGENT_ID_HEADER,
+  SESSION_ID_HEADER,
+  USER_ID_HEADER,
+} from "@shared";
 import type { streamText } from "ai";
 import config from "@/config";
 import logger from "@/logging";
@@ -164,9 +168,17 @@ export function createLLMModel(params: {
   modelName: string;
   userId?: string;
   externalAgentId?: string;
+  sessionId?: string;
 }): LLMModel {
-  const { provider, apiKey, agentId, modelName, userId, externalAgentId } =
-    params;
+  const {
+    provider,
+    apiKey,
+    agentId,
+    modelName,
+    userId,
+    externalAgentId,
+    sessionId,
+  } = params;
 
   // Build headers for LLM Proxy
   const clientHeaders: Record<string, string> = {};
@@ -175,6 +187,9 @@ export function createLLMModel(params: {
   }
   if (userId) {
     clientHeaders[USER_ID_HEADER] = userId;
+  }
+  if (sessionId) {
+    clientHeaders[SESSION_ID_HEADER] = sessionId;
   }
 
   const headers =
@@ -263,6 +278,7 @@ export async function createLLMModelForAgent(params: {
   provider: SupportedChatProvider;
   conversationId?: string | null;
   externalAgentId?: string;
+  sessionId?: string;
 }): Promise<{
   model: LLMModel;
   provider: SupportedChatProvider;
@@ -276,6 +292,7 @@ export async function createLLMModelForAgent(params: {
     provider,
     conversationId,
     externalAgentId,
+    sessionId,
   } = params;
 
   const { apiKey, source } = await resolveProviderApiKey({
@@ -310,6 +327,7 @@ export async function createLLMModelForAgent(params: {
     modelName,
     userId,
     externalAgentId,
+    sessionId,
   });
 
   return { model, provider, apiKeySource: source };
