@@ -142,7 +142,7 @@ See the [Vertex AI authentication guide](https://cloud.google.com/vertex-ai/docs
 
 ### Important Notes
 
-- Usage of the llama models in the chat ⚠️ Not yet supported. 
+- Usage of the llama models in the chat ⚠️ Not yet supported ([GitHub Issue #2058](https://github.com/archestra-ai/archestra/issues/2058)) 
 
 ## vLLM
 
