@@ -140,20 +140,9 @@ See the [Vertex AI authentication guide](https://cloud.google.com/vertex-ai/docs
 - **Base URL**: `http://localhost:9000/v1/cerebras/{agent-id}`
 - **Authentication**: Pass your Cerebras API key in the `Authorization` header as `Bearer <your-api-key>`
 
-### Supported Models
-
-Cerebras supports various open-source models including:
-
-- **Llama models** (e.g., `llama-4-scout-17b-16e-instruct`, `llama-3.3-70b`)
-- **DeepSeek models** (e.g., `deepseek-r1-distill-llama-70b`)
-- **Qwen models** (e.g., `qwen-3-32b`)
-
 ### Important Notes
 
-- **OpenAI-Compatible**: Cerebras uses an OpenAI-compatible API, so you can use OpenAI SDK libraries with the Cerebras base URL.
-- **Tool Support**: Function calling (tool use) is fully supported, including tool invocation policies and trusted data policies.
-- **Streaming**: Cerebras streaming responses are fully supported.
-- **Getting an API Key**: You can get a Cerebras API key from the [Cerebras Cloud](https://cloud.cerebras.ai/platform) platform.
+- Usage of the llama models in the chat ⚠️ Not yet supported. 
 
 ## vLLM
 
