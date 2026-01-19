@@ -61,7 +61,6 @@ import { useFeatures } from "@/lib/features.query";
 import { useOrganization } from "@/lib/organization.query";
 import {
   applyPendingActions,
-  clearPendingActions,
   getPendingActions,
 } from "@/lib/pending-tool-state";
 import { usePrompt, usePrompts } from "@/lib/prompts.query";
@@ -743,8 +742,9 @@ export default function ChatPage() {
                 } catch {
                   // Silently fail - the default tools will be used
                 }
-                // Clear pending actions regardless of success
-                clearPendingActions();
+                // Note: We intentionally do NOT clear pending actions here
+                // This allows the user's tool preferences for this profile
+                // to persist across new chats (fix for #2227)
               }
 
               newlyCreatedConversationRef.current = newConversation.id;

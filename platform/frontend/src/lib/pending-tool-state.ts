@@ -1,6 +1,10 @@
 /**
- * Manages pending tool enable/disable state before a conversation is created.
- * State is stored in localStorage and applied when the first message is sent.
+ * Manages tool enable/disable preferences for profiles.
+ * State is stored in localStorage and applied when conversations are created.
+ *
+ * These preferences persist across multiple chats with the same profile,
+ * allowing users to have consistent tool configurations for each profile.
+ * Preferences are automatically cleared when switching to a different profile.
  */
 
 const STORAGE_KEY = "archestra-pending-tool-state";
@@ -85,7 +89,9 @@ export function getPendingActions(
 }
 
 /**
- * Clear all pending actions.
+ * Clear all tool preferences.
+ * This is useful for explicitly resetting a user's tool configuration to defaults.
+ * Note: Preferences are also automatically cleared when switching to a different profile.
  */
 export function clearPendingActions(): void {
   if (typeof window === "undefined") return;
