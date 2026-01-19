@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Archestra Platform API",
-    "version": "1.0.24"
+    "version": "1.0.27"
   },
   "components": {
     "schemas": {
@@ -31794,7 +31794,17 @@
         "tags": [
           "Chat"
         ],
-        "description": "List all conversations for current user with agent details",
+        "description": "List all conversations for current user with agent details. Optionally filter by search query.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "search",
+            "required": false
+          }
+        ],
         "responses": {
           "200": {
             "description": "Default Response",
@@ -37822,6 +37832,27 @@
                         "enabled"
                       ],
                       "additionalProperties": false
+                    },
+                    "knowledgeGraph": {
+                      "type": "object",
+                      "properties": {
+                        "enabled": {
+                          "type": "boolean"
+                        },
+                        "provider": {
+                          "type": "string",
+                          "enum": [
+                            "lightrag"
+                          ]
+                        },
+                        "displayName": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "enabled"
+                      ],
+                      "additionalProperties": false
                     }
                   },
                   "required": [
@@ -37833,7 +37864,8 @@
                     "ollamaEnabled",
                     "globalToolPolicy",
                     "browserStreamingEnabled",
-                    "incomingEmail"
+                    "incomingEmail",
+                    "knowledgeGraph"
                   ],
                   "additionalProperties": false
                 }
@@ -41629,6 +41661,15 @@
           },
           {
             "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "description": "Free-text search across session content (case-insensitive)"
+          },
+          {
+            "schema": {
               "default": 20,
               "type": "integer",
               "minimum": 1,
@@ -43782,6 +43823,9 @@
                                       "type": "boolean"
                                     }
                                   ]
+                                },
+                                "mounted": {
+                                  "type": "boolean"
                                 }
                               },
                               "required": [
@@ -44374,6 +44418,9 @@
                                   "type": "boolean"
                                 }
                               ]
+                            },
+                            "mounted": {
+                              "type": "boolean"
                             }
                           },
                           "required": [
@@ -44730,6 +44777,9 @@
                                     "type": "boolean"
                                   }
                                 ]
+                              },
+                              "mounted": {
+                                "type": "boolean"
                               }
                             },
                             "required": [
@@ -45336,6 +45386,9 @@
                                     "type": "boolean"
                                   }
                                 ]
+                              },
+                              "mounted": {
+                                "type": "boolean"
                               }
                             },
                             "required": [
@@ -45922,6 +45975,9 @@
                                   "type": "boolean"
                                 }
                               ]
+                            },
+                            "mounted": {
+                              "type": "boolean"
                             }
                           },
                           "required": [
@@ -46285,6 +46341,9 @@
                                     "type": "boolean"
                                   }
                                 ]
+                              },
+                              "mounted": {
+                                "type": "boolean"
                               }
                             },
                             "required": [
@@ -49596,6 +49655,9 @@
                                               "type": "boolean"
                                             }
                                           ]
+                                        },
+                                        "mounted": {
+                                          "type": "boolean"
                                         }
                                       },
                                       "required": [
@@ -50149,6 +50211,9 @@
                                           "type": "boolean"
                                         }
                                       ]
+                                    },
+                                    "mounted": {
+                                      "type": "boolean"
                                     }
                                   },
                                   "required": [
@@ -50431,6 +50496,9 @@
                                             "type": "boolean"
                                           }
                                         ]
+                                      },
+                                      "mounted": {
+                                        "type": "boolean"
                                       }
                                     },
                                     "required": [
@@ -51012,6 +51080,9 @@
                                             "type": "boolean"
                                           }
                                         ]
+                                      },
+                                      "mounted": {
+                                        "type": "boolean"
                                       }
                                     },
                                     "required": [
@@ -51568,6 +51639,9 @@
                                           "type": "boolean"
                                         }
                                       ]
+                                    },
+                                    "mounted": {
+                                      "type": "boolean"
                                     }
                                   },
                                   "required": [
@@ -51900,6 +51974,9 @@
                                             "type": "boolean"
                                           }
                                         ]
+                                      },
+                                      "mounted": {
+                                        "type": "boolean"
                                       }
                                     },
                                     "required": [
@@ -52745,6 +52822,9 @@
                                             "type": "boolean"
                                           }
                                         ]
+                                      },
+                                      "mounted": {
+                                        "type": "boolean"
                                       }
                                     },
                                     "required": [
@@ -53340,6 +53420,9 @@
                                             "type": "boolean"
                                           }
                                         ]
+                                      },
+                                      "mounted": {
+                                        "type": "boolean"
                                       }
                                     },
                                     "required": [
@@ -53940,6 +54023,9 @@
                                             "type": "boolean"
                                           }
                                         ]
+                                      },
+                                      "mounted": {
+                                        "type": "boolean"
                                       }
                                     },
                                     "required": [
@@ -57204,6 +57290,15 @@
             "name": "endDate",
             "required": false,
             "description": "Filter by end date (ISO 8601 format)"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "description": "Free-text search across MCP server name, tool name, and arguments (case-insensitive)"
           },
           {
             "schema": {

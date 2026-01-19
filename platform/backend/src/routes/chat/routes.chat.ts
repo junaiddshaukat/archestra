@@ -16,6 +16,7 @@ import {
   detectProviderFromModel,
 } from "@/clients/llm-client";
 import config from "@/config";
+import { extractAndIngestDocuments } from "@/knowledge-graph/chat-document-extractor";
 import logger from "@/logging";
 import {
   AgentModel,
@@ -142,6 +143,15 @@ const chatRoutes: FastifyPluginAsyncZod = async (fastify) => {
       { body: { id: conversationId, messages }, user, organizationId, headers },
       reply,
     ) => {
+      // Extract and ingest documents to knowledge graph (fire and forget)
+      // This runs asynchronously to avoid blocking the chat response
+      extractAndIngestDocuments(messages).catch((error) => {
+        logger.warn(
+          { error: error instanceof Error ? error.message : String(error) },
+          "[Chat] Background document ingestion failed",
+        );
+      });
+
       const { success: userIsProfileAdmin } = await hasPermission(
         { profile: ["admin"] },
         headers,
@@ -426,16 +436,21 @@ const chatRoutes: FastifyPluginAsyncZod = async (fastify) => {
       schema: {
         operationId: RouteId.GetChatConversations,
         description:
-          "List all conversations for current user with agent details",
+          "List all conversations for current user with agent details. Optionally filter by search query.",
         tags: ["Chat"],
+        querystring: z.object({
+          search: z.string().optional(),
+        }),
         response: constructResponseSchema(z.array(SelectConversationSchema)),
       },
     },
     async (request, reply) => {
+      const { search } = request.query;
       return reply.send(
         await ConversationModel.findAll(
           request.user.id,
           request.organizationId,
+          search,
         ),
       );
     },
