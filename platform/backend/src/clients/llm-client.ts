@@ -3,6 +3,7 @@ import { createCerebras } from "@ai-sdk/cerebras";
 import { createCohere } from "@ai-sdk/cohere";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createVertex } from "@ai-sdk/google-vertex";
+import { createMistral } from "@ai-sdk/mistral";
 import { createOpenAI } from "@ai-sdk/openai";
 import {
   EXTERNAL_AGENT_ID_HEADER,
@@ -117,6 +118,9 @@ export async function resolveProviderApiKey(params: {
       apiKeySource = "environment";
     } else if (provider === "cerebras" && config.chat.cerebras.apiKey) {
       providerApiKey = config.chat.cerebras.apiKey;
+      apiKeySource = "environment";
+    } else if (provider === "mistral" && config.chat.mistral.apiKey) {
+      providerApiKey = config.chat.mistral.apiKey;
       apiKeySource = "environment";
     } else if (provider === "openai" && config.chat.openai.apiKey) {
       providerApiKey = config.chat.openai.apiKey;
@@ -391,6 +395,16 @@ export function createLLMModel(params: {
     const client = createCerebras({
       apiKey,
       baseURL: `http://localhost:${config.api.port}/v1/cerebras/${agentId}`,
+      headers,
+    });
+    return client(modelName);
+  }
+
+  if (provider === "mistral") {
+    // URL format: /v1/mistral/:agentId (SDK appends /chat/completions)
+    const client = createMistral({
+      apiKey,
+      baseURL: `http://localhost:${config.api.port}/v1/mistral/${agentId}`,
       headers,
     });
     return client(modelName);
