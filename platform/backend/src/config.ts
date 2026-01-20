@@ -454,7 +454,6 @@ export default {
     mistral: {
       baseUrl:
         process.env.ARCHESTRA_MISTRAL_BASE_URL || "https://api.mistral.ai/v1",
-      useV2Routes: process.env.ARCHESTRA_MISTRAL_USE_V2_ROUTES !== "false",
     },
     vllm: {
       enabled: Boolean(process.env.ARCHESTRA_VLLM_BASE_URL),

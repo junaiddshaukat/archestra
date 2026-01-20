@@ -45,10 +45,8 @@ export const anthropicProxyRoutes = config.llm.anthropic.useV2Routes
   : anthropicProxyRoutesV1;
 // Cerebras proxy routes - V2 only (no legacy V1 implementation)
 export const cerebrasProxyRoutes = cerebrasProxyRoutesV2;
-// Mistral proxy routes - V2 only (no legacy V1 implementation)
-export const mistralProxyRoutes = config.llm.mistral.useV2Routes
-  ? mistralProxyRoutesV2
-  : mistralProxyRoutesV2; // Mistral only has V2 since it was added after the unified handler
+// Mistral proxy routes - V2 only (OpenAI-compatible, no legacy V1)
+export const mistralProxyRoutes = mistralProxyRoutesV2;
 // Gemini proxy routes - V1 (legacy) by default, V2 (unified handler) via env var
 export const geminiProxyRoutes = config.llm.gemini.useV2Routes
   ? geminiProxyRoutesV2
