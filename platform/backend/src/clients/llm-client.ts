@@ -163,7 +163,7 @@ export const FAST_MODELS: Record<SupportedChatProvider, string> = {
   vllm: "default", // vLLM uses whatever model is deployed
   ollama: "llama3.2", // Common fast model for Ollama
   zhipuai: "glm-4-flash", // Zhipu's fast model
-  mistral: "mistral-small-2506", // Mistral's fast model
+  mistral: "mistral-small-latest", // Mistral's fast model
 };
 
 /**
@@ -324,6 +324,9 @@ export function createDirectLLMModel({
   modelName: string;
 }): LLMModel {
   const creator = directModelCreators[provider];
+  if (!creator) {
+    throw new ApiError(400, `Unsupported provider: ${provider}`);
+  }
   return creator({ apiKey, modelName });
 }
 
