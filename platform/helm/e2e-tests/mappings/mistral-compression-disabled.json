@@ -4,9 +4,14 @@
     "urlPath": "/mistral/v1/chat/completions",
     "headers": {
       "Authorization": {
-        "contains": "mistral-compression-disabled"
+        "contains": "mistral-compression"
       }
-    }
+    },
+    "bodyPatterns": [
+      {
+        "contains": "{\\\"files\\\":[{\\\"name\\\":\\\"README.md\\\",\\\"size\\\":1024"
+      }
+    ]
   },
   "response": {
     "status": 200,
@@ -23,7 +28,7 @@
           "index": 0,
           "message": {
             "role": "assistant",
-            "content": "Compression disabled test response.",
+            "content": "I have processed the JSON tool result.",
             "refusal": null
           },
           "finish_reason": "stop",
@@ -31,9 +36,9 @@
         }
       ],
       "usage": {
-        "prompt_tokens": 50,
+        "prompt_tokens": 150,
         "completion_tokens": 10,
-        "total_tokens": 60
+        "total_tokens": 160
       }
     }
   }

@@ -17,7 +17,7 @@
       "id": "chatcmpl-mistral-token-cost-limit-test",
       "object": "chat.completion",
       "created": 1234567890,
-      "model": "mistral-large-latest",
+      "model": "test-mistral-cost-limit",
       "choices": [
         {
           "index": 0,
@@ -31,9 +31,9 @@
         }
       ],
       "usage": {
-        "prompt_tokens": 50,
-        "completion_tokens": 10,
-        "total_tokens": 60
+        "prompt_tokens": 100,
+        "completion_tokens": 20,
+        "total_tokens": 120
       }
     }
   }
