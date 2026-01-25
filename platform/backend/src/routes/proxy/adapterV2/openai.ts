@@ -642,7 +642,9 @@ export function stripImageBlocksFromContent(content: unknown): string {
 // =============================================================================
 
 // Exported for reuse by OpenAI-compatible providers (Mistral, etc.)
-export class OpenAIResponseAdapter implements LLMResponseAdapter<OpenAiResponse> {
+export class OpenAIResponseAdapter
+  implements LLMResponseAdapter<OpenAiResponse>
+{
   readonly provider = "openai" as const;
   private response: OpenAiResponse;
 

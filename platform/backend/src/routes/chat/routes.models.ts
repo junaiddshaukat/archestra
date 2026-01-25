@@ -711,7 +711,11 @@ export async function fetchModelsForProvider({
 
   try {
     let models: ModelInfo[] = [];
-    if (["anthropic", "cerebras", "cohere", "mistral", "openai"].includes(provider)) {
+    if (
+      ["anthropic", "cerebras", "cohere", "mistral", "openai"].includes(
+        provider,
+      )
+    ) {
       if (apiKey) {
         models = await modelFetchers[provider](apiKey);
       }
