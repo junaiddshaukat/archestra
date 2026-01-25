@@ -69,6 +69,25 @@ export function detectProviderFromModel(model: string): SupportedChatProvider {
 }
 
 /**
+ * Environment variable API key getter for each provider.
+ * TypeScript enforces that ALL providers in SupportedChatProvider have an entry.
+ */
+const envApiKeyGetters: Record<
+  SupportedChatProvider,
+  () => string | undefined
+> = {
+  anthropic: () => config.chat.anthropic.apiKey,
+  cerebras: () => config.chat.cerebras.apiKey,
+  cohere: () => config.chat.cohere.apiKey,
+  gemini: () => config.chat.gemini.apiKey,
+  mistral: () => config.chat.mistral.apiKey,
+  ollama: () => config.chat.ollama.apiKey,
+  openai: () => config.chat.openai.apiKey,
+  vllm: () => config.chat.vllm.apiKey,
+  zhipuai: () => config.chat.zhipuai.apiKey,
+};
+
+/**
  * Resolve API key for a provider using priority:
  * conversation > personal > team > org_wide > environment variable
  */
@@ -79,9 +98,6 @@ export async function resolveProviderApiKey(params: {
   conversationId?: string | null;
 }): Promise<{ apiKey: string | undefined; source: string }> {
   const { organizationId, userId, provider, conversationId } = params;
-
-  let providerApiKey: string | undefined;
-  let apiKeySource = "environment";
 
   // Get user's team IDs for API key resolution
   const userTeamIds = await TeamModel.getUserTeamIds(userId);
@@ -106,43 +122,17 @@ export async function resolveProviderApiKey(params: {
       secret?.secret?.zhipuaiApiKey ??
       secret?.secret?.cohereApiKey;
     if (secretValue) {
-      providerApiKey = secretValue as string;
-      apiKeySource = resolvedApiKey.scope;
+      return { apiKey: secretValue as string, source: resolvedApiKey.scope };
     }
   }
 
   // Fall back to environment variable
-  if (!providerApiKey) {
-    if (provider === "anthropic" && config.chat.anthropic.apiKey) {
-      providerApiKey = config.chat.anthropic.apiKey;
-      apiKeySource = "environment";
-    } else if (provider === "cerebras" && config.chat.cerebras.apiKey) {
-      providerApiKey = config.chat.cerebras.apiKey;
-      apiKeySource = "environment";
-    } else if (provider === "mistral" && config.chat.mistral.apiKey) {
-      providerApiKey = config.chat.mistral.apiKey;
-      apiKeySource = "environment";
-    } else if (provider === "openai" && config.chat.openai.apiKey) {
-      providerApiKey = config.chat.openai.apiKey;
-      apiKeySource = "environment";
-    } else if (provider === "gemini" && config.chat.gemini.apiKey) {
-      providerApiKey = config.chat.gemini.apiKey;
-      apiKeySource = "environment";
-    } else if (provider === "cohere" && config.chat.cohere.apiKey) {
-      providerApiKey = config.chat.cohere.apiKey;
-      apiKeySource = "environment";
-    } else if (provider === "vllm" && config.chat.vllm.apiKey) {
-      providerApiKey = config.chat.vllm.apiKey;
-      apiKeySource = "environment";
-    } else if (provider === "ollama" && config.chat.ollama.apiKey) {
-      providerApiKey = config.chat.ollama.apiKey;
-    } else if (provider === "zhipuai" && config.chat.zhipuai.apiKey) {
-      providerApiKey = config.chat.zhipuai.apiKey;
-      apiKeySource = "environment";
-    }
+  const envApiKey = envApiKeyGetters[provider]();
+  if (envApiKey) {
+    return { apiKey: envApiKey, source: "environment" };
   }
 
-  return { apiKey: providerApiKey, source: apiKeySource };
+  return { apiKey: undefined, source: "environment" };
 }
 
 /**
