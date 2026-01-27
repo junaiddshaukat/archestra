@@ -1039,7 +1039,7 @@ export function createDualLlmClient(
       if (!apiKey) {
         throw new Error("API key required for Mistral dual LLM");
       }
-      return new MistralDualLlmClient(apiKey);
+      return new MistralDualLlmClient(apiKey, model);
     case "gemini":
       // Gemini supports Vertex AI mode where apiKey may be undefined
       return new GeminiDualLlmClient(apiKey);

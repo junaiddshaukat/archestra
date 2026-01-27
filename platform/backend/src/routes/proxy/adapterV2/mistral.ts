@@ -251,9 +251,10 @@ export const mistralAdapterFactory: LLMProvider<
       ...request,
       stream: false,
     } as unknown as ChatCompletionCreateParamsNonStreaming;
+    // Cast through unknown because MistralResponse uses .passthrough() which adds index signature
     return mistralClient.chat.completions.create(
       mistralRequest,
-    ) as Promise<MistralResponse>;
+    ) as unknown as Promise<MistralResponse>;
   },
 
   async executeStream(
