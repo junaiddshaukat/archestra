@@ -2208,6 +2208,64 @@ export type MistralChatCompletionResponseInput = {
          */
         prompt_tokens_details?: unknown;
     };
+    [key: string]: unknown | string | Array<{
+        finish_reason: 'stop' | 'length' | 'tool_calls' | 'content_filter' | 'function_call';
+        index: number;
+        logprobs: unknown;
+        /**
+         * https://github.com/openai/openai-node/blob/v6.0.0/src/resources/chat/completions/completions.ts#L1000
+         */
+        message: {
+            content: string | unknown;
+            refusal?: string | unknown;
+            role: 'assistant';
+            annotations?: Array<unknown>;
+            audio?: unknown;
+            /**
+             * https://github.com/openai/openai-node/blob/v6.0.0/src/resources/chat/completions/completions.ts#L431
+             */
+            function_call?: {
+                arguments: string;
+                name: string;
+            } | unknown;
+            /**
+             * https://github.com/openai/openai-node/blob/v6.0.0/src/resources/chat/completions/completions.ts#L1197
+             */
+            tool_calls?: Array<{
+                id: string;
+                type: 'function';
+                /**
+                 * https://github.com/openai/openai-node/blob/v6.0.0/src/resources/chat/completions/completions.ts#L1165
+                 */
+                function: {
+                    arguments: string;
+                    name: string;
+                };
+            } | {
+                id: string;
+                type: 'custom';
+                /**
+                 * https://github.com/openai/openai-node/blob/v6.0.0/src/resources/chat/completions/completions.ts#L1128
+                 */
+                custom: {
+                    input: string;
+                    name: string;
+                };
+            }>;
+        };
+    }> | number | 'chat.completion' | string | unknown | {
+        completion_tokens: number;
+        prompt_tokens: number;
+        total_tokens: number;
+        /**
+         * https://github.com/openai/openai-node/blob/master/src/resources/completions.ts#L144
+         */
+        completion_tokens_details?: unknown;
+        /**
+         * https://github.com/openai/openai-node/blob/master/src/resources/completions.ts#L173
+         */
+        prompt_tokens_details?: unknown;
+    } | undefined;
 };
 
 export type VllmChatCompletionRequestInput = {
@@ -5298,6 +5356,64 @@ export type MistralChatCompletionResponse = {
          */
         prompt_tokens_details?: unknown;
     };
+    [key: string]: unknown | string | Array<{
+        finish_reason: 'stop' | 'length' | 'tool_calls' | 'content_filter' | 'function_call';
+        index: number;
+        logprobs: unknown;
+        /**
+         * https://github.com/openai/openai-node/blob/v6.0.0/src/resources/chat/completions/completions.ts#L1000
+         */
+        message: {
+            content: string | unknown;
+            refusal?: string | unknown;
+            role: 'assistant';
+            annotations?: Array<unknown>;
+            audio?: unknown;
+            /**
+             * https://github.com/openai/openai-node/blob/v6.0.0/src/resources/chat/completions/completions.ts#L431
+             */
+            function_call?: {
+                arguments: string;
+                name: string;
+            } | unknown;
+            /**
+             * https://github.com/openai/openai-node/blob/v6.0.0/src/resources/chat/completions/completions.ts#L1197
+             */
+            tool_calls?: Array<{
+                id: string;
+                type: 'function';
+                /**
+                 * https://github.com/openai/openai-node/blob/v6.0.0/src/resources/chat/completions/completions.ts#L1165
+                 */
+                function: {
+                    arguments: string;
+                    name: string;
+                };
+            } | {
+                id: string;
+                type: 'custom';
+                /**
+                 * https://github.com/openai/openai-node/blob/v6.0.0/src/resources/chat/completions/completions.ts#L1128
+                 */
+                custom: {
+                    input: string;
+                    name: string;
+                };
+            }>;
+        };
+    }> | number | 'chat.completion' | string | unknown | {
+        completion_tokens: number;
+        prompt_tokens: number;
+        total_tokens: number;
+        /**
+         * https://github.com/openai/openai-node/blob/master/src/resources/completions.ts#L144
+         */
+        completion_tokens_details?: unknown;
+        /**
+         * https://github.com/openai/openai-node/blob/master/src/resources/completions.ts#L173
+         */
+        prompt_tokens_details?: unknown;
+    } | undefined;
 };
 
 export type VllmChatCompletionRequest = {
@@ -13409,6 +13525,7 @@ export type GetFeaturesResponses = {
         geminiVertexAiEnabled: boolean;
         vllmEnabled: boolean;
         ollamaEnabled: boolean;
+        mistralEnabled: boolean;
         globalToolPolicy: 'permissive' | 'restrictive';
         browserStreamingEnabled: boolean;
         incomingEmail: {
@@ -14330,7 +14447,7 @@ export type GetInteractionsResponses = {
             sessionSource: string | null;
             request: MistralChatCompletionRequest;
             processedRequest?: MistralChatCompletionRequest | null;
-            response: MistralChatCompletionResponse;
+            response: OpenAiChatCompletionResponse;
             type: 'openai:chatCompletions';
             model: string | null;
             baselineModel: string | null;
@@ -14924,7 +15041,7 @@ export type GetInteractionResponses = {
         sessionSource: string | null;
         request: MistralChatCompletionRequest;
         processedRequest?: MistralChatCompletionRequest | null;
-        response: MistralChatCompletionResponse;
+        response: OpenAiChatCompletionResponse;
         type: 'openai:chatCompletions';
         model: string | null;
         baselineModel: string | null;
@@ -19766,7 +19883,7 @@ export type OpenAiChatCompletionsWithDefaultAgentResponses = {
     /**
      * Default Response
      */
-    200: MistralChatCompletionResponse;
+    200: OpenAiChatCompletionResponse;
 };
 
 export type OpenAiChatCompletionsWithDefaultAgentResponse = OpenAiChatCompletionsWithDefaultAgentResponses[keyof OpenAiChatCompletionsWithDefaultAgentResponses];
@@ -19853,7 +19970,7 @@ export type OpenAiChatCompletionsWithAgentResponses = {
     /**
      * Default Response
      */
-    200: MistralChatCompletionResponse;
+    200: OpenAiChatCompletionResponse;
 };
 
 export type OpenAiChatCompletionsWithAgentResponse = OpenAiChatCompletionsWithAgentResponses[keyof OpenAiChatCompletionsWithAgentResponses];
