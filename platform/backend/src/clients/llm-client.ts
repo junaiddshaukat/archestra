@@ -6,6 +6,7 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createVertex } from "@ai-sdk/google-vertex";
 import { createMistral } from "@ai-sdk/mistral";
 import { createOpenAI } from "@ai-sdk/openai";
+// Note: Perplexity uses OpenAI-compatible API, so we use createOpenAI for better compatibility
 import {
   EXTERNAL_AGENT_ID_HEADER,
   SESSION_ID_HEADER,
@@ -85,6 +86,7 @@ const envApiKeyGetters: Record<
   mistral: () => config.chat.mistral.apiKey,
   ollama: () => config.chat.ollama.apiKey,
   openai: () => config.chat.openai.apiKey,
+  perplexity: () => config.chat.perplexity.apiKey,
   vllm: () => config.chat.vllm.apiKey,
   zhipuai: () => config.chat.zhipuai.apiKey,
 };
@@ -171,6 +173,7 @@ export const FAST_MODELS: Record<SupportedChatProvider, string> = {
   zhipuai: "glm-4-flash", // Zhipu's fast model
   bedrock: "amazon.nova-lite-v1:0", // Bedrock's fast model, available in all regions for on-demand inference
   mistral: "mistral-small-latest", // Mistral's fast model
+  perplexity: "sonar", // Perplexity's fast model
 };
 
 /**
@@ -281,6 +284,22 @@ const directModelCreators: Record<SupportedChatProvider, DirectModelCreator> = {
       baseURL: config.llm.mistral.baseUrl,
     });
     return client(modelName);
+  },
+
+  perplexity: ({ apiKey, modelName }) => {
+    if (!apiKey) {
+      throw new ApiError(
+        400,
+        "Perplexity API key is required. Please configure PERPLEXITY_API_KEY.",
+      );
+    }
+    // Perplexity uses OpenAI-compatible API, so we use the OpenAI SDK
+    // This provides better compatibility than @ai-sdk/perplexity
+    const client = createOpenAI({
+      apiKey,
+      baseURL: config.chat.perplexity.baseUrl,
+    });
+    return client.chat(modelName);
   },
 
   vllm: ({ apiKey, modelName }) => {
@@ -453,6 +472,18 @@ const proxiedModelCreators: Record<SupportedChatProvider, ProxiedModelCreator> =
         headers,
       });
       return client(modelName);
+    },
+
+    perplexity: ({ apiKey, agentId, modelName, headers }) => {
+      // URL format: /v1/perplexity/:agentId (SDK appends /chat/completions)
+      // Perplexity uses OpenAI-compatible API, so we use the OpenAI SDK
+      // This provides better compatibility than @ai-sdk/perplexity
+      const client = createOpenAI({
+        apiKey,
+        baseURL: buildProxyBaseUrl("perplexity", agentId),
+        headers,
+      });
+      return client.chat(modelName);
     },
 
     vllm: ({ apiKey, agentId, modelName, headers }) => {
