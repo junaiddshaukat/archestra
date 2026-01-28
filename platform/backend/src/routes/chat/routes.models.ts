@@ -280,6 +280,74 @@ async function fetchMistralModels(apiKey: string): Promise<ModelInfo[]> {
 }
 
 /**
+ * Fetch models from Perplexity API
+ *
+ * Note: Perplexity does NOT have a /models endpoint like OpenAI.
+ * We return a hardcoded list of available models and validate the API key
+ * by making a lightweight chat completion request.
+ *
+ * @see https://docs.perplexity.ai/models/model-cards
+ */
+async function fetchPerplexityModels(apiKey: string): Promise<ModelInfo[]> {
+  const baseUrl = config.chat.perplexity.baseUrl;
+
+  // Perplexity doesn't have a /models endpoint, so we validate the API key
+  // by making a minimal chat completion request
+  const validateUrl = `${baseUrl}/chat/completions`;
+
+  const response = await fetch(validateUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "sonar",
+      messages: [{ role: "user", content: "hi" }],
+      max_tokens: 1,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    logger.error(
+      { status: response.status, error: errorText },
+      "Failed to validate Perplexity API key",
+    );
+    throw new Error(
+      `Failed to validate Perplexity API key: ${response.status}`,
+    );
+  }
+
+  // Return hardcoded list of Perplexity models
+  // @see https://docs.perplexity.ai/models/model-cards
+  const perplexityModels: ModelInfo[] = [
+    {
+      id: "sonar-pro",
+      displayName: "Sonar Pro",
+      provider: "perplexity" as const,
+    },
+    {
+      id: "sonar",
+      displayName: "Sonar",
+      provider: "perplexity" as const,
+    },
+    {
+      id: "sonar-reasoning-pro",
+      displayName: "Sonar Reasoning Pro",
+      provider: "perplexity" as const,
+    },
+    {
+      id: "sonar-deep-research",
+      displayName: "Sonar Deep Research",
+      provider: "perplexity" as const,
+    },
+  ];
+
+  return perplexityModels;
+}
+
+/**
  * Fetch models from vLLM API
  * vLLM exposes an OpenAI-compatible /models endpoint
  * See: https://docs.vllm.ai/en/latest/features/openai_api.html
@@ -734,6 +802,7 @@ async function getProviderApiKey({
     mistral: () => config.chat.mistral.apiKey || null,
     ollama: () => config.chat.ollama.apiKey || "", // Ollama typically doesn't require API keys
     openai: () => config.chat.openai.apiKey || null,
+    perplexity: () => config.chat.perplexity?.apiKey || null,
     vllm: () => config.chat.vllm.apiKey || "", // vLLM typically doesn't require API keys
     zhipuai: () => config.chat.zhipuai?.apiKey || null,
     bedrock: () => config.chat.bedrock.apiKey || null,
@@ -753,6 +822,7 @@ const modelFetchers: Record<
   gemini: fetchGeminiModels,
   mistral: fetchMistralModels,
   openai: fetchOpenAiModels,
+  perplexity: fetchPerplexityModels,
   vllm: fetchVllmModels,
   ollama: fetchOllamaModels,
   cohere: fetchCohereModels,
@@ -823,9 +893,14 @@ export async function fetchModelsForProvider({
   try {
     let models: ModelInfo[] = [];
     if (
-      ["anthropic", "cerebras", "cohere", "mistral", "openai"].includes(
-        provider,
-      )
+      [
+        "anthropic",
+        "cerebras",
+        "cohere",
+        "mistral",
+        "openai",
+        "perplexity",
+      ].includes(provider)
     ) {
       if (apiKey) {
         models = await modelFetchers[provider](apiKey);
