@@ -1,6 +1,10 @@
 "use client";
 
-import { ARCHESTRA_MCP_CATALOG_ID, archestraApiSdk } from "@shared";
+import {
+  ARCHESTRA_MCP_CATALOG_ID,
+  type archestraApiTypes,
+  MCP_SERVER_TOOL_NAME_SEPARATOR,
+} from "@shared";
 import {
   Bot,
   Check,
@@ -15,6 +19,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { CodeText } from "@/components/code-text";
+import { ConnectionBaseUrlSelect } from "@/components/connection-base-url-select";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -43,10 +48,10 @@ import {
   useMcpServers,
   useMcpServersGroupedByCatalog,
 } from "@/lib/mcp-server.query";
-import { useTokens } from "@/lib/team-token.query";
-import { useUserToken } from "@/lib/user-token.query";
+import { useFetchTeamTokenValue, useTokens } from "@/lib/team-token.query";
+import { useFetchUserTokenValue, useUserToken } from "@/lib/user-token.query";
 
-const { internalProxyUrl } = config.api;
+const { externalProxyUrls, internalProxyUrl } = config.api;
 
 interface McpConnectionInstructionsProps {
   agentId: string;
@@ -61,8 +66,10 @@ export function McpConnectionInstructions({
   agentId,
   hideProfileSelector = false,
 }: McpConnectionInstructionsProps) {
-  const { data: profiles } = useProfiles();
-  const { data: mcpServers } = useMcpServers();
+  const { data: profiles = [] } = useProfiles({
+    filters: { agentTypes: ["profile", "mcp_gateway"] },
+  });
+  const { data: mcpServers = [] } = useMcpServers();
   const { data: catalogItems = [] } = useInternalMcpCatalog();
   const { data: userToken } = useUserToken();
   const { data: hasProfileAdminPermission } = useHasPermissions({
@@ -73,6 +80,9 @@ export function McpConnectionInstructions({
   const [isCopyingConfig, setIsCopyingConfig] = useState(false);
   const [selectedTokenId, setSelectedTokenId] = useState<string | null>(null);
   const [selectedProfileId, setSelectedProfileId] = useState<string>(agentId);
+  const [connectionUrl, setConnectionUrl] = useState<string>(
+    externalProxyUrls.length >= 1 ? externalProxyUrls[0] : internalProxyUrl,
+  );
 
   // Fetch tokens filtered by the selected profile's teams
   const { data: tokensData } = useTokens({ profileId: selectedProfileId });
@@ -81,7 +91,12 @@ export function McpConnectionInstructions({
   const [exposedTokenValue, setExposedTokenValue] = useState<string | null>(
     null,
   );
-  const [isLoadingToken, setIsLoadingToken] = useState(false);
+
+  // Mutations for fetching token values
+  const fetchUserTokenMutation = useFetchUserTokenValue();
+  const fetchTeamTokenMutation = useFetchTeamTokenValue();
+  const isLoadingToken =
+    fetchUserTokenMutation.isPending || fetchTeamTokenMutation.isPending;
 
   // Update selected profile when agentId changes
   useEffect(() => {
@@ -108,7 +123,7 @@ export function McpConnectionInstructions({
         mcpServerToolGroups: new Map<
           string,
           {
-            server: (typeof mcpServers)[0];
+            server: (typeof mcpServers)[number];
             tools: Array<{
               id: string;
               name: string;
@@ -128,7 +143,7 @@ export function McpConnectionInstructions({
     const groups = new Map<
       string,
       {
-        server: (typeof mcpServers)[0];
+        server: (typeof mcpServers)[number];
         tools: Array<{ id: string; name: string; description?: string | null }>;
         credentialSourceMcpServerId?: string | null;
         useDynamicTeamCredential?: boolean;
@@ -146,7 +161,8 @@ export function McpConnectionInstructions({
 
       // Check if this is an Archestra built-in tool
       if (tool.catalogId === ARCHESTRA_MCP_CATALOG_ID) {
-        const toolName = tool.name.split("__").pop() ?? tool.name;
+        const toolName =
+          tool.name.split(MCP_SERVER_TOOL_NAME_SEPARATOR).pop() ?? tool.name;
         archestraToolsList.push({
           id: tool.id,
           name: toolName,
@@ -155,11 +171,12 @@ export function McpConnectionInstructions({
         return;
       }
 
-      if (tool.mcpServerId && mcpServers) {
+      if (tool.mcpServerId) {
         const server = mcpServers.find((s) => s.id === tool.mcpServerId);
         if (server) {
           const existing = groups.get(tool.mcpServerId);
-          const toolName = tool.name.split("__").pop() ?? tool.name;
+          const toolName =
+            tool.name.split(MCP_SERVER_TOOL_NAME_SEPARATOR).pop() ?? tool.name;
           const toolData = {
             id: tool.id,
             name: toolName,
@@ -186,9 +203,10 @@ export function McpConnectionInstructions({
     return { mcpServerToolGroups: groups, archestraTools: archestraToolsList };
   }, [mcpServers, assignedToolsData]);
 
+  type ProfileType = archestraApiTypes.GetAllAgentsResponses["200"][number];
   const getToolsCountForProfile = useCallback(
-    (profile: (typeof profiles)[number]) => {
-      return profile.tools.reduce((acc, curr) => {
+    (profile: ProfileType) => {
+      return profile.tools.reduce((acc: number, curr) => {
         if (curr.mcpServerId) {
           const server = mcpServers?.find((s) => s.id === curr.mcpServerId);
           if (server) {
@@ -201,8 +219,7 @@ export function McpConnectionInstructions({
     [mcpServers],
   );
 
-  // Use the new URL format with selected profile ID
-  const mcpUrl = `${internalProxyUrl}/mcp/${selectedProfileId}`;
+  const mcpUrl = `${connectionUrl}/mcp/${selectedProfileId}`;
 
   // Default to personal token if available, otherwise org token, then first token
   const orgToken = tokens?.find((t) => t.isOrganizationToken);
@@ -275,41 +292,34 @@ export function McpConnectionInstructions({
       return;
     }
 
-    setIsLoadingToken(true);
-    try {
-      let tokenValue: string;
+    let tokenValue: string | null = null;
 
-      if (isPersonalTokenSelected) {
-        // Fetch personal token value
-        const response = await archestraApiSdk.getUserTokenValue();
-        if (response.error || !response.data) {
-          throw new Error("Failed to fetch personal token value");
-        }
-        tokenValue = (response.data as { value: string }).value;
-      } else {
-        // Fetch team token value
-        if (!selectedTeamToken) {
-          setIsLoadingToken(false);
-          return;
-        }
-        const response = await archestraApiSdk.getTokenValue({
-          path: { tokenId: selectedTeamToken.id },
-        });
-        if (response.error || !response.data) {
-          throw new Error("Failed to fetch token value");
-        }
-        tokenValue = (response.data as { value: string }).value;
+    if (isPersonalTokenSelected) {
+      // Fetch personal token value
+      const result = await fetchUserTokenMutation.mutateAsync();
+      tokenValue = result?.value ?? null;
+    } else {
+      // Fetch team token value
+      if (!selectedTeamToken) {
+        return;
       }
+      const result = await fetchTeamTokenMutation.mutateAsync(
+        selectedTeamToken.id,
+      );
+      tokenValue = result?.value ?? null;
+    }
 
+    if (tokenValue) {
       setExposedTokenValue(tokenValue);
       setShowExposedToken(true);
-    } catch (error) {
-      toast.error("Failed to fetch token");
-      console.error(error);
-    } finally {
-      setIsLoadingToken(false);
     }
-  }, [isPersonalTokenSelected, selectedTeamToken, showExposedToken]);
+  }, [
+    isPersonalTokenSelected,
+    selectedTeamToken,
+    showExposedToken,
+    fetchUserTokenMutation,
+    fetchTeamTokenMutation,
+  ]);
 
   const handleCopyConfigWithoutRealToken = async () => {
     const fullConfig = JSON.stringify(
@@ -335,63 +345,63 @@ export function McpConnectionInstructions({
 
   const handleCopyConfig = useCallback(async () => {
     setIsCopyingConfig(true);
-    try {
-      let tokenValue: string;
+    let tokenValue: string | null = null;
 
-      if (isPersonalTokenSelected) {
-        // Fetch personal token value
-        const response = await archestraApiSdk.getUserTokenValue();
-        if (response.error || !response.data) {
-          throw new Error("Failed to fetch personal token value");
-        }
-        tokenValue = (response.data as { value: string }).value;
-      } else {
-        // Fetch team token value
-        if (!selectedTeamToken) {
-          setIsCopyingConfig(false);
-          return;
-        }
-        const response = await archestraApiSdk.getTokenValue({
-          path: { tokenId: selectedTeamToken.id },
-        });
-        if (response.error || !response.data) {
-          throw new Error("Failed to fetch token value");
-        }
-        tokenValue = (response.data as { value: string }).value;
+    if (isPersonalTokenSelected) {
+      // Fetch personal token value
+      const result = await fetchUserTokenMutation.mutateAsync();
+      tokenValue = result?.value ?? null;
+    } else {
+      // Fetch team token value
+      if (!selectedTeamToken) {
+        setIsCopyingConfig(false);
+        return;
       }
+      const result = await fetchTeamTokenMutation.mutateAsync(
+        selectedTeamToken.id,
+      );
+      tokenValue = result?.value ?? null;
+    }
 
-      const fullConfig = JSON.stringify(
-        {
-          mcpServers: {
-            archestra: {
-              url: mcpUrl,
-              headers: {
-                Authorization: `Bearer ${tokenValue}`,
-              },
+    if (!tokenValue) {
+      setIsCopyingConfig(false);
+      return;
+    }
+
+    const fullConfig = JSON.stringify(
+      {
+        mcpServers: {
+          archestra: {
+            url: mcpUrl,
+            headers: {
+              Authorization: `Bearer ${tokenValue}`,
             },
           },
         },
-        null,
-        2,
-      );
+      },
+      null,
+      2,
+    );
 
-      await navigator.clipboard.writeText(fullConfig);
-      setCopiedConfig(true);
-      toast.success("Configuration copied");
-      setTimeout(() => setCopiedConfig(false), 2000);
-    } catch {
-      toast.error("Failed to copy configuration");
-    } finally {
-      setIsCopyingConfig(false);
-    }
-  }, [mcpUrl, isPersonalTokenSelected, selectedTeamToken]);
+    await navigator.clipboard.writeText(fullConfig);
+    setCopiedConfig(true);
+    toast.success("Configuration copied");
+    setTimeout(() => setCopiedConfig(false), 2000);
+    setIsCopyingConfig(false);
+  }, [
+    mcpUrl,
+    isPersonalTokenSelected,
+    selectedTeamToken,
+    fetchUserTokenMutation,
+    fetchTeamTokenMutation,
+  ]);
 
   return (
     <div className="space-y-6">
       {/* Profile Selector - hidden when opened from a specific profile's dialog */}
       {!hideProfileSelector && (
         <div className="space-y-2">
-          <Label className="text-sm font-medium">Select Profile</Label>
+          <Label className="text-sm font-medium">Select MCP Gateway</Label>
           <Select
             value={selectedProfileId}
             onValueChange={setSelectedProfileId}
@@ -556,6 +566,12 @@ export function McpConnectionInstructions({
           </SelectContent>
         </Select>
       </div>
+
+      <ConnectionBaseUrlSelect
+        value={connectionUrl}
+        onChange={setConnectionUrl}
+        idPrefix="mcp"
+      />
 
       <div className="space-y-3">
         <div className="space-y-2">
@@ -819,11 +835,11 @@ function ReadOnlySubagentPill({ agent }: ReadOnlySubagentPillProps) {
         <Button
           variant="outline"
           size="sm"
-          className="h-8 px-3 gap-1.5 text-xs"
+          className="h-8 px-3 gap-1.5 text-xs max-w-[200px]"
         >
-          <span className="h-2 w-2 rounded-full bg-green-500" />
-          <Bot className="h-3 w-3" />
-          <span className="font-medium">{agent.name}</span>
+          <span className="h-2 w-2 rounded-full bg-green-500 shrink-0" />
+          <Bot className="h-3 w-3 shrink-0" />
+          <span className="font-medium truncate">{agent.name}</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -834,8 +850,8 @@ function ReadOnlySubagentPill({ agent }: ReadOnlySubagentPillProps) {
         avoidCollisions
       >
         <div className="p-4 border-b flex items-start justify-between gap-2">
-          <div className="flex-1">
-            <h4 className="font-semibold">{agent.name}</h4>
+          <div className="flex-1 min-w-0">
+            <h4 className="font-semibold truncate">{agent.name}</h4>
             {agent.systemPrompt && (
               <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
                 {agent.systemPrompt}

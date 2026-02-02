@@ -1102,21 +1102,26 @@ class InteractionModel {
           !requestStr.includes("prompt suggestion generator") &&
           !requestStr.includes("Please write a 5-10 word title")
         ) {
-          // Check message content length
+          // Check if request has valid content - support both OpenAI/Anthropic and Gemini formats
+          // We accept any interaction that has a valid request structure, not just text content.
+          // This ensures we don't skip requests with images, files, or function calls.
           const request = interaction.request as {
-            messages?: Array<{ content?: string | Array<{ text?: string }> }>;
+            // OpenAI/Anthropic format
+            messages?: Array<{ content?: string | Array<unknown> }>;
+            // Gemini format
+            contents?: Array<{
+              role?: string;
+              parts?: Array<unknown>;
+            }>;
           };
-          const firstMessage = request?.messages?.[0]?.content;
-          const contentText =
-            typeof firstMessage === "string"
-              ? firstMessage
-              : Array.isArray(firstMessage)
-                ? firstMessage
-                    .map((c) => (typeof c === "string" ? c : (c.text ?? "")))
-                    .join(" ")
-                : "";
 
-          if (contentText.length > 20) {
+          // Check if request has valid content (messages or contents array with items)
+          const hasOpenAiContent =
+            Array.isArray(request?.messages) && request.messages.length > 0;
+          const hasGeminiContent =
+            Array.isArray(request?.contents) && request.contents.length > 0;
+
+          if (hasOpenAiContent || hasGeminiContent) {
             lastMainInteraction = interaction;
           }
         }

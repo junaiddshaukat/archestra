@@ -1,11 +1,11 @@
 "use client";
 
 import type { archestraApiTypes } from "@shared";
-import { archestraApiSdk } from "@shared";
 import { Check, Copy, Eye, EyeOff, Loader2, Mail } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { CodeText } from "@/components/code-text";
+import { ConnectionBaseUrlSelect } from "@/components/connection-base-url-select";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -20,10 +20,11 @@ import { useHasPermissions } from "@/lib/auth.query";
 import config from "@/lib/config";
 import { useFeatures } from "@/lib/features.query";
 import { useAgentEmailAddress } from "@/lib/incoming-email.query";
-import { useTokens } from "@/lib/team-token.query";
-import { useUserToken } from "@/lib/user-token.query";
+import { useFetchTeamTokenValue, useTokens } from "@/lib/team-token.query";
+import { useFetchUserTokenValue, useUserToken } from "@/lib/user-token.query";
+import { EmailNotConfiguredMessage } from "./email-not-configured-message";
 
-const { internalProxyUrl } = config.api;
+const { externalProxyUrls, internalProxyUrl } = config.api;
 
 type InternalAgent = archestraApiTypes.GetAllAgentsResponses["200"][number];
 
@@ -51,12 +52,20 @@ export function A2AConnectionInstructions({
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [selectedTokenId, setSelectedTokenId] = useState<string | null>(null);
+  const [connectionUrl, setConnectionUrl] = useState<string>(
+    externalProxyUrls.length >= 1 ? externalProxyUrls[0] : internalProxyUrl,
+  );
   const [showExposedToken, setShowExposedToken] = useState(false);
   const [exposedTokenValue, setExposedTokenValue] = useState<string | null>(
     null,
   );
-  const [isLoadingToken, setIsLoadingToken] = useState(false);
   const [isCopyingCode, setIsCopyingCode] = useState(false);
+
+  // Mutations for fetching token values
+  const fetchUserTokenMutation = useFetchUserTokenValue();
+  const fetchTeamTokenMutation = useFetchTeamTokenValue();
+  const isLoadingToken =
+    fetchUserTokenMutation.isPending || fetchTeamTokenMutation.isPending;
 
   // Email invocation - check both global feature AND agent-level setting
   const globalEmailEnabled = features?.incomingEmail?.enabled ?? false;
@@ -78,7 +87,7 @@ export function A2AConnectionInstructions({
   }, [agentEmailAddress]);
 
   // A2A endpoint
-  const a2aEndpoint = `${internalProxyUrl}/a2a/${agent.id}`;
+  const a2aEndpoint = `${connectionUrl}/a2a/${agent.id}`;
 
   // Default to personal token if available, otherwise org token, then first token
   const orgToken = tokens?.find((t) => t.isOrganizationToken);
@@ -132,41 +141,34 @@ export function A2AConnectionInstructions({
       return;
     }
 
-    setIsLoadingToken(true);
-    try {
-      let tokenValue: string;
+    let tokenValue: string | null = null;
 
-      if (isPersonalTokenSelected) {
-        // Fetch personal token value
-        const response = await archestraApiSdk.getUserTokenValue();
-        if (response.error || !response.data) {
-          throw new Error("Failed to fetch personal token value");
-        }
-        tokenValue = (response.data as { value: string }).value;
-      } else {
-        // Fetch team token value
-        if (!selectedTeamToken) {
-          setIsLoadingToken(false);
-          return;
-        }
-        const response = await archestraApiSdk.getTokenValue({
-          path: { tokenId: selectedTeamToken.id },
-        });
-        if (response.error || !response.data) {
-          throw new Error("Failed to fetch token value");
-        }
-        tokenValue = (response.data as { value: string }).value;
+    if (isPersonalTokenSelected) {
+      // Fetch personal token value
+      const result = await fetchUserTokenMutation.mutateAsync();
+      tokenValue = result?.value ?? null;
+    } else {
+      // Fetch team token value
+      if (!selectedTeamToken) {
+        return;
       }
+      const result = await fetchTeamTokenMutation.mutateAsync(
+        selectedTeamToken.id,
+      );
+      tokenValue = result?.value ?? null;
+    }
 
+    if (tokenValue) {
       setExposedTokenValue(tokenValue);
       setShowExposedToken(true);
-    } catch (error) {
-      toast.error("Failed to fetch token");
-      console.error(error);
-    } finally {
-      setIsLoadingToken(false);
     }
-  }, [isPersonalTokenSelected, selectedTeamToken, showExposedToken]);
+  }, [
+    isPersonalTokenSelected,
+    selectedTeamToken,
+    showExposedToken,
+    fetchUserTokenMutation,
+    fetchTeamTokenMutation,
+  ]);
 
   const handleCopyUrl = useCallback(async () => {
     await navigator.clipboard.writeText(a2aEndpoint);
@@ -186,7 +188,7 @@ export function A2AConnectionInstructions({
   }, [agent.id]);
 
   // Agent Card URL for discovery
-  const agentCardUrl = `${internalProxyUrl}/a2a/${agent.id}/.well-known/agent.json`;
+  const agentCardUrl = `${connectionUrl}/a2a/${agent.id}/.well-known/agent.json`;
 
   // cURL example code for sending messages
   const curlCode = useMemo(
@@ -218,49 +220,49 @@ curl -X GET "${agentCardUrl}" \\
   const handleCopyCode = useCallback(
     async (code: string) => {
       setIsCopyingCode(true);
-      try {
-        // Fetch real token if available
-        let tokenValue = tokenForDisplay;
+      // Fetch real token if available
+      let tokenValue = tokenForDisplay;
 
-        if (isPersonalTokenSelected || hasProfileAdminPermission) {
-          try {
-            if (isPersonalTokenSelected) {
-              const response = await archestraApiSdk.getUserTokenValue();
-              if (response.data) {
-                tokenValue = (response.data as { value: string }).value;
-              }
-            } else if (selectedTeamToken) {
-              const response = await archestraApiSdk.getTokenValue({
-                path: { tokenId: selectedTeamToken.id },
-              });
-              if (response.data) {
-                tokenValue = (response.data as { value: string }).value;
-              }
-            }
-          } catch {
-            // Keep the display token if fetch fails
+      if (isPersonalTokenSelected || hasProfileAdminPermission) {
+        if (isPersonalTokenSelected) {
+          const result = await fetchUserTokenMutation.mutateAsync();
+          if (result?.value) {
+            tokenValue = result.value;
+          }
+        } else if (selectedTeamToken) {
+          const result = await fetchTeamTokenMutation.mutateAsync(
+            selectedTeamToken.id,
+          );
+          if (result?.value) {
+            tokenValue = result.value;
           }
         }
-
-        const codeWithRealToken = code.replace(tokenForDisplay, tokenValue);
-        await navigator.clipboard.writeText(codeWithRealToken);
-        setCopiedCode(true);
-        toast.success("Code copied with token");
-        setTimeout(() => setCopiedCode(false), 2000);
-      } finally {
-        setIsCopyingCode(false);
       }
+
+      const codeWithRealToken = code.replace(tokenForDisplay, tokenValue);
+      await navigator.clipboard.writeText(codeWithRealToken);
+      setCopiedCode(true);
+      toast.success("Code copied with token");
+      setTimeout(() => setCopiedCode(false), 2000);
+      setIsCopyingCode(false);
     },
     [
       tokenForDisplay,
       isPersonalTokenSelected,
       hasProfileAdminPermission,
       selectedTeamToken,
+      fetchUserTokenMutation,
+      fetchTeamTokenMutation,
     ],
   );
 
   return (
     <div className="space-y-6">
+      <ConnectionBaseUrlSelect
+        value={connectionUrl}
+        onChange={setConnectionUrl}
+        idPrefix="a2a"
+      />
       {/* A2A Endpoint URL */}
       <div className="space-y-2">
         <Label className="text-sm font-medium">A2A Endpoint URL</Label>
@@ -519,84 +521,84 @@ curl -X GET "${agentCardUrl}" \\
         </div>
       </div>
 
-      {/* Email Invocation Section - show when global email feature is enabled */}
-      {globalEmailEnabled && (
-        <>
-          <Separator />
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Mail className="h-4 w-4 text-muted-foreground" />
-              <Label className="text-sm font-medium">Email Invocation</Label>
+      {/* Email Invocation Section - always show, with configuration guidance when not enabled */}
+      <Separator />
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Mail className="h-4 w-4 text-muted-foreground" />
+          <Label className="text-sm font-medium">Email Invocation</Label>
+        </div>
+
+        {!globalEmailEnabled ? (
+          <div className="bg-muted/50 rounded-md p-3">
+            <EmailNotConfiguredMessage />
+          </div>
+        ) : agentEmailEnabled ? (
+          <>
+            {/* Security mode description */}
+            <div className="bg-muted/50 rounded-md p-3 text-sm text-muted-foreground">
+              {agent.incomingEmailSecurityMode === "private" && (
+                <p>
+                  <strong>Private mode:</strong> Only emails from registered
+                  users with access to this agent will be processed.
+                </p>
+              )}
+              {agent.incomingEmailSecurityMode === "internal" && (
+                <p>
+                  <strong>Internal mode:</strong> Only emails from{" "}
+                  <span className="font-mono text-xs">
+                    @{agent.incomingEmailAllowedDomain || "your-domain.com"}
+                  </span>{" "}
+                  will be processed.
+                </p>
+              )}
+              {agent.incomingEmailSecurityMode === "public" && (
+                <p>
+                  <strong>Public mode:</strong> Any email will be processed. Use
+                  with caution.
+                </p>
+              )}
             </div>
 
-            {agentEmailEnabled ? (
-              <>
-                {/* Security mode description */}
-                <div className="bg-muted/50 rounded-md p-3 text-sm text-muted-foreground">
-                  {agent.incomingEmailSecurityMode === "private" && (
-                    <p>
-                      <strong>Private mode:</strong> Only emails from registered
-                      users with access to this agent will be processed.
-                    </p>
-                  )}
-                  {agent.incomingEmailSecurityMode === "internal" && (
-                    <p>
-                      <strong>Internal mode:</strong> Only emails from{" "}
-                      <span className="font-mono text-xs">
-                        @{agent.incomingEmailAllowedDomain || "your-domain.com"}
-                      </span>{" "}
-                      will be processed.
-                    </p>
-                  )}
-                  {agent.incomingEmailSecurityMode === "public" && (
-                    <p>
-                      <strong>Public mode:</strong> Any email will be processed.
-                      Use with caution.
-                    </p>
-                  )}
-                </div>
-
-                {/* Email address */}
-                {agentEmailAddress && (
-                  <div className="space-y-2">
-                    <Label className="text-sm text-muted-foreground">
-                      Send an email to invoke this agent. The email body will be
-                      used as the first message.
-                    </Label>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 min-w-0 bg-primary/5 rounded-md px-3 py-2 border border-primary/20 flex items-center gap-2">
-                        <Mail className="h-3 w-3 text-muted-foreground flex-shrink-0" />
-                        <CodeText className="text-xs text-primary break-all flex-1">
-                          {agentEmailAddress}
-                        </CodeText>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-6 w-6 flex-shrink-0"
-                          onClick={handleCopyEmail}
-                        >
-                          {copiedEmail ? (
-                            <Check className="h-3 w-3 text-green-500" />
-                          ) : (
-                            <Copy className="h-3 w-3" />
-                          )}
-                        </Button>
-                      </div>
-                    </div>
+            {/* Email address */}
+            {agentEmailAddress && (
+              <div className="space-y-2">
+                <Label className="text-sm text-muted-foreground">
+                  Send an email to invoke this agent. The email body will be
+                  used as the first message.
+                </Label>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 min-w-0 bg-primary/5 rounded-md px-3 py-2 border border-primary/20 flex items-center gap-2">
+                    <Mail className="h-3 w-3 text-muted-foreground flex-shrink-0" />
+                    <CodeText className="text-xs text-primary break-all flex-1">
+                      {agentEmailAddress}
+                    </CodeText>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 flex-shrink-0"
+                      onClick={handleCopyEmail}
+                    >
+                      {copiedEmail ? (
+                        <Check className="h-3 w-3 text-green-500" />
+                      ) : (
+                        <Copy className="h-3 w-3" />
+                      )}
+                    </Button>
                   </div>
-                )}
-              </>
-            ) : (
-              <div className="bg-muted/50 rounded-md p-3 text-sm text-muted-foreground">
-                <p>
-                  Email invocation is not enabled for this agent. Enable it in
-                  the agent settings to allow triggering via email.
-                </p>
+                </div>
               </div>
             )}
+          </>
+        ) : (
+          <div className="bg-muted/50 rounded-md p-3 text-sm text-muted-foreground">
+            <p>
+              Email invocation is not enabled for this agent. Enable it in the
+              agent settings to allow triggering via email.
+            </p>
           </div>
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 }

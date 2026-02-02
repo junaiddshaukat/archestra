@@ -3,7 +3,17 @@
 import type { archestraApiTypes } from "@shared";
 import { archestraApiSdk } from "@shared";
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, Bot, Loader2, Search, X } from "lucide-react";
+import {
+  AlertTriangle,
+  Bot,
+  Building2,
+  ExternalLink,
+  Globe,
+  Loader2,
+  Lock,
+  Search,
+  X,
+} from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -15,6 +25,7 @@ import {
   AgentToolsEditor,
   type AgentToolsEditorRef,
 } from "@/components/agent-tools-editor";
+import { EmailNotConfiguredMessage } from "@/components/email-not-configured-message";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -25,6 +36,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ExpandableText } from "@/components/ui/expandable-text";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MultiSelectCombobox } from "@/components/ui/multi-select-combobox";
@@ -33,11 +45,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import {
   useCreateProfile,
   useInternalAgents,
+  useProfile,
   useUpdateProfile,
 } from "@/lib/agent.query";
 import {
@@ -47,6 +67,7 @@ import {
 import { useHasPermissions } from "@/lib/auth.query";
 import { useChatProfileMcpTools } from "@/lib/chat.query";
 import { useChatOpsStatus } from "@/lib/chatops.query";
+import { useFeatures } from "@/lib/features.query";
 import { useInternalMcpCatalog } from "@/lib/internal-mcp-catalog.query";
 
 type Agent = archestraApiTypes.GetAllAgentsResponses["200"][number];
@@ -98,11 +119,13 @@ function SubagentPill({ agent, isSelected, onToggle }: SubagentPillProps) {
         <Button
           variant="outline"
           size="sm"
-          className={`h-8 px-3 gap-1.5 text-xs ${!isSelected ? "border-dashed opacity-50" : ""}`}
+          className={`h-8 px-3 gap-1.5 text-xs max-w-[200px] ${!isSelected ? "border-dashed opacity-50" : ""}`}
         >
-          {isSelected && <span className="h-2 w-2 rounded-full bg-green-500" />}
-          <Bot className="h-3 w-3" />
-          <span className="font-medium">{agent.name}</span>
+          {isSelected && (
+            <span className="h-2 w-2 rounded-full bg-green-500 shrink-0" />
+          )}
+          <Bot className="h-3 w-3 shrink-0" />
+          <span className="font-medium truncate">{agent.name}</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -113,12 +136,14 @@ function SubagentPill({ agent, isSelected, onToggle }: SubagentPillProps) {
         avoidCollisions
       >
         <div className="p-4 border-b flex items-start justify-between gap-2">
-          <div className="flex-1">
-            <h4 className="font-semibold">{agent.name}</h4>
-            {agent.systemPrompt && (
-              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                {agent.systemPrompt}
-              </p>
+          <div className="flex-1 min-w-0">
+            <h4 className="font-semibold truncate">{agent.name}</h4>
+            {agent.description && (
+              <ExpandableText
+                text={agent.description}
+                maxLines={2}
+                className="text-sm text-muted-foreground mt-1"
+              />
             )}
           </div>
           <Button
@@ -203,9 +228,22 @@ function SubagentsEditor({
 
   if (filteredAgents.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground">
-        No other agents available.
-      </p>
+      <>
+        <p className="text-sm text-muted-foreground">
+          No other agents available.
+        </p>
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 px-3 gap-1.5 text-xs border-dashed"
+          asChild
+        >
+          <a href="/agents?create=true" target="_blank" rel="noopener">
+            <span className="font-medium">Create a New Agent</span>
+            <ExternalLink className="h-3 w-3" />
+          </a>
+        </Button>
+      </>
     );
   }
 
@@ -231,6 +269,20 @@ function SubagentsEditor({
           onClick={onShowMore}
         >
           +{hiddenCount} more
+        </Button>
+      )}
+      {/* Show "Create a New Agent" when there's no "+N more" button */}
+      {(shouldShowAll || hiddenCount <= 0) && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 px-3 gap-1.5 text-xs border-dashed"
+          asChild
+        >
+          <a href="/agents?create=true" target="_blank" rel="noopener">
+            <span className="font-medium">Create a New Agent</span>
+            <ExternalLink className="h-3 w-3" />
+          </a>
         </Button>
       )}
     </>
@@ -316,6 +368,10 @@ export function AgentDialog({
   const syncDelegations = useSyncAgentDelegations();
   const { data: currentDelegations = [] } = useAgentDelegations(agent?.id);
   const { data: chatopsProviders = [] } = useChatOpsStatus();
+  const { data: features } = useFeatures();
+
+  // Fetch fresh agent data when dialog opens
+  const { data: freshAgent, refetch: refetchAgent } = useProfile(agent?.id);
   const { data: teams } = useQuery({
     queryKey: ["teams"],
     queryFn: async () => {
@@ -329,6 +385,7 @@ export function AgentDialog({
 
   // Form state
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
   const [systemPrompt, setSystemPrompt] = useState("");
   const [selectedDelegationTargetIds, setSelectedDelegationTargetIds] =
@@ -338,6 +395,12 @@ export function AgentDialog({
   const [labels, setLabels] = useState<ProfileLabel[]>([]);
   const [considerContextUntrusted, setConsiderContextUntrusted] =
     useState(false);
+  const [incomingEmailEnabled, setIncomingEmailEnabled] = useState(false);
+  const [incomingEmailSecurityMode, setIncomingEmailSecurityMode] = useState<
+    "private" | "internal" | "public"
+  >("private");
+  const [incomingEmailAllowedDomain, setIncomingEmailAllowedDomain] =
+    useState("");
   const [subagentsSearch, setSubagentsSearch] = useState("");
   const [subagentsSearchOpen, setSubagentsSearchOpen] = useState(false);
   const [subagentsShowAll, setSubagentsShowAll] = useState(false);
@@ -357,30 +420,50 @@ export function AgentDialog({
   // Reset form when dialog opens/closes or agent changes
   useEffect(() => {
     if (open) {
-      if (agent) {
+      // Refetch agent data when dialog opens to ensure fresh data
+      if (agent?.id) {
+        refetchAgent();
+      }
+
+      // Use fresh agent data if available, otherwise fall back to prop
+      const agentData = freshAgent || agent;
+
+      if (agentData) {
         // Edit mode
-        setName(agent.name);
-        setUserPrompt(agent.userPrompt || "");
-        setSystemPrompt(agent.systemPrompt || "");
+        setName(agentData.name);
+        setDescription(agentData.description || "");
+        setUserPrompt(agentData.userPrompt || "");
+        setSystemPrompt(agentData.systemPrompt || "");
         // Reset delegation targets - will be populated by the next useEffect when data loads
         setSelectedDelegationTargetIds([]);
         // Parse allowedChatops from agent
-        const chatopsValue = agent.allowedChatops;
+        const chatopsValue = agentData.allowedChatops;
         if (Array.isArray(chatopsValue)) {
           setAllowedChatops(chatopsValue as string[]);
         } else {
           setAllowedChatops([]);
         }
         // Teams and labels
-        const agentTeams = agent.teams as unknown as
+        const agentTeams = agentData.teams as unknown as
           | Array<{ id: string; name: string }>
           | undefined;
         setAssignedTeamIds(agentTeams?.map((t) => t.id) || []);
-        setLabels(agent.labels || []);
-        setConsiderContextUntrusted(agent.considerContextUntrusted || false);
+        setLabels(agentData.labels || []);
+        setConsiderContextUntrusted(
+          agentData.considerContextUntrusted || false,
+        );
+        // Email invocation settings
+        setIncomingEmailEnabled(agentData.incomingEmailEnabled || false);
+        setIncomingEmailSecurityMode(
+          agentData.incomingEmailSecurityMode || "private",
+        );
+        setIncomingEmailAllowedDomain(
+          agentData.incomingEmailAllowedDomain || "",
+        );
       } else {
         // Create mode - reset all fields
         setName("");
+        setDescription("");
         setUserPrompt("");
         setSystemPrompt("");
         setSelectedDelegationTargetIds([]);
@@ -388,6 +471,9 @@ export function AgentDialog({
         setAssignedTeamIds([]);
         setLabels([]);
         setConsiderContextUntrusted(false);
+        setIncomingEmailEnabled(false);
+        setIncomingEmailSecurityMode("private");
+        setIncomingEmailAllowedDomain("");
       }
       // Reset search and counts when dialog opens
       setSubagentsSearch("");
@@ -398,7 +484,7 @@ export function AgentDialog({
       setToolsShowAll(false);
       setSelectedToolsCount(0);
     }
-  }, [open, agent]);
+  }, [open, agent, freshAgent, refetchAgent]);
 
   // Sync selectedDelegationTargetIds with currentDelegations when data loads
   const currentDelegationIds = currentDelegations.map((a) => a.id).join(",");
@@ -433,6 +519,26 @@ export function AgentDialog({
       return;
     }
 
+    // Validate email domain when security mode is "internal"
+    if (
+      isInternalAgent &&
+      incomingEmailEnabled &&
+      incomingEmailSecurityMode === "internal"
+    ) {
+      const trimmedDomain = incomingEmailAllowedDomain.trim();
+      if (!trimmedDomain) {
+        toast.error("Allowed domain is required for internal security mode");
+        return;
+      }
+      // Basic domain format validation (no @, valid characters)
+      const domainRegex =
+        /^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?)*$/;
+      if (!domainRegex.test(trimmedDomain)) {
+        toast.error("Please enter a valid domain (e.g., example.com)");
+        return;
+      }
+    }
+
     // Save any unsaved label before submitting
     const updatedLabels = agentLabelsRef.current?.saveUnsavedLabel() || labels;
 
@@ -444,6 +550,17 @@ export function AgentDialog({
         await agentToolsEditorRef.current?.saveChanges();
       }
 
+      // Build email settings for internal agents (always save, backend controls enforcement)
+      const emailSettings = isInternalAgent
+        ? {
+            incomingEmailEnabled,
+            incomingEmailSecurityMode,
+            ...(incomingEmailSecurityMode === "internal" && {
+              incomingEmailAllowedDomain: incomingEmailAllowedDomain.trim(),
+            }),
+          }
+        : {};
+
       if (agent) {
         // Update existing agent
         const updated = await updateAgent.mutateAsync({
@@ -452,6 +569,7 @@ export function AgentDialog({
             name: trimmedName,
             agentType: agentType,
             ...(isInternalAgent && {
+              description: description.trim() || null,
               userPrompt: trimmedUserPrompt || undefined,
               systemPrompt: trimmedSystemPrompt || undefined,
               allowedChatops,
@@ -459,6 +577,7 @@ export function AgentDialog({
             teams: assignedTeamIds,
             labels: updatedLabels,
             ...(showSecurity && { considerContextUntrusted }),
+            ...emailSettings,
           },
         });
         savedAgentId = updated?.id ?? agent.id;
@@ -469,6 +588,7 @@ export function AgentDialog({
           name: trimmedName,
           agentType: agentType,
           ...(isInternalAgent && {
+            description: description.trim() || null,
             userPrompt: trimmedUserPrompt || undefined,
             systemPrompt: trimmedSystemPrompt || undefined,
             allowedChatops,
@@ -476,6 +596,7 @@ export function AgentDialog({
           teams: assignedTeamIds,
           labels: updatedLabels,
           ...(showSecurity && { considerContextUntrusted }),
+          ...emailSettings,
         });
         savedAgentId = created?.id ?? "";
 
@@ -514,12 +635,16 @@ export function AgentDialog({
     }
   }, [
     name,
+    description,
     userPrompt,
     systemPrompt,
     allowedChatops,
     assignedTeamIds,
     labels,
     considerContextUntrusted,
+    incomingEmailEnabled,
+    incomingEmailSecurityMode,
+    incomingEmailAllowedDomain,
     agentType,
     agent,
     isInternalAgent,
@@ -591,6 +716,24 @@ export function AgentDialog({
                 autoFocus
               />
             </div>
+
+            {/* Description (Agent only) */}
+            {isInternalAgent && (
+              <div className="space-y-2">
+                <Label htmlFor="agentDescription">Description</Label>
+                <p className="text-sm text-muted-foreground">
+                  A brief summary of what this agent does. Helps other agents
+                  quickly understand if this agent is relevant for their task.
+                </p>
+                <Textarea
+                  id="agentDescription"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Describe what this agent does"
+                  className="min-h-[60px]"
+                />
+              </div>
+            )}
 
             {/* Tools (MCP Gateway and Agent only) */}
             {showToolsAndSubagents && (
@@ -717,43 +860,201 @@ export function AgentDialog({
             )}
 
             {/* Agent Trigger Rules (Agent only) */}
-            {isInternalAgent && configuredChatopsProviders.length > 0 && (
+            {isInternalAgent && (
               <div className="space-y-2">
                 <Label>Agent Trigger Rules</Label>
-                <div className="space-y-3 pt-1">
-                  {configuredChatopsProviders.map((provider) => (
-                    <div
-                      key={provider.id}
-                      className="flex items-center justify-between"
+                {configuredChatopsProviders.length > 0 ? (
+                  <div className="space-y-3 pt-1">
+                    {configuredChatopsProviders.map((provider) => (
+                      <div
+                        key={provider.id}
+                        className="flex items-center justify-between"
+                      >
+                        <div className="space-y-0.5">
+                          <label
+                            htmlFor={`chatops-${provider.id}`}
+                            className="text-sm cursor-pointer"
+                          >
+                            {provider.displayName}
+                          </label>
+                          <p className="text-xs text-muted-foreground">
+                            Allow this agent to be triggered via{" "}
+                            {provider.displayName}
+                          </p>
+                        </div>
+                        <Switch
+                          id={`chatops-${provider.id}`}
+                          checked={allowedChatops.includes(provider.id)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setAllowedChatops([
+                                ...allowedChatops,
+                                provider.id,
+                              ]);
+                            } else {
+                              setAllowedChatops(
+                                allowedChatops.filter(
+                                  (id) => id !== provider.id,
+                                ),
+                              );
+                            }
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    No integrations configured. You can integrate with{" "}
+                    <a
+                      href="https://archestra.ai/docs/platform-agents#chatops-microsoft-teams"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary underline hover:no-underline"
                     >
+                      Microsoft Teams
+                    </a>{" "}
+                    to trigger agents from chat messages.
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Email Invocation (Agent only) */}
+            {isInternalAgent && (
+              <div className="space-y-2">
+                <Label>Email Invocation</Label>
+                {features?.incomingEmail?.enabled ? (
+                  <div className="border rounded-lg bg-muted/30 p-4 space-y-4">
+                    <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
                         <label
-                          htmlFor={`chatops-${provider.id}`}
-                          className="text-sm cursor-pointer"
+                          htmlFor="incoming-email-enabled"
+                          className="text-sm font-medium cursor-pointer"
                         >
-                          {provider.displayName}
+                          Enable email invocation
                         </label>
                         <p className="text-xs text-muted-foreground">
-                          Allow this agent to be triggered via{" "}
-                          {provider.displayName}
+                          Allow this agent to be triggered via email
                         </p>
                       </div>
                       <Switch
-                        id={`chatops-${provider.id}`}
-                        checked={allowedChatops.includes(provider.id)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setAllowedChatops([...allowedChatops, provider.id]);
-                          } else {
-                            setAllowedChatops(
-                              allowedChatops.filter((id) => id !== provider.id),
-                            );
-                          }
-                        }}
+                        id="incoming-email-enabled"
+                        checked={incomingEmailEnabled}
+                        onCheckedChange={setIncomingEmailEnabled}
                       />
                     </div>
-                  ))}
-                </div>
+
+                    {incomingEmailEnabled && (
+                      <div className="space-y-4 pt-2 border-t">
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="incoming-email-security-mode"
+                            className="text-sm"
+                          >
+                            Security mode
+                          </Label>
+                          <Select
+                            value={incomingEmailSecurityMode}
+                            onValueChange={(
+                              value: "private" | "internal" | "public",
+                            ) => setIncomingEmailSecurityMode(value)}
+                          >
+                            <SelectTrigger id="incoming-email-security-mode">
+                              <SelectValue placeholder="Select security mode">
+                                <div className="flex items-center gap-2">
+                                  {incomingEmailSecurityMode === "private" && (
+                                    <>
+                                      <Lock className="h-4 w-4" />
+                                      <span>Private</span>
+                                    </>
+                                  )}
+                                  {incomingEmailSecurityMode === "internal" && (
+                                    <>
+                                      <Building2 className="h-4 w-4" />
+                                      <span>Internal</span>
+                                    </>
+                                  )}
+                                  {incomingEmailSecurityMode === "public" && (
+                                    <>
+                                      <Globe className="h-4 w-4" />
+                                      <span>Public</span>
+                                    </>
+                                  )}
+                                </div>
+                              </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="private">
+                                <div className="flex items-start gap-2">
+                                  <Lock className="h-4 w-4 mt-0.5 text-muted-foreground" />
+                                  <div className="flex flex-col">
+                                    <span className="font-medium">Private</span>
+                                    <span className="text-xs text-muted-foreground">
+                                      Only registered users with access
+                                    </span>
+                                  </div>
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="internal">
+                                <div className="flex items-start gap-2">
+                                  <Building2 className="h-4 w-4 mt-0.5 text-muted-foreground" />
+                                  <div className="flex flex-col">
+                                    <span className="font-medium">
+                                      Internal
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
+                                      Only emails from allowed domain
+                                    </span>
+                                  </div>
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="public">
+                                <div className="flex items-start gap-2">
+                                  <Globe className="h-4 w-4 mt-0.5 text-amber-500" />
+                                  <div className="flex flex-col">
+                                    <span className="font-medium">Public</span>
+                                    <span className="text-xs text-muted-foreground">
+                                      Any email (use with caution)
+                                    </span>
+                                  </div>
+                                </div>
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {incomingEmailSecurityMode === "internal" && (
+                          <div className="space-y-2">
+                            <Label
+                              htmlFor="incoming-email-allowed-domain"
+                              className="text-sm"
+                            >
+                              Allowed domain
+                            </Label>
+                            <Input
+                              id="incoming-email-allowed-domain"
+                              placeholder="company.com"
+                              value={incomingEmailAllowedDomain}
+                              onChange={(e) =>
+                                setIncomingEmailAllowedDomain(e.target.value)
+                              }
+                            />
+                            <p className="text-xs text-muted-foreground">
+                              Only emails from @
+                              {incomingEmailAllowedDomain || "your-domain.com"}{" "}
+                              will be processed
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="border rounded-lg bg-muted/30 p-4">
+                    <EmailNotConfiguredMessage />
+                  </div>
+                )}
               </div>
             )}
 

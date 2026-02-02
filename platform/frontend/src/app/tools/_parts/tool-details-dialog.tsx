@@ -22,7 +22,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useInternalMcpCatalogSuspense } from "@/lib/internal-mcp-catalog.query";
+import { useInternalMcpCatalog } from "@/lib/internal-mcp-catalog.query";
 import type { ToolWithAssignmentsData } from "@/lib/tool.query";
 import { isMcpToolByProperties } from "@/lib/tool.utils";
 import { formatDate } from "@/lib/utils";
@@ -41,7 +41,7 @@ export function ToolDetailsDialog({
   open,
   onOpenChange,
 }: ToolDetailsDialogProps) {
-  const { data: internalMcpCatalogItems } = useInternalMcpCatalogSuspense();
+  const { data: internalMcpCatalogItems } = useInternalMcpCatalog();
   const [assignmentsOpen, setAssignmentsOpen] = useState(true);
 
   if (!tool) return null;
@@ -172,7 +172,9 @@ export function ToolDetailsDialog({
                   >
                     <div className="flex items-center gap-2">
                       <User className="h-4 w-4" />
-                      <span className="font-semibold text-sm">Assignments</span>
+                      <span className="font-semibold text-sm">
+                        Assignments to Agents and MCP Gateways
+                      </span>
                       <Badge variant="secondary" className="ml-2">
                         {tool.assignmentCount}
                       </Badge>
@@ -188,7 +190,7 @@ export function ToolDetailsDialog({
                   <div className="border-t border-border">
                     {tool.assignments.length === 0 ? (
                       <div className="p-4 text-sm text-muted-foreground text-center">
-                        No profile assignments
+                        Not assigned to agent or MCP gateway.
                       </div>
                     ) : (
                       <div className="divide-y divide-border">
