@@ -8,6 +8,7 @@ export { default as agentTeamsTable } from "./agent-team";
 export { default as agentToolsTable } from "./agent-tool";
 export { default as apikeysTable } from "./api-key";
 export { default as apiKeyModelsTable } from "./api-key-model";
+export { default as browserTabStatesTable } from "./browser-tab-state";
 export {
   type ChatApiKeyScope,
   default as chatApiKeysTable,
@@ -27,6 +28,7 @@ export { default as labelKeysTable } from "./label-key";
 export { default as labelValuesTable } from "./label-value";
 export { default as limitsTable } from "./limit";
 export { default as limitModelUsageTable } from "./limit-model-usage";
+export { default as mcpHttpSessionsTable } from "./mcp-http-session";
 export { default as mcpServersTable } from "./mcp-server";
 export { default as mcpServerInstallationRequestsTable } from "./mcp-server-installation-request";
 export { default as mcpServerUsersTable } from "./mcp-server-user";
