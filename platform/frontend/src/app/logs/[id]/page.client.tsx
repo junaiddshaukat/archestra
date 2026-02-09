@@ -266,7 +266,7 @@ function LogDetail({
               </AccordionContent>
             </AccordionItem>
 
-            {dynamicInteraction.processedRequest && (
+            {!!dynamicInteraction.processedRequest && (
               <AccordionItem
                 value="processedRequest"
                 className="border rounded-lg mb-2"
