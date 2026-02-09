@@ -12,8 +12,8 @@ import type {
 import GeminiGenerateContentInteraction from "./llmProviders/gemini";
 import MistralChatCompletionInteraction from "./llmProviders/mistral";
 import OllamaChatCompletionInteraction from "./llmProviders/ollama";
-import PerplexityChatCompletionInteraction from "./llmProviders/perplexity";
 import OpenAiChatCompletionInteraction from "./llmProviders/openai";
+import PerplexityChatCompletionInteraction from "./llmProviders/perplexity";
 import VllmChatCompletionInteraction from "./llmProviders/vllm";
 import ZhipuaiChatCompletionInteraction from "./llmProviders/zhipuai";
 
