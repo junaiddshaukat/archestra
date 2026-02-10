@@ -292,7 +292,7 @@ const chatRoutes: FastifyPluginAsyncZod = async (fastify) => {
       const streamTextConfig: Parameters<typeof streamText>[0] = {
         model,
         messages: modelMessages,
-...(supportsToolCalling && { tools: mcpTools }),
+        ...(supportsToolCalling && { tools: mcpTools }),
         stopWhen: stepCountIs(500),
         onFinish: async ({ usage, finishReason }) => {
           logger.info(
