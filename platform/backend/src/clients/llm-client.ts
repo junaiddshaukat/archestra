@@ -328,7 +328,7 @@ const directModelCreators: Record<SupportedChatProvider, DirectModelCreator> = {
     // This provides better compatibility than @ai-sdk/perplexity
     const client = createOpenAI({
       apiKey,
-      baseURL: config.chat.perplexity.baseUrl,
+      baseURL: config.llm.perplexity.baseUrl,
     });
     return client.chat(modelName);
   },

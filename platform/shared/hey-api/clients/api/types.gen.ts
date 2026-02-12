@@ -16874,9 +16874,9 @@ export type GetInteractionsResponses = {
             userId: string | null;
             sessionId: string | null;
             sessionSource: string | null;
-            request: unknown;
-            processedRequest?: unknown | null;
-            response: unknown;
+            request: MistralChatCompletionRequest;
+            processedRequest?: MistralChatCompletionRequest | null;
+            response: MistralChatCompletionResponse;
             type: 'perplexity:chatCompletions';
             model: string | null;
             baselineModel: string | null;
@@ -17894,9 +17894,9 @@ export type GetInteractionResponses = {
         userId: string | null;
         sessionId: string | null;
         sessionSource: string | null;
-        request: unknown;
-        processedRequest?: unknown | null;
-        response: unknown;
+        request: MistralChatCompletionRequest;
+        processedRequest?: MistralChatCompletionRequest | null;
+        response: MistralChatCompletionResponse;
         type: 'perplexity:chatCompletions';
         model: string | null;
         baselineModel: string | null;

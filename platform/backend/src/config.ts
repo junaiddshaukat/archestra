@@ -569,9 +569,6 @@ export default {
     },
     perplexity: {
       apiKey: process.env.ARCHESTRA_CHAT_PERPLEXITY_API_KEY || "",
-      baseUrl:
-        process.env.ARCHESTRA_CHAT_PERPLEXITY_BASE_URL ||
-        "https://api.perplexity.ai",
     },
     vllm: {
       apiKey: process.env.ARCHESTRA_CHAT_VLLM_API_KEY || "",
