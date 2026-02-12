@@ -36,7 +36,6 @@ namespace Perplexity {
     export type FinishReason = z.infer<typeof PerplexityAPI.FinishReasonSchema>;
     export type Message = z.infer<typeof PerplexityMessages.MessageParamSchema>;
     export type Role = Message["role"];
-    export type SearchResult = z.infer<typeof PerplexityAPI.SearchResultSchema>;
 
     // Use OpenAI's stream chunk type since Perplexity is OpenAI-compatible
     export type ChatCompletionChunk =

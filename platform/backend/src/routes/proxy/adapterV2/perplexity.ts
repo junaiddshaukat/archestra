@@ -17,7 +17,7 @@ import type {
   ChatCompletionCreateParamsStreaming,
 } from "openai/resources/chat/completions/completions";
 import config from "@/config";
-import { getObservableFetch } from "@/llm-metrics";
+import { getObservableFetch } from "@/observability/metrics/llm";
 import logger from "@/logging";
 import type {
   ChunkProcessingResult,

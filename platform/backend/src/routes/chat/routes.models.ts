@@ -283,43 +283,15 @@ async function fetchMistralModels(apiKey: string): Promise<ModelInfo[]> {
  * Fetch models from Perplexity API
  *
  * Note: Perplexity does NOT have a /models endpoint like OpenAI.
- * We return a hardcoded list of available models and validate the API key
- * by making a lightweight chat completion request.
+ * Returns a hardcoded list of available models. Perplexity does not have a
+ * /models endpoint, so we return the known models directly. API key validation
+ * happens on first actual use rather than on model list refresh.
  *
  * @see https://docs.perplexity.ai/models/model-cards
  */
-async function fetchPerplexityModels(apiKey: string): Promise<ModelInfo[]> {
-  const baseUrl = config.chat.perplexity.baseUrl;
-
-  // Perplexity doesn't have a /models endpoint, so we validate the API key
-  // by making a minimal chat completion request
-  const validateUrl = `${baseUrl}/chat/completions`;
-
-  const response = await fetch(validateUrl, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "sonar",
-      messages: [{ role: "user", content: "hi" }],
-      max_tokens: 1,
-    }),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    logger.error(
-      { status: response.status, error: errorText },
-      "Failed to validate Perplexity API key",
-    );
-    throw new Error(
-      `Failed to validate Perplexity API key: ${response.status}`,
-    );
-  }
-
+async function fetchPerplexityModels(_apiKey: string): Promise<ModelInfo[]> {
   // Return hardcoded list of Perplexity models
+  // Perplexity has no /models endpoint - validation happens on first actual use
   // @see https://docs.perplexity.ai/models/model-cards
   const perplexityModels: ModelInfo[] = [
     {
