@@ -608,4 +608,6 @@ export default {
   },
   authRateLimitDisabled:
     process.env.ARCHESTRA_AUTH_RATE_LIMIT_DISABLED === "true",
+  isQuickstart: process.env.ARCHESTRA_QUICKSTART === "true",
+  ngrokDomain: process.env.ARCHESTRA_NGROK_DOMAIN || "",
 };

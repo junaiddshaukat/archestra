@@ -266,14 +266,14 @@ export const RouteId = {
   // Appearance Routes (public/unauthenticated)
   GetPublicAppearance: "getPublicAppearance",
 
-  // SSO Provider Routes
-  GetPublicSsoProviders: "getPublicSsoProviders",
-  GetSsoProviders: "getSsoProviders",
-  GetSsoProvider: "getSsoProvider",
-  CreateSsoProvider: "createSsoProvider",
-  UpdateSsoProvider: "updateSsoProvider",
-  DeleteSsoProvider: "deleteSsoProvider",
-  GetSsoProviderIdpLogoutUrl: "getSsoProviderIdpLogoutUrl",
+  // Identity Provider Routes
+  GetPublicIdentityProviders: "getPublicIdentityProviders",
+  GetIdentityProviders: "getIdentityProviders",
+  GetIdentityProvider: "getIdentityProvider",
+  CreateIdentityProvider: "createIdentityProvider",
+  UpdateIdentityProvider: "updateIdentityProvider",
+  DeleteIdentityProvider: "deleteIdentityProvider",
+  GetIdentityProviderIdpLogoutUrl: "getIdentityProviderIdpLogoutUrl",
 
   // User Routes
   GetUserPermissions: "getUserPermissions",
@@ -325,6 +325,8 @@ export const RouteId = {
   GetChatOpsStatus: "getChatOpsStatus",
   ListChatOpsBindings: "listChatOpsBindings",
   DeleteChatOpsBinding: "deleteChatOpsBinding",
+  UpdateChatOpsBinding: "updateChatOpsBinding",
+  UpdateChatOpsConfigInQuickstart: "updateChatOpsConfigInQuickstart",
 
   // Invitation Routes
   CheckInvitation: "checkInvitation",

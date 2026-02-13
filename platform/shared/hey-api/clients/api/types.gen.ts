@@ -6380,6 +6380,7 @@ export type GetAgentsResponses = {
             incomingEmailAllowedDomain: string | null;
             llmApiKeyId: string | null;
             llmModel: string | null;
+            identityProviderId: string | null;
             createdAt: string;
             updatedAt: string;
             tools: Array<{
@@ -6454,6 +6455,7 @@ export type CreateAgentData = {
         incomingEmailAllowedDomain?: string | null;
         llmApiKeyId?: string | null;
         llmModel?: string | null;
+        identityProviderId?: string | null;
         teams: Array<string>;
         labels?: Array<{
             key: string;
@@ -6553,6 +6555,7 @@ export type CreateAgentResponses = {
         incomingEmailAllowedDomain: string | null;
         llmApiKeyId: string | null;
         llmModel: string | null;
+        identityProviderId: string | null;
         createdAt: string;
         updatedAt: string;
         tools: Array<{
@@ -6701,6 +6704,7 @@ export type GetAllAgentsResponses = {
         incomingEmailAllowedDomain: string | null;
         llmApiKeyId: string | null;
         llmModel: string | null;
+        identityProviderId: string | null;
         createdAt: string;
         updatedAt: string;
         tools: Array<{
@@ -6840,6 +6844,7 @@ export type GetDefaultMcpGatewayResponses = {
         incomingEmailAllowedDomain: string | null;
         llmApiKeyId: string | null;
         llmModel: string | null;
+        identityProviderId: string | null;
         createdAt: string;
         updatedAt: string;
         tools: Array<{
@@ -6979,6 +6984,7 @@ export type GetDefaultLlmProxyResponses = {
         incomingEmailAllowedDomain: string | null;
         llmApiKeyId: string | null;
         llmModel: string | null;
+        identityProviderId: string | null;
         createdAt: string;
         updatedAt: string;
         tools: Array<{
@@ -7199,6 +7205,7 @@ export type GetAgentResponses = {
         incomingEmailAllowedDomain: string | null;
         llmApiKeyId: string | null;
         llmModel: string | null;
+        identityProviderId: string | null;
         createdAt: string;
         updatedAt: string;
         tools: Array<{
@@ -7264,6 +7271,7 @@ export type UpdateAgentData = {
         incomingEmailAllowedDomain?: string | null;
         llmApiKeyId?: string | null;
         llmModel?: string | null;
+        identityProviderId?: string | null;
         teams?: Array<string>;
         labels?: Array<{
             key: string;
@@ -7365,6 +7373,7 @@ export type UpdateAgentResponses = {
         incomingEmailAllowedDomain: string | null;
         llmApiKeyId: string | null;
         llmModel: string | null;
+        identityProviderId: string | null;
         createdAt: string;
         updatedAt: string;
         tools: Array<{
@@ -7507,6 +7516,7 @@ export type GetAgentVersionsResponses = {
             incomingEmailAllowedDomain: string | null;
             llmApiKeyId: string | null;
             llmModel: string | null;
+            identityProviderId: string | null;
             createdAt: string;
             updatedAt: string;
             tools: Array<{
@@ -7660,6 +7670,7 @@ export type RollbackAgentResponses = {
         incomingEmailAllowedDomain: string | null;
         llmApiKeyId: string | null;
         llmModel: string | null;
+        identityProviderId: string | null;
         createdAt: string;
         updatedAt: string;
         tools: Array<{
@@ -14114,6 +14125,11 @@ export type GetChatOpsStatusResponses = {
             id: string;
             displayName: string;
             configured: boolean;
+            credentials?: {
+                appId: string;
+                appSecret: string;
+                tenantId: string;
+            };
         }>;
     };
 };
@@ -14196,6 +14212,8 @@ export type ListChatOpsBindingsResponses = {
         provider: 'ms-teams';
         channelId: string;
         workspaceId: string | null;
+        channelName: string | null;
+        workspaceName: string | null;
         agentId: string | null;
         createdAt: string;
         updatedAt: string;
@@ -14282,6 +14300,178 @@ export type DeleteChatOpsBindingResponses = {
 };
 
 export type DeleteChatOpsBindingResponse = DeleteChatOpsBindingResponses[keyof DeleteChatOpsBindingResponses];
+
+export type UpdateChatOpsBindingData = {
+    body?: {
+        agentId?: string | null;
+    };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/chatops/bindings/{id}';
+};
+
+export type UpdateChatOpsBindingErrors = {
+    /**
+     * Default Response
+     */
+    400: {
+        error: {
+            message: string;
+            type: 'api_validation_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    401: {
+        error: {
+            message: string;
+            type: 'api_authentication_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    403: {
+        error: {
+            message: string;
+            type: 'api_authorization_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    404: {
+        error: {
+            message: string;
+            type: 'api_not_found_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    409: {
+        error: {
+            message: string;
+            type: 'api_conflict_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    500: {
+        error: {
+            message: string;
+            type: 'api_internal_server_error';
+        };
+    };
+};
+
+export type UpdateChatOpsBindingError = UpdateChatOpsBindingErrors[keyof UpdateChatOpsBindingErrors];
+
+export type UpdateChatOpsBindingResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        id: string;
+        organizationId: string;
+        provider: 'ms-teams';
+        channelId: string;
+        workspaceId: string | null;
+        channelName: string | null;
+        workspaceName: string | null;
+        agentId: string | null;
+        createdAt: string;
+        updatedAt: string;
+    };
+};
+
+export type UpdateChatOpsBindingResponse = UpdateChatOpsBindingResponses[keyof UpdateChatOpsBindingResponses];
+
+export type UpdateChatOpsConfigInQuickstartData = {
+    body?: {
+        enabled?: boolean;
+        appId?: string;
+        appSecret?: string;
+        tenantId?: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/chatops/config/ms-teams';
+};
+
+export type UpdateChatOpsConfigInQuickstartErrors = {
+    /**
+     * Default Response
+     */
+    400: {
+        error: {
+            message: string;
+            type: 'api_validation_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    401: {
+        error: {
+            message: string;
+            type: 'api_authentication_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    403: {
+        error: {
+            message: string;
+            type: 'api_authorization_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    404: {
+        error: {
+            message: string;
+            type: 'api_not_found_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    409: {
+        error: {
+            message: string;
+            type: 'api_conflict_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    500: {
+        error: {
+            message: string;
+            type: 'api_internal_server_error';
+        };
+    };
+};
+
+export type UpdateChatOpsConfigInQuickstartError = UpdateChatOpsConfigInQuickstartErrors[keyof UpdateChatOpsConfigInQuickstartErrors];
+
+export type UpdateChatOpsConfigInQuickstartResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        success: boolean;
+    };
+};
+
+export type UpdateChatOpsConfigInQuickstartResponse = UpdateChatOpsConfigInQuickstartResponses[keyof UpdateChatOpsConfigInQuickstartResponses];
 
 export type CohereChatWithDefaultAgentData = {
     body?: CohereChatRequestInput;
@@ -15176,6 +15366,14 @@ export type GetFeaturesResponses = {
         };
         mcpServerBaseImage: string;
         orchestratorK8sNamespace: string;
+        isQuickstart: boolean;
+        ngrokDomain: string;
+        chatops: {
+            msTeamsEnabled: boolean;
+            msTeamsAppId: boolean;
+            msTeamsAppSecret: boolean;
+            msTeamsTenantId: boolean;
+        };
     };
 };
 
@@ -16078,6 +16276,7 @@ export type GetInteractionsResponses = {
             id: string;
             profileId: string;
             externalAgentId: string | null;
+            executionId: string | null;
             userId: string | null;
             sessionId: string | null;
             sessionSource: string | null;
@@ -16102,6 +16301,7 @@ export type GetInteractionsResponses = {
             id: string;
             profileId: string;
             externalAgentId: string | null;
+            executionId: string | null;
             userId: string | null;
             sessionId: string | null;
             sessionSource: string | null;
@@ -16126,6 +16326,7 @@ export type GetInteractionsResponses = {
             id: string;
             profileId: string;
             externalAgentId: string | null;
+            executionId: string | null;
             userId: string | null;
             sessionId: string | null;
             sessionSource: string | null;
@@ -16150,6 +16351,7 @@ export type GetInteractionsResponses = {
             id: string;
             profileId: string;
             externalAgentId: string | null;
+            executionId: string | null;
             userId: string | null;
             sessionId: string | null;
             sessionSource: string | null;
@@ -16542,6 +16744,7 @@ export type GetInteractionsResponses = {
             id: string;
             profileId: string;
             externalAgentId: string | null;
+            executionId: string | null;
             userId: string | null;
             sessionId: string | null;
             sessionSource: string | null;
@@ -16566,6 +16769,7 @@ export type GetInteractionsResponses = {
             id: string;
             profileId: string;
             externalAgentId: string | null;
+            executionId: string | null;
             userId: string | null;
             sessionId: string | null;
             sessionSource: string | null;
@@ -16590,6 +16794,7 @@ export type GetInteractionsResponses = {
             id: string;
             profileId: string;
             externalAgentId: string | null;
+            executionId: string | null;
             userId: string | null;
             sessionId: string | null;
             sessionSource: string | null;
@@ -16636,6 +16841,7 @@ export type GetInteractionsResponses = {
             id: string;
             profileId: string;
             externalAgentId: string | null;
+            executionId: string | null;
             userId: string | null;
             sessionId: string | null;
             sessionSource: string | null;
@@ -16658,6 +16864,7 @@ export type GetInteractionsResponses = {
             id: string;
             profileId: string;
             externalAgentId: string | null;
+            executionId: string | null;
             userId: string | null;
             sessionId: string | null;
             sessionSource: string | null;
@@ -16682,6 +16889,7 @@ export type GetInteractionsResponses = {
             id: string;
             profileId: string;
             externalAgentId: string | null;
+            executionId: string | null;
             userId: string | null;
             sessionId: string | null;
             sessionSource: string | null;
@@ -17088,6 +17296,7 @@ export type GetInteractionResponses = {
         id: string;
         profileId: string;
         externalAgentId: string | null;
+        executionId: string | null;
         userId: string | null;
         sessionId: string | null;
         sessionSource: string | null;
@@ -17112,6 +17321,7 @@ export type GetInteractionResponses = {
         id: string;
         profileId: string;
         externalAgentId: string | null;
+        executionId: string | null;
         userId: string | null;
         sessionId: string | null;
         sessionSource: string | null;
@@ -17136,6 +17346,7 @@ export type GetInteractionResponses = {
         id: string;
         profileId: string;
         externalAgentId: string | null;
+        executionId: string | null;
         userId: string | null;
         sessionId: string | null;
         sessionSource: string | null;
@@ -17160,6 +17371,7 @@ export type GetInteractionResponses = {
         id: string;
         profileId: string;
         externalAgentId: string | null;
+        executionId: string | null;
         userId: string | null;
         sessionId: string | null;
         sessionSource: string | null;
@@ -17552,6 +17764,7 @@ export type GetInteractionResponses = {
         id: string;
         profileId: string;
         externalAgentId: string | null;
+        executionId: string | null;
         userId: string | null;
         sessionId: string | null;
         sessionSource: string | null;
@@ -17576,6 +17789,7 @@ export type GetInteractionResponses = {
         id: string;
         profileId: string;
         externalAgentId: string | null;
+        executionId: string | null;
         userId: string | null;
         sessionId: string | null;
         sessionSource: string | null;
@@ -17600,6 +17814,7 @@ export type GetInteractionResponses = {
         id: string;
         profileId: string;
         externalAgentId: string | null;
+        executionId: string | null;
         userId: string | null;
         sessionId: string | null;
         sessionSource: string | null;
@@ -17646,6 +17861,7 @@ export type GetInteractionResponses = {
         id: string;
         profileId: string;
         externalAgentId: string | null;
+        executionId: string | null;
         userId: string | null;
         sessionId: string | null;
         sessionSource: string | null;
@@ -17668,6 +17884,7 @@ export type GetInteractionResponses = {
         id: string;
         profileId: string;
         externalAgentId: string | null;
+        executionId: string | null;
         userId: string | null;
         sessionId: string | null;
         sessionSource: string | null;
@@ -17692,6 +17909,7 @@ export type GetInteractionResponses = {
         id: string;
         profileId: string;
         externalAgentId: string | null;
+        executionId: string | null;
         userId: string | null;
         sessionId: string | null;
         sessionSource: string | null;
@@ -21822,7 +22040,14 @@ export type GetMcpToolCallsResponses = {
             } | null;
             toolResult: unknown;
             userId: string | null;
-            authMethod: 'oauth' | 'user_token' | 'org_token' | 'team_token';
+            authMethod: 'oauth' | 'user_token' | 'org_token' | 'team_token' | 'external_idp';
+            externalIdentity?: {
+                idpId: string;
+                idpName: string;
+                sub: string;
+                email: string | null;
+                name: string | null;
+            } | null;
             createdAt: string;
             userName: string | null;
         }>;
@@ -21928,7 +22153,14 @@ export type GetMcpToolCallResponses = {
         } | null;
         toolResult: unknown;
         userId: string | null;
-        authMethod: 'oauth' | 'user_token' | 'org_token' | 'team_token';
+        authMethod: 'oauth' | 'user_token' | 'org_token' | 'team_token' | 'external_idp';
+        externalIdentity?: {
+            idpId: string;
+            idpName: string;
+            sub: string;
+            email: string | null;
+            name: string | null;
+        } | null;
         createdAt: string;
         userName: string | null;
     };
@@ -27321,14 +27553,14 @@ export type ZhipuaiChatCompletionsWithAgentResponses = {
 
 export type ZhipuaiChatCompletionsWithAgentResponse = ZhipuaiChatCompletionsWithAgentResponses[keyof ZhipuaiChatCompletionsWithAgentResponses];
 
-export type GetPublicSsoProvidersData = {
+export type GetPublicIdentityProvidersData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/api/sso-providers/public';
+    url: '/api/identity-providers/public';
 };
 
-export type GetPublicSsoProvidersErrors = {
+export type GetPublicIdentityProvidersErrors = {
     /**
      * Default Response
      */
@@ -27385,9 +27617,9 @@ export type GetPublicSsoProvidersErrors = {
     };
 };
 
-export type GetPublicSsoProvidersError = GetPublicSsoProvidersErrors[keyof GetPublicSsoProvidersErrors];
+export type GetPublicIdentityProvidersError = GetPublicIdentityProvidersErrors[keyof GetPublicIdentityProvidersErrors];
 
-export type GetPublicSsoProvidersResponses = {
+export type GetPublicIdentityProvidersResponses = {
     /**
      * Default Response
      */
@@ -27397,16 +27629,16 @@ export type GetPublicSsoProvidersResponses = {
     }>;
 };
 
-export type GetPublicSsoProvidersResponse = GetPublicSsoProvidersResponses[keyof GetPublicSsoProvidersResponses];
+export type GetPublicIdentityProvidersResponse = GetPublicIdentityProvidersResponses[keyof GetPublicIdentityProvidersResponses];
 
-export type GetSsoProvidersData = {
+export type GetIdentityProvidersData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/api/sso-providers';
+    url: '/api/identity-providers';
 };
 
-export type GetSsoProvidersErrors = {
+export type GetIdentityProvidersErrors = {
     /**
      * Default Response
      */
@@ -27463,9 +27695,9 @@ export type GetSsoProvidersErrors = {
     };
 };
 
-export type GetSsoProvidersError = GetSsoProvidersErrors[keyof GetSsoProvidersErrors];
+export type GetIdentityProvidersError = GetIdentityProvidersErrors[keyof GetIdentityProvidersErrors];
 
-export type GetSsoProvidersResponses = {
+export type GetIdentityProvidersResponses = {
     /**
      * Default Response
      */
@@ -27582,9 +27814,9 @@ export type GetSsoProvidersResponses = {
     }>;
 };
 
-export type GetSsoProvidersResponse = GetSsoProvidersResponses[keyof GetSsoProvidersResponses];
+export type GetIdentityProvidersResponse = GetIdentityProvidersResponses[keyof GetIdentityProvidersResponses];
 
-export type CreateSsoProviderData = {
+export type CreateIdentityProviderData = {
     body: {
         issuer: string;
         /**
@@ -27696,10 +27928,10 @@ export type CreateSsoProviderData = {
     };
     path?: never;
     query?: never;
-    url: '/api/sso-providers';
+    url: '/api/identity-providers';
 };
 
-export type CreateSsoProviderErrors = {
+export type CreateIdentityProviderErrors = {
     /**
      * Default Response
      */
@@ -27756,9 +27988,9 @@ export type CreateSsoProviderErrors = {
     };
 };
 
-export type CreateSsoProviderError = CreateSsoProviderErrors[keyof CreateSsoProviderErrors];
+export type CreateIdentityProviderError = CreateIdentityProviderErrors[keyof CreateIdentityProviderErrors];
 
-export type CreateSsoProviderResponses = {
+export type CreateIdentityProviderResponses = {
     /**
      * Default Response
      */
@@ -27875,16 +28107,16 @@ export type CreateSsoProviderResponses = {
     };
 };
 
-export type CreateSsoProviderResponse = CreateSsoProviderResponses[keyof CreateSsoProviderResponses];
+export type CreateIdentityProviderResponse = CreateIdentityProviderResponses[keyof CreateIdentityProviderResponses];
 
-export type GetSsoProviderIdpLogoutUrlData = {
+export type GetIdentityProviderIdpLogoutUrlData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/api/sso-providers/idp-logout-url';
+    url: '/api/identity-providers/idp-logout-url';
 };
 
-export type GetSsoProviderIdpLogoutUrlErrors = {
+export type GetIdentityProviderIdpLogoutUrlErrors = {
     /**
      * Default Response
      */
@@ -27941,9 +28173,9 @@ export type GetSsoProviderIdpLogoutUrlErrors = {
     };
 };
 
-export type GetSsoProviderIdpLogoutUrlError = GetSsoProviderIdpLogoutUrlErrors[keyof GetSsoProviderIdpLogoutUrlErrors];
+export type GetIdentityProviderIdpLogoutUrlError = GetIdentityProviderIdpLogoutUrlErrors[keyof GetIdentityProviderIdpLogoutUrlErrors];
 
-export type GetSsoProviderIdpLogoutUrlResponses = {
+export type GetIdentityProviderIdpLogoutUrlResponses = {
     /**
      * Default Response
      */
@@ -27952,18 +28184,18 @@ export type GetSsoProviderIdpLogoutUrlResponses = {
     };
 };
 
-export type GetSsoProviderIdpLogoutUrlResponse = GetSsoProviderIdpLogoutUrlResponses[keyof GetSsoProviderIdpLogoutUrlResponses];
+export type GetIdentityProviderIdpLogoutUrlResponse = GetIdentityProviderIdpLogoutUrlResponses[keyof GetIdentityProviderIdpLogoutUrlResponses];
 
-export type DeleteSsoProviderData = {
+export type DeleteIdentityProviderData = {
     body?: never;
     path: {
         id: string;
     };
     query?: never;
-    url: '/api/sso-providers/{id}';
+    url: '/api/identity-providers/{id}';
 };
 
-export type DeleteSsoProviderErrors = {
+export type DeleteIdentityProviderErrors = {
     /**
      * Default Response
      */
@@ -28020,9 +28252,9 @@ export type DeleteSsoProviderErrors = {
     };
 };
 
-export type DeleteSsoProviderError = DeleteSsoProviderErrors[keyof DeleteSsoProviderErrors];
+export type DeleteIdentityProviderError = DeleteIdentityProviderErrors[keyof DeleteIdentityProviderErrors];
 
-export type DeleteSsoProviderResponses = {
+export type DeleteIdentityProviderResponses = {
     /**
      * Default Response
      */
@@ -28031,18 +28263,18 @@ export type DeleteSsoProviderResponses = {
     };
 };
 
-export type DeleteSsoProviderResponse = DeleteSsoProviderResponses[keyof DeleteSsoProviderResponses];
+export type DeleteIdentityProviderResponse = DeleteIdentityProviderResponses[keyof DeleteIdentityProviderResponses];
 
-export type GetSsoProviderData = {
+export type GetIdentityProviderData = {
     body?: never;
     path: {
         id: string;
     };
     query?: never;
-    url: '/api/sso-providers/{id}';
+    url: '/api/identity-providers/{id}';
 };
 
-export type GetSsoProviderErrors = {
+export type GetIdentityProviderErrors = {
     /**
      * Default Response
      */
@@ -28099,9 +28331,9 @@ export type GetSsoProviderErrors = {
     };
 };
 
-export type GetSsoProviderError = GetSsoProviderErrors[keyof GetSsoProviderErrors];
+export type GetIdentityProviderError = GetIdentityProviderErrors[keyof GetIdentityProviderErrors];
 
-export type GetSsoProviderResponses = {
+export type GetIdentityProviderResponses = {
     /**
      * Default Response
      */
@@ -28218,9 +28450,9 @@ export type GetSsoProviderResponses = {
     };
 };
 
-export type GetSsoProviderResponse = GetSsoProviderResponses[keyof GetSsoProviderResponses];
+export type GetIdentityProviderResponse = GetIdentityProviderResponses[keyof GetIdentityProviderResponses];
 
-export type UpdateSsoProviderData = {
+export type UpdateIdentityProviderData = {
     body?: {
         issuer?: string;
         /**
@@ -28333,10 +28565,10 @@ export type UpdateSsoProviderData = {
         id: string;
     };
     query?: never;
-    url: '/api/sso-providers/{id}';
+    url: '/api/identity-providers/{id}';
 };
 
-export type UpdateSsoProviderErrors = {
+export type UpdateIdentityProviderErrors = {
     /**
      * Default Response
      */
@@ -28393,9 +28625,9 @@ export type UpdateSsoProviderErrors = {
     };
 };
 
-export type UpdateSsoProviderError = UpdateSsoProviderErrors[keyof UpdateSsoProviderErrors];
+export type UpdateIdentityProviderError = UpdateIdentityProviderErrors[keyof UpdateIdentityProviderErrors];
 
-export type UpdateSsoProviderResponses = {
+export type UpdateIdentityProviderResponses = {
     /**
      * Default Response
      */
@@ -28512,7 +28744,7 @@ export type UpdateSsoProviderResponses = {
     };
 };
 
-export type UpdateSsoProviderResponse = UpdateSsoProviderResponses[keyof UpdateSsoProviderResponses];
+export type UpdateIdentityProviderResponse = UpdateIdentityProviderResponses[keyof UpdateIdentityProviderResponses];
 
 export type DeleteTeamVaultFolderData = {
     body?: never;
