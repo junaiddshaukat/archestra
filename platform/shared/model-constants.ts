@@ -52,6 +52,19 @@ export const providerDisplayNames: Record<SupportedProvider, string> = {
 };
 
 /**
+ * Perplexity model definitions — single source of truth.
+ * Perplexity has no /models endpoint, so models are maintained here.
+ * @see https://ai-sdk.dev/providers/ai-sdk-providers/perplexity#model-capabilities
+ */
+export const PERPLEXITY_MODELS = [
+  { id: "sonar-pro", displayName: "Sonar Pro" },
+  { id: "sonar", displayName: "Sonar" },
+  { id: "sonar-reasoning-pro", displayName: "Sonar Reasoning Pro" },
+  { id: "sonar-reasoning", displayName: "Sonar Reasoning" },
+  { id: "sonar-deep-research", displayName: "Sonar Deep Research" },
+] as const;
+
+/**
  * Pattern-based model markers per provider.
  * Patterns are substrings that model IDs must contain (case-insensitive).
  * Used to identify "fastest" (lightweight, low latency) and "best" (highest quality) models.
@@ -95,7 +108,7 @@ export const MODEL_MARKER_PATTERNS: Record<
   },
   perplexity: {
     fastest: ["sonar"],
-    best: ["sonar-pro", "sonar-reasoning-pro"],
+    best: ["sonar-pro", "sonar-reasoning-pro", "sonar-reasoning"],
   },
   ollama: {
     fastest: ["llama3.2", "phi"],

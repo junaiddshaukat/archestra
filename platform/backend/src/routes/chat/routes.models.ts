@@ -1,4 +1,5 @@
 import {
+  PERPLEXITY_MODELS,
   PROVIDERS_WITH_OPTIONAL_API_KEY,
   RouteId,
   type SupportedProvider,
@@ -291,35 +292,12 @@ async function fetchMistralModels(apiKey: string): Promise<ModelInfo[]> {
  */
 async function fetchPerplexityModels(_apiKey: string): Promise<ModelInfo[]> {
   // Perplexity has no /models endpoint - validation happens on first actual use.
-  // Model list from @ai-sdk/perplexity capabilities table:
-  // @see https://ai-sdk.dev/providers/ai-sdk-providers/perplexity#model-capabilities
-  return [
-    {
-      id: "sonar-pro",
-      displayName: "Sonar Pro",
-      provider: "perplexity" as const,
-    },
-    {
-      id: "sonar",
-      displayName: "Sonar",
-      provider: "perplexity" as const,
-    },
-    {
-      id: "sonar-reasoning-pro",
-      displayName: "Sonar Reasoning Pro",
-      provider: "perplexity" as const,
-    },
-    {
-      id: "sonar-reasoning",
-      displayName: "Sonar Reasoning",
-      provider: "perplexity" as const,
-    },
-    {
-      id: "sonar-deep-research",
-      displayName: "Sonar Deep Research",
-      provider: "perplexity" as const,
-    },
-  ];
+  // Model list centralized in shared/model-constants.ts (PERPLEXITY_MODELS).
+  return PERPLEXITY_MODELS.map((m) => ({
+    id: m.id,
+    displayName: m.displayName,
+    provider: "perplexity" as const,
+  }));
 }
 
 /**

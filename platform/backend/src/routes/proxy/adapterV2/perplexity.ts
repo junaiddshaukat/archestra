@@ -18,7 +18,7 @@ import type {
 } from "openai/resources/chat/completions/completions";
 import config from "@/config";
 import logger from "@/logging";
-import { getObservableFetch } from "@/observability/metrics/llm";
+import { metrics } from "@/observability";
 import type {
   ChunkProcessingResult,
   CommonMcpToolDefinition,
@@ -478,7 +478,11 @@ export const perplexityAdapterFactory: LLMProvider<
 
     // Use observable fetch for request duration metrics if agent is provided
     const customFetch = options?.agent
-      ? getObservableFetch("perplexity", options.agent, options.externalAgentId)
+      ? metrics.llm.getObservableFetch(
+          "perplexity",
+          options.agent,
+          options.externalAgentId,
+        )
       : undefined;
 
     // Use OpenAI SDK with Perplexity base URL (OpenAI-compatible API)
