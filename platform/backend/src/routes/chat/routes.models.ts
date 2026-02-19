@@ -290,10 +290,10 @@ async function fetchMistralModels(apiKey: string): Promise<ModelInfo[]> {
  * @see https://docs.perplexity.ai/models/model-cards
  */
 async function fetchPerplexityModels(_apiKey: string): Promise<ModelInfo[]> {
-  // Return hardcoded list of Perplexity models
-  // Perplexity has no /models endpoint - validation happens on first actual use
-  // @see https://docs.perplexity.ai/models/model-cards
-  const perplexityModels: ModelInfo[] = [
+  // Perplexity has no /models endpoint - validation happens on first actual use.
+  // Model list from @ai-sdk/perplexity capabilities table:
+  // @see https://ai-sdk.dev/providers/ai-sdk-providers/perplexity#model-capabilities
+  return [
     {
       id: "sonar-pro",
       displayName: "Sonar Pro",
@@ -310,13 +310,16 @@ async function fetchPerplexityModels(_apiKey: string): Promise<ModelInfo[]> {
       provider: "perplexity" as const,
     },
     {
+      id: "sonar-reasoning",
+      displayName: "Sonar Reasoning",
+      provider: "perplexity" as const,
+    },
+    {
       id: "sonar-deep-research",
       displayName: "Sonar Deep Research",
       provider: "perplexity" as const,
     },
   ];
-
-  return perplexityModels;
 }
 
 /**
