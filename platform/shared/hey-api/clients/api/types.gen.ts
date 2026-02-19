@@ -16895,6 +16895,7 @@ export type GetInteractionsResponses = {
             id: string;
             profileId: string;
             externalAgentId: string | null;
+            executionId: string | null;
             userId: string | null;
             sessionId: string | null;
             sessionSource: string | null;
@@ -17915,6 +17916,7 @@ export type GetInteractionResponses = {
         id: string;
         profileId: string;
         externalAgentId: string | null;
+        executionId: string | null;
         userId: string | null;
         sessionId: string | null;
         sessionSource: string | null;

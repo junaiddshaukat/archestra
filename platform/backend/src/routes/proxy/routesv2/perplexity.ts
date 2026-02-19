@@ -19,7 +19,7 @@ import { constructResponseSchema, Perplexity, UuidIdSchema } from "@/types";
 import { perplexityAdapterFactory } from "../adapterV2";
 import { PROXY_API_PREFIX, PROXY_BODY_LIMIT } from "../common";
 import { handleLLMProxy } from "../llm-proxy-handler";
-import * as utils from "../utils";
+import { createProxyPreHandler } from "./proxy-prehandler";
 
 const perplexityProxyRoutesV2: FastifyPluginAsyncZod = async (fastify) => {
   const API_PREFIX = `${PROXY_API_PREFIX}/perplexity`;
@@ -27,69 +27,16 @@ const perplexityProxyRoutesV2: FastifyPluginAsyncZod = async (fastify) => {
 
   logger.info("[UnifiedProxy] Registering unified Perplexity routes");
 
-  /**
-   * Register HTTP proxy for Perplexity routes
-   * Chat completions are handled separately with full agent support
-   */
   await fastify.register(fastifyHttpProxy, {
     upstream: config.llm.perplexity.baseUrl,
     prefix: API_PREFIX,
     rewritePrefix: "",
-    preHandler: (request, _reply, next) => {
-      // Skip chat/completions - handled by custom handler below
-      if (
-        request.method === "POST" &&
-        request.url.includes(CHAT_COMPLETIONS_SUFFIX)
-      ) {
-        logger.info(
-          {
-            method: request.method,
-            url: request.url,
-            action: "skip-proxy",
-            reason: "handled-by-custom-handler",
-          },
-          "Perplexity proxy preHandler: skipping chat/completions route",
-        );
-        next(new Error("skip"));
-        return;
-      }
-
-      // Check if URL has UUID segment that needs stripping
-      const pathAfterPrefix = request.url.replace(API_PREFIX, "");
-      const uuidMatch = pathAfterPrefix.match(
-        /^\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(\/.*)?$/i,
-      );
-
-      if (uuidMatch) {
-        // Strip UUID: /v1/perplexity/:uuid/path -> /v1/perplexity/path
-        const remainingPath = uuidMatch[2] || "";
-        const originalUrl = request.raw.url;
-        request.raw.url = `${API_PREFIX}${remainingPath}`;
-
-        logger.info(
-          {
-            method: request.method,
-            originalUrl,
-            rewrittenUrl: request.raw.url,
-            upstream: config.llm.perplexity.baseUrl,
-            finalProxyUrl: `${config.llm.perplexity.baseUrl}${remainingPath}`,
-          },
-          "Perplexity proxy preHandler: URL rewritten (UUID stripped)",
-        );
-      } else {
-        logger.info(
-          {
-            method: request.method,
-            url: request.url,
-            upstream: config.llm.perplexity.baseUrl,
-            finalProxyUrl: `${config.llm.perplexity.baseUrl}${pathAfterPrefix}`,
-          },
-          "Perplexity proxy preHandler: proxying request",
-        );
-      }
-
-      next();
-    },
+    preHandler: createProxyPreHandler({
+      apiPrefix: API_PREFIX,
+      endpointSuffix: CHAT_COMPLETIONS_SUFFIX,
+      upstream: config.llm.perplexity.baseUrl,
+      providerName: "Perplexity",
+    }),
   });
 
   /**
@@ -116,21 +63,11 @@ const perplexityProxyRoutesV2: FastifyPluginAsyncZod = async (fastify) => {
         { url: request.url },
         "[UnifiedProxy] Handling Perplexity request (default agent)",
       );
-      const externalAgentId = utils.externalAgentId.getExternalAgentId(
-        request.headers,
-      );
-      const userId = (await utils.user.getUser(request.headers))?.userId;
       return handleLLMProxy(
         request.body,
-        request.headers,
+        request,
         reply,
         perplexityAdapterFactory,
-        {
-          organizationId: request.organizationId,
-          agentId: undefined,
-          externalAgentId,
-          userId,
-        },
       );
     },
   );
@@ -162,21 +99,11 @@ const perplexityProxyRoutesV2: FastifyPluginAsyncZod = async (fastify) => {
         { url: request.url, agentId: request.params.agentId },
         "[UnifiedProxy] Handling Perplexity request (with agent)",
       );
-      const externalAgentId = utils.externalAgentId.getExternalAgentId(
-        request.headers,
-      );
-      const userId = (await utils.user.getUser(request.headers))?.userId;
       return handleLLMProxy(
         request.body,
-        request.headers,
+        request,
         reply,
         perplexityAdapterFactory,
-        {
-          organizationId: request.organizationId,
-          agentId: request.params.agentId,
-          externalAgentId,
-          userId,
-        },
       );
     },
   );

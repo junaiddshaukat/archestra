@@ -217,6 +217,11 @@ class PerplexityResponseAdapter
     };
   }
 
+  getFinishReasons(): string[] {
+    const reason = this.response.choices[0]?.finish_reason;
+    return reason ? [reason] : [];
+  }
+
   getOriginalResponse(): PerplexityResponse {
     return this.response;
   }
@@ -461,9 +466,7 @@ export const perplexityAdapterFactory: LLMProvider<
     return config.llm.perplexity.baseUrl;
   },
 
-  getSpanName(_streaming: boolean): string {
-    return "perplexity.chat.completions";
-  },
+  spanName: "chat",
 
   createClient(
     apiKey: string | undefined,
