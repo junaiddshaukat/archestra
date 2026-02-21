@@ -15378,6 +15378,11 @@ export type GetChatOpsStatusResponses = {
             credentials?: {
                 [key: string]: string;
             };
+            dmInfo?: {
+                botUserId?: string;
+                teamId?: string;
+                appId?: string;
+            };
         }>;
     };
 };
@@ -15462,6 +15467,8 @@ export type ListChatOpsBindingsResponses = {
         workspaceId: string | null;
         channelName: string | null;
         workspaceName: string | null;
+        isDm: boolean;
+        dmOwnerEmail: string | null;
         agentId: string | null;
         createdAt: string;
         updatedAt: string;
@@ -15631,6 +15638,8 @@ export type UpdateChatOpsBindingResponses = {
         workspaceId: string | null;
         channelName: string | null;
         workspaceName: string | null;
+        isDm: boolean;
+        dmOwnerEmail: string | null;
         agentId: string | null;
         createdAt: string;
         updatedAt: string;

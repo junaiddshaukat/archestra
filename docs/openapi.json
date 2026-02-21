@@ -53845,6 +53845,21 @@
                             "additionalProperties": {
                               "type": "string"
                             }
+                          },
+                          "dmInfo": {
+                            "type": "object",
+                            "properties": {
+                              "botUserId": {
+                                "type": "string"
+                              },
+                              "teamId": {
+                                "type": "string"
+                              },
+                              "appId": {
+                                "type": "string"
+                              }
+                            },
+                            "additionalProperties": false
                           }
                         },
                         "required": [
@@ -54128,6 +54143,14 @@
                         "type": "string",
                         "maxLength": 256
                       },
+                      "isDm": {
+                        "type": "boolean"
+                      },
+                      "dmOwnerEmail": {
+                        "nullable": true,
+                        "type": "string",
+                        "maxLength": 256
+                      },
                       "agentId": {
                         "nullable": true,
                         "type": "string",
@@ -54153,6 +54176,8 @@
                       "workspaceId",
                       "channelName",
                       "workspaceName",
+                      "isDm",
+                      "dmOwnerEmail",
                       "agentId",
                       "createdAt",
                       "updatedAt"
@@ -54704,6 +54729,14 @@
                       "type": "string",
                       "maxLength": 256
                     },
+                    "isDm": {
+                      "type": "boolean"
+                    },
+                    "dmOwnerEmail": {
+                      "nullable": true,
+                      "type": "string",
+                      "maxLength": 256
+                    },
                     "agentId": {
                       "nullable": true,
                       "type": "string",
@@ -54729,6 +54762,8 @@
                     "workspaceId",
                     "channelName",
                     "workspaceName",
+                    "isDm",
+                    "dmOwnerEmail",
                     "agentId",
                     "createdAt",
                     "updatedAt"
