@@ -315,6 +315,7 @@ const testConfigsMap = {
   vllm: vllmConfig,
   ollama: ollamaConfig,
   zhipuai: zhipuaiConfig,
+  deepseek: null,
   bedrock: bedrockConfig,
   perplexity: null, // Perplexity does not support tool calling
 } satisfies Record<SupportedProvider, ToolPersistenceTestConfig | null>;

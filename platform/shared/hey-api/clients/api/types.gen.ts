@@ -3493,6 +3493,152 @@ export type ZhipuaiChatCompletionResponseInput = {
     }>;
 };
 
+export type DeepSeekChatCompletionRequestInput = {
+    model: string;
+    /**
+     * https://api-docs.deepseek.com/api/create-chat-completion
+     */
+    messages: Array<{
+        role: 'system';
+        content: string;
+        name?: string;
+    } | {
+        role: 'user';
+        content: string | Array<{
+            type: 'text';
+            text: string;
+        } | {
+            type: 'image_url';
+            /**
+             * https://api-docs.deepseek.com/api/create-chat-completion
+             */
+            image_url: {
+                url: string;
+                detail?: 'auto' | 'low' | 'high';
+            };
+        }>;
+        name?: string;
+    } | {
+        role: 'assistant';
+        content?: string | unknown;
+        reasoning_content?: string | unknown;
+        name?: string;
+        tool_calls?: Array<{
+            id: string;
+            type: 'function';
+            /**
+             * https://api-docs.deepseek.com/api/create-chat-completion
+             */
+            function: {
+                arguments: string;
+                name: string;
+            };
+        }>;
+    } | {
+        role: 'tool';
+        content: string;
+        tool_call_id: string;
+    }>;
+    tools?: Array<{
+        type: 'function';
+        /**
+         * https://api-docs.deepseek.com/api/create-chat-completion
+         */
+        function: {
+            name: string;
+            description?: string;
+            /**
+             *
+             * https://api-docs.deepseek.com/api/create-chat-completion
+             *
+             * The parameters the functions accepts, described as a JSON Schema object. See the
+             * [JSON Schema reference](https://json-schema.org/understanding-json-schema/) for
+             * documentation about the format.
+             *
+             * Omitting parameters defines a function with an empty parameter list.
+             *
+             */
+            parameters?: {
+                [key: string]: unknown;
+            };
+            strict?: boolean | unknown;
+        };
+    }>;
+    /**
+     * https://api-docs.deepseek.com/api/create-chat-completion
+     */
+    tool_choice?: 'auto' | 'none' | 'required' | {
+        type: 'function';
+        function: {
+            name: string;
+        };
+    };
+    stream?: boolean;
+    temperature?: number | unknown;
+    top_p?: number | unknown;
+    max_tokens?: number | unknown;
+    stop?: string | Array<string>;
+    frequency_penalty?: number | unknown;
+    presence_penalty?: number | unknown;
+    logprobs?: boolean;
+    top_logprobs?: number | unknown;
+    response_format?: {
+        type: 'text' | 'json_object';
+    };
+};
+
+export type DeepSeekChatCompletionResponseInput = {
+    id: string;
+    choices: Array<{
+        finish_reason: 'stop' | 'length' | 'tool_calls' | 'content_filter';
+        index: number;
+        logprobs: unknown;
+        /**
+         * https://api-docs.deepseek.com/api/create-chat-completion
+         */
+        message: {
+            content: string | unknown;
+            role: 'assistant';
+            reasoning_content?: string | unknown;
+            tool_calls?: Array<{
+                id: string;
+                type: 'function';
+                /**
+                 * https://api-docs.deepseek.com/api/create-chat-completion
+                 */
+                function: {
+                    arguments: string;
+                    name: string;
+                };
+            }>;
+        };
+    }>;
+    created: number;
+    model: string;
+    object: 'chat.completion';
+    system_fingerprint?: string | unknown;
+    /**
+     * https://api-docs.deepseek.com/api/create-chat-completion
+     */
+    usage?: {
+        completion_tokens: number;
+        prompt_tokens: number;
+        total_tokens: number;
+        /**
+         * https://api-docs.deepseek.com/api/create-chat-completion
+         */
+        prompt_tokens_details?: {
+            cached_tokens: number;
+        };
+        /**
+         * https://api-docs.deepseek.com/api/create-chat-completion
+         */
+        completion_tokens_details?: {
+            reasoning_tokens: number;
+        };
+    };
+};
+
 export type OpenAiChatCompletionRequest = {
     model: string;
     /**
@@ -6980,6 +7126,152 @@ export type ZhipuaiChatCompletionResponse = {
         refer: string;
         publish_date: string;
     }>;
+};
+
+export type DeepSeekChatCompletionRequest = {
+    model: string;
+    /**
+     * https://api-docs.deepseek.com/api/create-chat-completion
+     */
+    messages: Array<{
+        role: 'system';
+        content: string;
+        name?: string;
+    } | {
+        role: 'user';
+        content: string | Array<{
+            type: 'text';
+            text: string;
+        } | {
+            type: 'image_url';
+            /**
+             * https://api-docs.deepseek.com/api/create-chat-completion
+             */
+            image_url: {
+                url: string;
+                detail?: 'auto' | 'low' | 'high';
+            };
+        }>;
+        name?: string;
+    } | {
+        role: 'assistant';
+        content?: string | unknown;
+        reasoning_content?: string | unknown;
+        name?: string;
+        tool_calls?: Array<{
+            id: string;
+            type: 'function';
+            /**
+             * https://api-docs.deepseek.com/api/create-chat-completion
+             */
+            function: {
+                arguments: string;
+                name: string;
+            };
+        }>;
+    } | {
+        role: 'tool';
+        content: string;
+        tool_call_id: string;
+    }>;
+    tools?: Array<{
+        type: 'function';
+        /**
+         * https://api-docs.deepseek.com/api/create-chat-completion
+         */
+        function: {
+            name: string;
+            description?: string;
+            /**
+             *
+             * https://api-docs.deepseek.com/api/create-chat-completion
+             *
+             * The parameters the functions accepts, described as a JSON Schema object. See the
+             * [JSON Schema reference](https://json-schema.org/understanding-json-schema/) for
+             * documentation about the format.
+             *
+             * Omitting parameters defines a function with an empty parameter list.
+             *
+             */
+            parameters?: {
+                [key: string]: unknown;
+            };
+            strict?: boolean | unknown;
+        };
+    }>;
+    /**
+     * https://api-docs.deepseek.com/api/create-chat-completion
+     */
+    tool_choice?: 'auto' | 'none' | 'required' | {
+        type: 'function';
+        function: {
+            name: string;
+        };
+    };
+    stream?: boolean;
+    temperature?: number | unknown;
+    top_p?: number | unknown;
+    max_tokens?: number | unknown;
+    stop?: string | Array<string>;
+    frequency_penalty?: number | unknown;
+    presence_penalty?: number | unknown;
+    logprobs?: boolean;
+    top_logprobs?: number | unknown;
+    response_format?: {
+        type: 'text' | 'json_object';
+    };
+};
+
+export type DeepSeekChatCompletionResponse = {
+    id: string;
+    choices: Array<{
+        finish_reason: 'stop' | 'length' | 'tool_calls' | 'content_filter';
+        index: number;
+        logprobs: unknown;
+        /**
+         * https://api-docs.deepseek.com/api/create-chat-completion
+         */
+        message: {
+            content: string | unknown;
+            role: 'assistant';
+            reasoning_content?: string | unknown;
+            tool_calls?: Array<{
+                id: string;
+                type: 'function';
+                /**
+                 * https://api-docs.deepseek.com/api/create-chat-completion
+                 */
+                function: {
+                    arguments: string;
+                    name: string;
+                };
+            }>;
+        };
+    }>;
+    created: number;
+    model: string;
+    object: 'chat.completion';
+    system_fingerprint?: string | unknown;
+    /**
+     * https://api-docs.deepseek.com/api/create-chat-completion
+     */
+    usage?: {
+        completion_tokens: number;
+        prompt_tokens: number;
+        total_tokens: number;
+        /**
+         * https://api-docs.deepseek.com/api/create-chat-completion
+         */
+        prompt_tokens_details?: {
+            cached_tokens: number;
+        };
+        /**
+         * https://api-docs.deepseek.com/api/create-chat-completion
+         */
+        completion_tokens_details?: {
+            reasoning_tokens: number;
+        };
+    };
 };
 
 export type GetHealthData = {
@@ -12885,7 +13177,7 @@ export type GetChatApiKeysResponses = {
         id: string;
         organizationId: string;
         name: string;
-        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         secretId: string | null;
         scope: 'personal' | 'team' | 'org_wide';
         userId: string | null;
@@ -12908,7 +13200,7 @@ export type GetChatApiKeysResponse = GetChatApiKeysResponses[keyof GetChatApiKey
 export type CreateChatApiKeyData = {
     body: {
         name: string;
-        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         apiKey?: string;
         scope?: 'personal' | 'team' | 'org_wide';
         teamId?: string;
@@ -12987,7 +13279,7 @@ export type CreateChatApiKeyResponses = {
         id: string;
         organizationId: string;
         name: string;
-        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         secretId: string | null;
         scope: 'personal' | 'team' | 'org_wide';
         userId: string | null;
@@ -13004,7 +13296,7 @@ export type GetAvailableChatApiKeysData = {
     body?: never;
     path?: never;
     query?: {
-        provider?: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider?: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         includeKeyId?: string;
     };
     url: '/api/chat-api-keys/available';
@@ -13077,7 +13369,7 @@ export type GetAvailableChatApiKeysResponses = {
         id: string;
         organizationId: string;
         name: string;
-        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         secretId: string | null;
         scope: 'personal' | 'team' | 'org_wide';
         userId: string | null;
@@ -13252,7 +13544,7 @@ export type GetChatApiKeyResponses = {
         id: string;
         organizationId: string;
         name: string;
-        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         secretId: string | null;
         scope: 'personal' | 'team' | 'org_wide';
         userId: string | null;
@@ -13355,7 +13647,7 @@ export type UpdateChatApiKeyResponses = {
         id: string;
         organizationId: string;
         name: string;
-        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         secretId: string | null;
         scope: 'personal' | 'team' | 'org_wide';
         userId: string | null;
@@ -13372,7 +13664,7 @@ export type GetChatModelsData = {
     body?: never;
     path?: never;
     query?: {
-        provider?: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider?: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
     };
     url: '/api/chat/models';
 };
@@ -13443,7 +13735,7 @@ export type GetChatModelsResponses = {
     200: Array<{
         id: string;
         displayName: string;
-        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         createdAt?: string;
         capabilities?: {
             contextLength: number | null;
@@ -13608,7 +13900,7 @@ export type GetModelsWithApiKeysResponses = {
     200: Array<{
         id: string;
         externalId: string;
-        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         modelId: string;
         description: string | null;
         contextLength: number | null;
@@ -13871,7 +14163,7 @@ export type GetChatConversationsResponses = {
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
-        selectedProvider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        selectedProvider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         hasCustomToolSelection: boolean;
         todoList: string | number | boolean | null | {
             [key: string]: unknown;
@@ -13898,7 +14190,7 @@ export type CreateChatConversationData = {
         agentId: string;
         title?: string | null;
         selectedModel?: string;
-        selectedProvider?: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        selectedProvider?: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         chatApiKeyId?: string | null;
     };
     path?: never;
@@ -13977,7 +14269,7 @@ export type CreateChatConversationResponses = {
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
-        selectedProvider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        selectedProvider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         hasCustomToolSelection: boolean;
         todoList: string | number | boolean | null | {
             [key: string]: unknown;
@@ -14158,7 +14450,7 @@ export type GetChatConversationResponses = {
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
-        selectedProvider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        selectedProvider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         hasCustomToolSelection: boolean;
         todoList: string | number | boolean | null | {
             [key: string]: unknown;
@@ -14184,7 +14476,7 @@ export type UpdateChatConversationData = {
     body?: {
         title?: string | null;
         selectedModel?: string;
-        selectedProvider?: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        selectedProvider?: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         chatApiKeyId?: string | null;
         agentId?: string;
         artifact?: string | null;
@@ -14267,7 +14559,7 @@ export type UpdateChatConversationResponses = {
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
-        selectedProvider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        selectedProvider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         hasCustomToolSelection: boolean;
         todoList: string | number | boolean | null | {
             [key: string]: unknown;
@@ -14457,7 +14749,7 @@ export type GenerateChatConversationTitleResponses = {
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
-        selectedProvider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        selectedProvider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         hasCustomToolSelection: boolean;
         todoList: string | number | boolean | null | {
             [key: string]: unknown;
@@ -14563,7 +14855,7 @@ export type UpdateChatMessageResponses = {
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
-        selectedProvider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        selectedProvider: 'anthropic' | 'bedrock' | 'cerebras' | 'cohere' | 'gemini' | 'mistral' | 'openai' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         hasCustomToolSelection: boolean;
         todoList: string | number | boolean | null | {
             [key: string]: unknown;
@@ -15762,6 +16054,180 @@ export type CohereChatWithAgentResponses = {
 
 export type CohereChatWithAgentResponse = CohereChatWithAgentResponses[keyof CohereChatWithAgentResponses];
 
+export type DeepseekChatCompletionsWithDefaultAgentData = {
+    body?: DeepSeekChatCompletionRequestInput;
+    headers: {
+        /**
+         * The user agent of the client
+         */
+        'user-agent'?: string;
+        /**
+         * Bearer token for DeepSeek
+         */
+        authorization: string;
+        'accept-language'?: string;
+    };
+    path?: never;
+    query?: never;
+    url: '/v1/deepseek/chat/completions';
+};
+
+export type DeepseekChatCompletionsWithDefaultAgentErrors = {
+    /**
+     * Default Response
+     */
+    400: {
+        error: {
+            message: string;
+            type: 'api_validation_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    401: {
+        error: {
+            message: string;
+            type: 'api_authentication_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    403: {
+        error: {
+            message: string;
+            type: 'api_authorization_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    404: {
+        error: {
+            message: string;
+            type: 'api_not_found_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    409: {
+        error: {
+            message: string;
+            type: 'api_conflict_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    500: {
+        error: {
+            message: string;
+            type: 'api_internal_server_error';
+        };
+    };
+};
+
+export type DeepseekChatCompletionsWithDefaultAgentError = DeepseekChatCompletionsWithDefaultAgentErrors[keyof DeepseekChatCompletionsWithDefaultAgentErrors];
+
+export type DeepseekChatCompletionsWithDefaultAgentResponses = {
+    /**
+     * Default Response
+     */
+    200: DeepSeekChatCompletionResponse;
+};
+
+export type DeepseekChatCompletionsWithDefaultAgentResponse = DeepseekChatCompletionsWithDefaultAgentResponses[keyof DeepseekChatCompletionsWithDefaultAgentResponses];
+
+export type DeepseekChatCompletionsWithAgentData = {
+    body?: DeepSeekChatCompletionRequestInput;
+    headers: {
+        /**
+         * The user agent of the client
+         */
+        'user-agent'?: string;
+        /**
+         * Bearer token for DeepSeek
+         */
+        authorization: string;
+        'accept-language'?: string;
+    };
+    path: {
+        agentId: string;
+    };
+    query?: never;
+    url: '/v1/deepseek/{agentId}/chat/completions';
+};
+
+export type DeepseekChatCompletionsWithAgentErrors = {
+    /**
+     * Default Response
+     */
+    400: {
+        error: {
+            message: string;
+            type: 'api_validation_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    401: {
+        error: {
+            message: string;
+            type: 'api_authentication_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    403: {
+        error: {
+            message: string;
+            type: 'api_authorization_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    404: {
+        error: {
+            message: string;
+            type: 'api_not_found_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    409: {
+        error: {
+            message: string;
+            type: 'api_conflict_error';
+        };
+    };
+    /**
+     * Default Response
+     */
+    500: {
+        error: {
+            message: string;
+            type: 'api_internal_server_error';
+        };
+    };
+};
+
+export type DeepseekChatCompletionsWithAgentError = DeepseekChatCompletionsWithAgentErrors[keyof DeepseekChatCompletionsWithAgentErrors];
+
+export type DeepseekChatCompletionsWithAgentResponses = {
+    /**
+     * Default Response
+     */
+    200: DeepSeekChatCompletionResponse;
+};
+
+export type DeepseekChatCompletionsWithAgentResponse = DeepseekChatCompletionsWithAgentResponses[keyof DeepseekChatCompletionsWithAgentResponses];
+
 export type GetDefaultDualLlmConfigData = {
     body?: never;
     path?: never;
@@ -16469,6 +16935,7 @@ export type GetFeaturesResponses = {
         ollamaEnabled: boolean;
         mistralEnabled: boolean;
         perplexityEnabled: boolean;
+        deepseekEnabled: boolean;
         globalToolPolicy: 'permissive' | 'restrictive';
         browserStreamingEnabled: boolean;
         incomingEmail: {
@@ -18023,6 +18490,31 @@ export type GetInteractionsResponses = {
             createdAt: string;
             requestType?: 'main' | 'subagent';
             externalAgentIdLabel?: string | null;
+        } | {
+            id: string;
+            profileId: string;
+            externalAgentId: string | null;
+            executionId: string | null;
+            userId: string | null;
+            sessionId: string | null;
+            sessionSource: string | null;
+            request: DeepSeekChatCompletionRequest;
+            processedRequest?: DeepSeekChatCompletionRequest | null;
+            response: DeepSeekChatCompletionResponse;
+            type: 'deepseek:chatCompletions';
+            model: string | null;
+            baselineModel: string | null;
+            inputTokens: number | null;
+            outputTokens: number | null;
+            baselineCost: string | null;
+            cost: string | null;
+            toonTokensBefore: number | null;
+            toonTokensAfter: number | null;
+            toonCostSavings: string | null;
+            toonSkipReason: string | null;
+            createdAt: string;
+            requestType?: 'main' | 'subagent';
+            externalAgentIdLabel?: string | null;
         }>;
         pagination: {
             currentPage: number;
@@ -19031,6 +19523,31 @@ export type GetInteractionResponses = {
         processedRequest?: ZhipuaiChatCompletionRequest | null;
         response: ZhipuaiChatCompletionResponse;
         type: 'zhipuai:chatCompletions';
+        model: string | null;
+        baselineModel: string | null;
+        inputTokens: number | null;
+        outputTokens: number | null;
+        baselineCost: string | null;
+        cost: string | null;
+        toonTokensBefore: number | null;
+        toonTokensAfter: number | null;
+        toonCostSavings: string | null;
+        toonSkipReason: string | null;
+        createdAt: string;
+        requestType?: 'main' | 'subagent';
+        externalAgentIdLabel?: string | null;
+    } | {
+        id: string;
+        profileId: string;
+        externalAgentId: string | null;
+        executionId: string | null;
+        userId: string | null;
+        sessionId: string | null;
+        sessionSource: string | null;
+        request: DeepSeekChatCompletionRequest;
+        processedRequest?: DeepSeekChatCompletionRequest | null;
+        response: DeepSeekChatCompletionResponse;
+        type: 'deepseek:chatCompletions';
         model: string | null;
         baselineModel: string | null;
         inputTokens: number | null;
@@ -24081,7 +24598,7 @@ export type GetOptimizationRulesResponses = {
         } | {
             hasTools: boolean;
         }>;
-        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         targetModel: string;
         enabled: boolean;
         createdAt: string;
@@ -24101,7 +24618,7 @@ export type CreateOptimizationRuleData = {
         } | {
             hasTools: boolean;
         }>;
-        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         targetModel: string;
         enabled?: boolean;
         createdAt?: unknown;
@@ -24184,7 +24701,7 @@ export type CreateOptimizationRuleResponses = {
         } | {
             hasTools: boolean;
         }>;
-        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         targetModel: string;
         enabled: boolean;
         createdAt: string;
@@ -24283,7 +24800,7 @@ export type UpdateOptimizationRuleData = {
         } | {
             hasTools: boolean;
         }>;
-        provider?: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider?: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         targetModel?: string;
         enabled?: boolean;
         createdAt?: unknown;
@@ -24368,7 +24885,7 @@ export type UpdateOptimizationRuleResponses = {
         } | {
             hasTools: boolean;
         }>;
-        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         targetModel: string;
         enabled: boolean;
         createdAt: string;
@@ -27136,7 +27653,7 @@ export type GetTokenPricesResponses = {
      */
     200: Array<{
         id: string;
-        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         model: string;
         pricePerMillionInput: string;
         pricePerMillionOutput: string;
@@ -27149,7 +27666,7 @@ export type GetTokenPricesResponse = GetTokenPricesResponses[keyof GetTokenPrice
 
 export type CreateTokenPriceData = {
     body: {
-        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         model: string;
         pricePerMillionInput: string;
         pricePerMillionOutput: string;
@@ -27224,7 +27741,7 @@ export type CreateTokenPriceResponses = {
      */
     200: {
         id: string;
-        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         model: string;
         pricePerMillionInput: string;
         pricePerMillionOutput: string;
@@ -27388,7 +27905,7 @@ export type GetTokenPriceResponses = {
      */
     200: {
         id: string;
-        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         model: string;
         pricePerMillionInput: string;
         pricePerMillionOutput: string;
@@ -27401,7 +27918,7 @@ export type GetTokenPriceResponse = GetTokenPriceResponses[keyof GetTokenPriceRe
 
 export type UpdateTokenPriceData = {
     body?: {
-        provider?: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider?: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         model?: string;
         pricePerMillionInput?: string;
         pricePerMillionOutput?: string;
@@ -27478,7 +27995,7 @@ export type UpdateTokenPriceResponses = {
      */
     200: {
         id: string;
-        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai';
+        provider: 'openai' | 'gemini' | 'anthropic' | 'bedrock' | 'cohere' | 'cerebras' | 'mistral' | 'perplexity' | 'vllm' | 'ollama' | 'zhipuai' | 'deepseek';
         model: string;
         pricePerMillionInput: string;
         pricePerMillionOutput: string;

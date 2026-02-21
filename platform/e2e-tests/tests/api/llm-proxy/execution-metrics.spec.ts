@@ -199,6 +199,7 @@ const testConfigsMap = {
   vllm: vllmConfig,
   ollama: ollamaConfig,
   zhipuai: zhipuaiConfig,
+  deepseek: null,
   bedrock: bedrockConfig,
   perplexity: null, // Perplexity has no tool calling - execution metrics require tool call flows
 } satisfies Record<SupportedProvider, ExecutionMetricsTestConfig | null>;

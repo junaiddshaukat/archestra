@@ -238,6 +238,7 @@ const testConfigsMap = {
   vllm: vllmConfig,
   ollama: ollamaConfig,
   zhipuai: zhipuaiConfig,
+  deepseek: null,
   bedrock: null, // Bedrock uses binary AWS EventStream format which cannot be mocked via WireMock SSE
   perplexity: null, // Perplexity does not support tool calling
 } satisfies Record<SupportedProvider, StreamingToolCallTestConfig | null>;

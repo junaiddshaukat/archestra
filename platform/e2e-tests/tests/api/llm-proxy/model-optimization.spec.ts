@@ -449,6 +449,7 @@ const testConfigsMap = {
   vllm: vllmConfig,
   ollama: ollamaConfig,
   zhipuai: zhipuaiConfig,
+  deepseek: null,
   bedrock: null, // Bedrock messages use nested content arrays that the tokenizer doesn't count correctly
 } satisfies Record<SupportedProvider, ModelOptimizationTestConfig | null>;
 

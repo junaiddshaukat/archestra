@@ -9,6 +9,7 @@ import type {
   Interaction,
   InteractionUtils,
 } from "./llmProviders/common";
+import DeepSeekChatCompletionInteraction from "./llmProviders/deepseek";
 import GeminiGenerateContentInteraction from "./llmProviders/gemini";
 import MistralChatCompletionInteraction from "./llmProviders/mistral";
 import OllamaChatCompletionInteraction from "./llmProviders/ollama";
@@ -32,6 +33,7 @@ const interactionFactories: Record<Interaction["type"], InteractionFactory> = {
     new PerplexityChatCompletionInteraction(i),
   "vllm:chatCompletions": (i) => new VllmChatCompletionInteraction(i),
   "zhipuai:chatCompletions": (i) => new ZhipuaiChatCompletionInteraction(i),
+  "deepseek:chatCompletions": (i) => new DeepSeekChatCompletionInteraction(i),
 };
 
 export interface CostSavingsInput {

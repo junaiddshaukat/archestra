@@ -11,6 +11,7 @@ import type {
   Anthropic,
   Cerebras,
   Cohere,
+  DeepSeek,
   Gemini,
   Mistral,
   OpenAi,
@@ -30,6 +31,7 @@ type ProviderMessages = {
   vllm: Vllm.Types.ChatCompletionsRequest["messages"];
   ollama: Vllm.Types.ChatCompletionsRequest["messages"];
   zhipuai: Zhipuai.Types.ChatCompletionsRequest["messages"];
+  deepseek: DeepSeek.Types.ChatCompletionsRequest["messages"];
 };
 
 /**
