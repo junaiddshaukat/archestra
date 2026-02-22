@@ -42,7 +42,7 @@ const NamedToolChoiceSchema = z
   https://api-docs.deepseek.com/api/create-chat-completion
   `);
 
-export const ToolSchema = z.union([FunctionToolSchema]).describe(`
+export const ToolSchema = FunctionToolSchema.describe(`
   A function tool that can be used to generate a response.
 
   https://api-docs.deepseek.com/api/create-chat-completion

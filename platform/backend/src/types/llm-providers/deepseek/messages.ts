@@ -13,9 +13,9 @@ const FunctionToolCallSchema = z
   })
   .describe(`https://api-docs.deepseek.com/api/create-chat-completion`);
 
-export const ToolCallSchema = z
-  .union([FunctionToolCallSchema])
-  .describe(`https://api-docs.deepseek.com/api/create-chat-completion`);
+export const ToolCallSchema = FunctionToolCallSchema.describe(
+  `https://api-docs.deepseek.com/api/create-chat-completion`,
+);
 
 const ContentPartTextSchema = z
   .object({

@@ -124,12 +124,6 @@ class DeepSeekChatCompletionInteraction implements InteractionUtils {
       if (toolCalls) {
         if (typeof content === "string" && content) {
           parts.push({ type: "text", text: content });
-        } else if (Array.isArray(content)) {
-          for (const part of content) {
-            if (part.type === "text") {
-              parts.push({ type: "text", text: part.text });
-            }
-          }
         }
 
         for (const toolCall of toolCalls) {
