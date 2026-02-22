@@ -692,7 +692,7 @@ export async function waitForServerInstallation(
 /**
  * Skip the onboarding dialog if it is present.
  */
-export async function skipOnboarding(page: Page): Promise<void> {
+async function skipOnboarding(page: Page): Promise<void> {
   const skipButton = page.getByTestId(E2eTestId.OnboardingSkipButton);
   if (await skipButton.isVisible({ timeout: 2000 }).catch(() => false)) {
     await skipButton.click();
