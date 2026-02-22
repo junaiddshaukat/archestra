@@ -14,7 +14,6 @@ import client from "prom-client";
 import logger from "@/logging";
 import { getUsageTokens as getAnthropicUsage } from "@/routes/proxy/adapterV2/anthropic";
 import { getUsageTokens as getCohereUsage } from "@/routes/proxy/adapterV2/cohere";
-import { getUsageTokens as getDeepSeekUsage } from "@/routes/proxy/adapterV2/deepseek";
 import { getUsageTokens as getGeminiUsage } from "@/routes/proxy/adapterV2/gemini";
 import { getUsageTokens as getOpenAIUsage } from "@/routes/proxy/adapterV2/openai";
 import { getUsageTokens as getZhipuaiUsage } from "@/routes/proxy/adapterV2/zhipuai";
@@ -41,7 +40,7 @@ const fetchUsageExtractors: Record<SupportedProvider, UsageExtractor> = {
   anthropic: getAnthropicUsage,
   cohere: getCohereUsage,
   zhipuai: getZhipuaiUsage,
-  deepseek: getDeepSeekUsage,
+  deepseek: getOpenAIUsage,
   gemini: null,
   bedrock: null,
 };

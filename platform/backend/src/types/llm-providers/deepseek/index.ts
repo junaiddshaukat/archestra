@@ -1,3 +1,12 @@
+/**
+ * DeepSeek LLM Provider Types - OpenAI-compatible
+ *
+ * DeepSeek uses an OpenAI-compatible API. We re-export OpenAI schemas with
+ * passthrough for DeepSeek-specific fields; stream chunk type uses OpenAI SDK.
+ *
+ * @see https://api-docs.deepseek.com/api/create-chat-completion
+ */
+import type OpenAIProvider from "openai";
 import type { z } from "zod";
 import * as DeepSeekAPI from "./api";
 import * as DeepSeekMessages from "./messages";
@@ -24,35 +33,8 @@ namespace DeepSeek {
     export type Message = z.infer<typeof DeepSeekMessages.MessageParamSchema>;
     export type Role = Message["role"];
 
-    export type ChatCompletionChunk = {
-      id: string;
-      object: "chat.completion.chunk";
-      created: number;
-      model: string;
-      choices: Array<{
-        index: number;
-        delta: {
-          role?: "assistant";
-          content?: string;
-          reasoning_content?: string;
-          tool_calls?: Array<{
-            index: number;
-            id?: string;
-            type?: "function";
-            function?: {
-              name?: string;
-              arguments?: string;
-            };
-          }>;
-        };
-        finish_reason: string | null;
-      }>;
-      usage?: {
-        prompt_tokens: number;
-        completion_tokens: number;
-        total_tokens: number;
-      };
-    };
+    export type ChatCompletionChunk =
+      OpenAIProvider.Chat.Completions.ChatCompletionChunk;
   }
 }
 
