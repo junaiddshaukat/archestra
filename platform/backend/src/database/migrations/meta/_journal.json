@@ -1079,6 +1079,20 @@
       "when": 1771801414963,
       "tag": "0153_shared_proxy_tools",
       "breakpoints": true
+    },
+    {
+      "idx": 154,
+      "version": "7",
+      "when": 1771858283453,
+      "tag": "0154_public_human_cannonball",
+      "breakpoints": true
+    },
+    {
+      "idx": 155,
+      "version": "7",
+      "when": 1771871771110,
+      "tag": "0155_black_captain_america",
+      "breakpoints": true
     }
   ]
 }
