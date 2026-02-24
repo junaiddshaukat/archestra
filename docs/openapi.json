@@ -71849,6 +71849,21 @@
                           },
                           "nodePort": {
                             "type": "number"
+                          },
+                          "imagePullSecrets": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "additionalProperties": false
+                            }
                           }
                         },
                         "additionalProperties": false
@@ -72474,6 +72489,21 @@
                       },
                       "serviceAccount": {
                         "type": "string"
+                      },
+                      "imagePullSecrets": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "name"
+                          ]
+                        }
                       }
                     }
                   },
@@ -72861,6 +72891,21 @@
                         },
                         "nodePort": {
                           "type": "number"
+                        },
+                        "imagePullSecrets": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          }
                         }
                       },
                       "additionalProperties": false
@@ -73501,6 +73546,21 @@
                         },
                         "nodePort": {
                           "type": "number"
+                        },
+                        "imagePullSecrets": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          }
                         }
                       },
                       "additionalProperties": false
@@ -74120,6 +74180,21 @@
                       },
                       "serviceAccount": {
                         "type": "string"
+                      },
+                      "imagePullSecrets": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "name"
+                          ]
+                        }
                       }
                     }
                   },
@@ -74514,6 +74589,21 @@
                         },
                         "nodePort": {
                           "type": "number"
+                        },
+                        "imagePullSecrets": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          }
                         }
                       },
                       "additionalProperties": false
@@ -79398,6 +79488,22 @@
                                   },
                                   "serviceAccount": {
                                     "type": "string"
+                                  },
+                                  "imagePullSecrets": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "name": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
+                                      },
+                                      "required": [
+                                        "name"
+                                      ],
+                                      "additionalProperties": false
+                                    }
                                   }
                                 },
                                 "additionalProperties": false
@@ -79956,6 +80062,21 @@
                               },
                               "serviceAccount": {
                                 "type": "string"
+                              },
+                              "imagePullSecrets": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "name"
+                                  ]
+                                }
                               }
                             }
                           }
@@ -80245,6 +80366,22 @@
                                 },
                                 "serviceAccount": {
                                   "type": "string"
+                                },
+                                "imagePullSecrets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "name"
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "additionalProperties": false
@@ -80832,6 +80969,22 @@
                                 },
                                 "serviceAccount": {
                                   "type": "string"
+                                },
+                                "imagePullSecrets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "name"
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "additionalProperties": false
@@ -81393,6 +81546,21 @@
                               },
                               "serviceAccount": {
                                 "type": "string"
+                              },
+                              "imagePullSecrets": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "name"
+                                  ]
+                                }
                               }
                             }
                           }
@@ -81732,6 +81900,22 @@
                                 },
                                 "serviceAccount": {
                                   "type": "string"
+                                },
+                                "imagePullSecrets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "name"
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "additionalProperties": false
@@ -82583,6 +82767,22 @@
                                 },
                                 "serviceAccount": {
                                   "type": "string"
+                                },
+                                "imagePullSecrets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "name"
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "additionalProperties": false
@@ -83184,6 +83384,22 @@
                                 },
                                 "serviceAccount": {
                                   "type": "string"
+                                },
+                                "imagePullSecrets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "name"
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "additionalProperties": false
@@ -83790,6 +84006,22 @@
                                 },
                                 "serviceAccount": {
                                   "type": "string"
+                                },
+                                "imagePullSecrets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "name"
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "additionalProperties": false

@@ -19769,6 +19769,9 @@ export type GetInternalMcpCatalogResponses = {
             httpPort?: number;
             httpPath?: string;
             nodePort?: number;
+            imagePullSecrets?: Array<{
+                name: string;
+            }>;
         } | null;
         deploymentSpecYaml: string | null;
         userConfig: {
@@ -19859,6 +19862,9 @@ export type CreateInternalMcpCatalogItemData = {
             httpPath?: string;
             nodePort?: number;
             serviceAccount?: string;
+            imagePullSecrets?: Array<{
+                name: string;
+            }>;
         } | null;
         deploymentSpecYaml?: string | null;
         userConfig?: {
@@ -20014,6 +20020,9 @@ export type CreateInternalMcpCatalogItemResponses = {
             httpPort?: number;
             httpPath?: string;
             nodePort?: number;
+            imagePullSecrets?: Array<{
+                name: string;
+            }>;
         } | null;
         deploymentSpecYaml: string | null;
         userConfig: {
@@ -20254,6 +20263,9 @@ export type GetInternalMcpCatalogItemResponses = {
             httpPort?: number;
             httpPath?: string;
             nodePort?: number;
+            imagePullSecrets?: Array<{
+                name: string;
+            }>;
         } | null;
         deploymentSpecYaml: string | null;
         userConfig: {
@@ -20343,6 +20355,9 @@ export type UpdateInternalMcpCatalogItemData = {
             httpPath?: string;
             nodePort?: number;
             serviceAccount?: string;
+            imagePullSecrets?: Array<{
+                name: string;
+            }>;
         } | null;
         deploymentSpecYaml?: string | null;
         userConfig?: {
@@ -20500,6 +20515,9 @@ export type UpdateInternalMcpCatalogItemResponses = {
             httpPort?: number;
             httpPath?: string;
             nodePort?: number;
+            imagePullSecrets?: Array<{
+                name: string;
+            }>;
         } | null;
         deploymentSpecYaml: string | null;
         userConfig: {
@@ -21858,6 +21876,9 @@ export type GetMcpServerInstallationRequestsResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
@@ -21939,6 +21960,9 @@ export type CreateMcpServerInstallationRequestData = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
     };
@@ -22074,6 +22098,9 @@ export type CreateMcpServerInstallationRequestResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
@@ -22308,6 +22335,9 @@ export type GetMcpServerInstallationRequestResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
@@ -22389,6 +22419,9 @@ export type UpdateMcpServerInstallationRequestData = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse?: string | null;
@@ -22536,6 +22569,9 @@ export type UpdateMcpServerInstallationRequestResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
@@ -22693,6 +22729,9 @@ export type ApproveMcpServerInstallationRequestResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
@@ -22850,6 +22889,9 @@ export type DeclineMcpServerInstallationRequestResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
@@ -23007,6 +23049,9 @@ export type AddMcpServerInstallationRequestNoteResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
