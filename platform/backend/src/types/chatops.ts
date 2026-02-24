@@ -197,6 +197,30 @@ export interface ChatOpsProvider {
   getUserEmail(userId: string): Promise<string | null>;
 
   /**
+   * Get a channel's display name from its provider-specific ID.
+   * Used when creating early bindings for channels not yet in the discovery cache.
+   * @param channelId - The channel ID in the provider's system
+   * @returns The channel name, or null if not available
+   */
+  getChannelName(channelId: string): Promise<string | null>;
+
+  /**
+   * Parse an interactive payload (e.g. button click) into a structured selection.
+   * Each provider implements its own payload parsing (Block Kit for Slack, Adaptive Card for MS Teams).
+   * @param payload - The raw interactive payload from the provider
+   * @returns Parsed selection or null if not a valid agent selection
+   */
+  parseInteractivePayload(payload: unknown): {
+    agentId: string;
+    channelId: string;
+    workspaceId: string | null;
+    threadTs?: string;
+    userId: string;
+    userName: string;
+    responseUrl: string;
+  } | null;
+
+  /**
    * Send an agent selection card/message to a channel.
    * Each provider renders the card in its native format (Adaptive Card for MS Teams, Block Kit for Slack).
    * @param params.message - The incoming message that triggered the selection
@@ -220,12 +244,36 @@ export interface ChatOpsProvider {
   getWorkspaceId(): string | null;
 
   /**
+   * Get the workspace/team display name for this provider, if known.
+   * Used to populate workspaceName on channel bindings (including DMs).
+   */
+  getWorkspaceName(): string | null;
+
+  /**
    * Discover all channels in a workspace/team.
    * Used to auto-populate channel bindings so admins can assign agents from the UI.
    * @param context - Provider-specific context (e.g., TurnContext for MS Teams)
    * @returns Discovered channels, or null if context doesn't support discovery
    */
   discoverChannels(context: unknown): Promise<DiscoveredChannel[] | null>;
+}
+
+/**
+ * Callback interface for socket-mode providers to delegate events
+ * back to the ChatOpsManager without depending on it directly.
+ */
+export interface ChatOpsEventHandler {
+  handleIncomingMessage(
+    provider: ChatOpsProvider,
+    body: unknown,
+  ): Promise<void>;
+  handleInteractiveSelection(
+    provider: ChatOpsProvider,
+    payload: unknown,
+  ): Promise<void>;
+  getAccessibleChatopsAgents(params: {
+    senderEmail?: string;
+  }): Promise<{ id: string; name: string }[]>;
 }
 
 /**
@@ -243,25 +291,4 @@ export interface MSTeamsConfig {
     clientId: string;
     clientSecret: string;
   };
-}
-
-/**
- * Slack specific configuration from environment variables
- */
-export interface SlackConfig {
-  enabled: boolean;
-  /** Slack Bot User OAuth Token (xoxb-...) */
-  botToken: string;
-  /** Slack Signing Secret for webhook verification */
-  signingSecret: string;
-  /** Slack App ID (used to filter bot's own messages) */
-  appId: string;
-}
-
-/**
- * Overall chatops configuration
- */
-export interface ChatOpsConfig {
-  msTeams: MSTeamsConfig;
-  slack: SlackConfig;
 }

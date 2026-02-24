@@ -2,7 +2,7 @@ import { SupportedProviders } from "@shared";
 import { expect, test } from "./fixtures";
 
 test.describe("Config endpoint", () => {
-  test("GET /api/config returns features and providerBaseUrls", async ({
+  test("GET /api/config returns features and providerBaseUrls for authenticated user", async ({
     request,
     makeApiRequest,
   }) => {

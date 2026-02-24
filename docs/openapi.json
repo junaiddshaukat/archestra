@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Archestra",
-    "version": "1.0.46"
+    "version": "1.0.49"
   },
   "components": {
     "schemas": {
@@ -26470,39 +26470,6 @@
                               }
                             ]
                           },
-                          "allowedChatops": {
-                            "nullable": true,
-                            "anyOf": [
-                              {
-                                "anyOf": [
-                                  {
-                                    "type": "string"
-                                  },
-                                  {
-                                    "type": "number"
-                                  },
-                                  {
-                                    "type": "boolean"
-                                  },
-                                  {
-                                    "type": "string",
-                                    "nullable": true,
-                                    "enum": [
-                                      null
-                                    ]
-                                  }
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "additionalProperties": {}
-                              },
-                              {
-                                "type": "array",
-                                "items": {}
-                              }
-                            ]
-                          },
                           "description": {
                             "nullable": true,
                             "type": "string"
@@ -26695,7 +26662,6 @@
                           "userPrompt",
                           "promptVersion",
                           "promptHistory",
-                          "allowedChatops",
                           "description",
                           "incomingEmailEnabled",
                           "incomingEmailSecurityMode",
@@ -27018,39 +26984,6 @@
                     "nullable": true,
                     "type": "string"
                   },
-                  "allowedChatops": {
-                    "nullable": true,
-                    "anyOf": [
-                      {
-                        "anyOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "number"
-                          },
-                          {
-                            "type": "boolean"
-                          },
-                          {
-                            "type": "string",
-                            "nullable": true,
-                            "enum": [
-                              null
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "additionalProperties": {}
-                      },
-                      {
-                        "type": "array",
-                        "items": {}
-                      }
-                    ]
-                  },
                   "description": {
                     "nullable": true,
                     "type": "string"
@@ -27180,39 +27113,6 @@
                       "maximum": 2147483647
                     },
                     "promptHistory": {
-                      "nullable": true,
-                      "anyOf": [
-                        {
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "type": "number"
-                            },
-                            {
-                              "type": "boolean"
-                            },
-                            {
-                              "type": "string",
-                              "nullable": true,
-                              "enum": [
-                                null
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "additionalProperties": {}
-                        },
-                        {
-                          "type": "array",
-                          "items": {}
-                        }
-                      ]
-                    },
-                    "allowedChatops": {
                       "nullable": true,
                       "anyOf": [
                         {
@@ -27437,7 +27337,6 @@
                     "userPrompt",
                     "promptVersion",
                     "promptHistory",
-                    "allowedChatops",
                     "description",
                     "incomingEmailEnabled",
                     "incomingEmailSecurityMode",
@@ -27797,39 +27696,6 @@
                           }
                         ]
                       },
-                      "allowedChatops": {
-                        "nullable": true,
-                        "anyOf": [
-                          {
-                            "anyOf": [
-                              {
-                                "type": "string"
-                              },
-                              {
-                                "type": "number"
-                              },
-                              {
-                                "type": "boolean"
-                              },
-                              {
-                                "type": "string",
-                                "nullable": true,
-                                "enum": [
-                                  null
-                                ]
-                              }
-                            ]
-                          },
-                          {
-                            "type": "object",
-                            "additionalProperties": {}
-                          },
-                          {
-                            "type": "array",
-                            "items": {}
-                          }
-                        ]
-                      },
                       "description": {
                         "nullable": true,
                         "type": "string"
@@ -28022,7 +27888,6 @@
                       "userPrompt",
                       "promptVersion",
                       "promptHistory",
-                      "allowedChatops",
                       "description",
                       "incomingEmailEnabled",
                       "incomingEmailSecurityMode",
@@ -28346,39 +28211,6 @@
                         }
                       ]
                     },
-                    "allowedChatops": {
-                      "nullable": true,
-                      "anyOf": [
-                        {
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "type": "number"
-                            },
-                            {
-                              "type": "boolean"
-                            },
-                            {
-                              "type": "string",
-                              "nullable": true,
-                              "enum": [
-                                null
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "additionalProperties": {}
-                        },
-                        {
-                          "type": "array",
-                          "items": {}
-                        }
-                      ]
-                    },
                     "description": {
                       "nullable": true,
                       "type": "string"
@@ -28571,7 +28403,6 @@
                     "userPrompt",
                     "promptVersion",
                     "promptHistory",
-                    "allowedChatops",
                     "description",
                     "incomingEmailEnabled",
                     "incomingEmailSecurityMode",
@@ -28894,39 +28725,6 @@
                         }
                       ]
                     },
-                    "allowedChatops": {
-                      "nullable": true,
-                      "anyOf": [
-                        {
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "type": "number"
-                            },
-                            {
-                              "type": "boolean"
-                            },
-                            {
-                              "type": "string",
-                              "nullable": true,
-                              "enum": [
-                                null
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "additionalProperties": {}
-                        },
-                        {
-                          "type": "array",
-                          "items": {}
-                        }
-                      ]
-                    },
                     "description": {
                       "nullable": true,
                       "type": "string"
@@ -29119,7 +28917,6 @@
                     "userPrompt",
                     "promptVersion",
                     "promptHistory",
-                    "allowedChatops",
                     "description",
                     "incomingEmailEnabled",
                     "incomingEmailSecurityMode",
@@ -29454,39 +29251,6 @@
                         }
                       ]
                     },
-                    "allowedChatops": {
-                      "nullable": true,
-                      "anyOf": [
-                        {
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "type": "number"
-                            },
-                            {
-                              "type": "boolean"
-                            },
-                            {
-                              "type": "string",
-                              "nullable": true,
-                              "enum": [
-                                null
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "additionalProperties": {}
-                        },
-                        {
-                          "type": "array",
-                          "items": {}
-                        }
-                      ]
-                    },
                     "description": {
                       "nullable": true,
                       "type": "string"
@@ -29679,7 +29443,6 @@
                     "userPrompt",
                     "promptVersion",
                     "promptHistory",
-                    "allowedChatops",
                     "description",
                     "incomingEmailEnabled",
                     "incomingEmailSecurityMode",
@@ -29954,39 +29717,6 @@
                     "nullable": true,
                     "type": "string"
                   },
-                  "allowedChatops": {
-                    "nullable": true,
-                    "anyOf": [
-                      {
-                        "anyOf": [
-                          {
-                            "type": "string"
-                          },
-                          {
-                            "type": "number"
-                          },
-                          {
-                            "type": "boolean"
-                          },
-                          {
-                            "type": "string",
-                            "nullable": true,
-                            "enum": [
-                              null
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        "type": "object",
-                        "additionalProperties": {}
-                      },
-                      {
-                        "type": "array",
-                        "items": {}
-                      }
-                    ]
-                  },
                   "description": {
                     "nullable": true,
                     "type": "string"
@@ -30123,39 +29853,6 @@
                       "maximum": 2147483647
                     },
                     "promptHistory": {
-                      "nullable": true,
-                      "anyOf": [
-                        {
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "type": "number"
-                            },
-                            {
-                              "type": "boolean"
-                            },
-                            {
-                              "type": "string",
-                              "nullable": true,
-                              "enum": [
-                                null
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "additionalProperties": {}
-                        },
-                        {
-                          "type": "array",
-                          "items": {}
-                        }
-                      ]
-                    },
-                    "allowedChatops": {
                       "nullable": true,
                       "anyOf": [
                         {
@@ -30380,7 +30077,6 @@
                     "userPrompt",
                     "promptVersion",
                     "promptHistory",
-                    "allowedChatops",
                     "description",
                     "incomingEmailEnabled",
                     "incomingEmailSecurityMode",
@@ -30968,39 +30664,6 @@
                             }
                           ]
                         },
-                        "allowedChatops": {
-                          "nullable": true,
-                          "anyOf": [
-                            {
-                              "anyOf": [
-                                {
-                                  "type": "string"
-                                },
-                                {
-                                  "type": "number"
-                                },
-                                {
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "string",
-                                  "nullable": true,
-                                  "enum": [
-                                    null
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "type": "object",
-                              "additionalProperties": {}
-                            },
-                            {
-                              "type": "array",
-                              "items": {}
-                            }
-                          ]
-                        },
                         "description": {
                           "nullable": true,
                           "type": "string"
@@ -31193,7 +30856,6 @@
                         "userPrompt",
                         "promptVersion",
                         "promptHistory",
-                        "allowedChatops",
                         "description",
                         "incomingEmailEnabled",
                         "incomingEmailSecurityMode",
@@ -31585,39 +31247,6 @@
                         }
                       ]
                     },
-                    "allowedChatops": {
-                      "nullable": true,
-                      "anyOf": [
-                        {
-                          "anyOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "type": "number"
-                            },
-                            {
-                              "type": "boolean"
-                            },
-                            {
-                              "type": "string",
-                              "nullable": true,
-                              "enum": [
-                                null
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "object",
-                          "additionalProperties": {}
-                        },
-                        {
-                          "type": "array",
-                          "items": {}
-                        }
-                      ]
-                    },
                     "description": {
                       "nullable": true,
                       "type": "string"
@@ -31810,7 +31439,6 @@
                     "userPrompt",
                     "promptVersion",
                     "promptHistory",
-                    "allowedChatops",
                     "description",
                     "incomingEmailEnabled",
                     "incomingEmailSecurityMode",
@@ -51286,6 +50914,7 @@
                         "type": "string"
                       },
                       "agentId": {
+                        "nullable": true,
                         "type": "string",
                         "format": "uuid",
                         "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -51361,6 +50990,11 @@
                         "nullable": true,
                         "type": "string"
                       },
+                      "pinnedAt": {
+                        "nullable": true,
+                        "type": "string",
+                        "format": "date-time"
+                      },
                       "createdAt": {
                         "type": "string",
                         "format": "date-time"
@@ -51370,6 +51004,7 @@
                         "format": "date-time"
                       },
                       "agent": {
+                        "nullable": true,
                         "type": "object",
                         "properties": {
                           "id": {
@@ -51427,6 +51062,7 @@
                       "hasCustomToolSelection",
                       "todoList",
                       "artifact",
+                      "pinnedAt",
                       "createdAt",
                       "updatedAt",
                       "agent",
@@ -51726,6 +51362,7 @@
                       "type": "string"
                     },
                     "agentId": {
+                      "nullable": true,
                       "type": "string",
                       "format": "uuid",
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -51801,6 +51438,11 @@
                       "nullable": true,
                       "type": "string"
                     },
+                    "pinnedAt": {
+                      "nullable": true,
+                      "type": "string",
+                      "format": "date-time"
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time"
@@ -51810,6 +51452,7 @@
                       "format": "date-time"
                     },
                     "agent": {
+                      "nullable": true,
                       "type": "object",
                       "properties": {
                         "id": {
@@ -51867,6 +51510,7 @@
                     "hasCustomToolSelection",
                     "todoList",
                     "artifact",
+                    "pinnedAt",
                     "createdAt",
                     "updatedAt",
                     "agent",
@@ -52129,6 +51773,7 @@
                       "type": "string"
                     },
                     "agentId": {
+                      "nullable": true,
                       "type": "string",
                       "format": "uuid",
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -52204,6 +51849,11 @@
                       "nullable": true,
                       "type": "string"
                     },
+                    "pinnedAt": {
+                      "nullable": true,
+                      "type": "string",
+                      "format": "date-time"
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time"
@@ -52213,6 +51863,7 @@
                       "format": "date-time"
                     },
                     "agent": {
+                      "nullable": true,
                       "type": "object",
                       "properties": {
                         "id": {
@@ -52270,6 +51921,7 @@
                     "hasCustomToolSelection",
                     "todoList",
                     "artifact",
+                    "pinnedAt",
                     "createdAt",
                     "updatedAt",
                     "agent",
@@ -52542,6 +52194,12 @@
                   "artifact": {
                     "nullable": true,
                     "type": "string"
+                  },
+                  "pinnedAt": {
+                    "nullable": true,
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
                   }
                 }
               }
@@ -52580,6 +52238,7 @@
                       "type": "string"
                     },
                     "agentId": {
+                      "nullable": true,
                       "type": "string",
                       "format": "uuid",
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -52655,6 +52314,11 @@
                       "nullable": true,
                       "type": "string"
                     },
+                    "pinnedAt": {
+                      "nullable": true,
+                      "type": "string",
+                      "format": "date-time"
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time"
@@ -52664,6 +52328,7 @@
                       "format": "date-time"
                     },
                     "agent": {
+                      "nullable": true,
                       "type": "object",
                       "properties": {
                         "id": {
@@ -52721,6 +52386,7 @@
                     "hasCustomToolSelection",
                     "todoList",
                     "artifact",
+                    "pinnedAt",
                     "createdAt",
                     "updatedAt",
                     "agent",
@@ -53513,6 +53179,7 @@
                       "type": "string"
                     },
                     "agentId": {
+                      "nullable": true,
                       "type": "string",
                       "format": "uuid",
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -53588,6 +53255,11 @@
                       "nullable": true,
                       "type": "string"
                     },
+                    "pinnedAt": {
+                      "nullable": true,
+                      "type": "string",
+                      "format": "date-time"
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time"
@@ -53597,6 +53269,7 @@
                       "format": "date-time"
                     },
                     "agent": {
+                      "nullable": true,
                       "type": "object",
                       "properties": {
                         "id": {
@@ -53654,6 +53327,7 @@
                     "hasCustomToolSelection",
                     "todoList",
                     "artifact",
+                    "pinnedAt",
                     "createdAt",
                     "updatedAt",
                     "agent",
@@ -53944,6 +53618,7 @@
                       "type": "string"
                     },
                     "agentId": {
+                      "nullable": true,
                       "type": "string",
                       "format": "uuid",
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -54019,6 +53694,11 @@
                       "nullable": true,
                       "type": "string"
                     },
+                    "pinnedAt": {
+                      "nullable": true,
+                      "type": "string",
+                      "format": "date-time"
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time"
@@ -54028,6 +53708,7 @@
                       "format": "date-time"
                     },
                     "agent": {
+                      "nullable": true,
                       "type": "object",
                       "properties": {
                         "id": {
@@ -54085,6 +53766,7 @@
                     "hasCustomToolSelection",
                     "todoList",
                     "artifact",
+                    "pinnedAt",
                     "createdAt",
                     "updatedAt",
                     "agent",
@@ -57042,18 +56724,26 @@
                   },
                   "botToken": {
                     "type": "string",
-                    "minLength": 1,
                     "maxLength": 512
                   },
                   "signingSecret": {
                     "type": "string",
-                    "minLength": 1,
                     "maxLength": 256
                   },
                   "appId": {
                     "type": "string",
-                    "minLength": 1,
                     "maxLength": 256
+                  },
+                  "connectionMode": {
+                    "type": "string",
+                    "enum": [
+                      "webhook",
+                      "socket"
+                    ]
+                  },
+                  "appLevelToken": {
+                    "type": "string",
+                    "maxLength": 512
                   }
                 }
               }
@@ -63721,6 +63411,7 @@
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                               },
                               "profileId": {
+                                "nullable": true,
                                 "type": "string",
                                 "format": "uuid",
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -63863,6 +63554,7 @@
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                               },
                               "profileId": {
+                                "nullable": true,
                                 "type": "string",
                                 "format": "uuid",
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -64005,6 +63697,7 @@
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                               },
                               "profileId": {
+                                "nullable": true,
                                 "type": "string",
                                 "format": "uuid",
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -64147,6 +63840,7 @@
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                               },
                               "profileId": {
+                                "nullable": true,
                                 "type": "string",
                                 "format": "uuid",
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -65989,6 +65683,7 @@
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                               },
                               "profileId": {
+                                "nullable": true,
                                 "type": "string",
                                 "format": "uuid",
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -66131,6 +65826,7 @@
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                               },
                               "profileId": {
+                                "nullable": true,
                                 "type": "string",
                                 "format": "uuid",
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -66273,6 +65969,7 @@
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                               },
                               "profileId": {
+                                "nullable": true,
                                 "type": "string",
                                 "format": "uuid",
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -66415,6 +66112,7 @@
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                               },
                               "profileId": {
+                                "nullable": true,
                                 "type": "string",
                                 "format": "uuid",
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -66546,6 +66244,7 @@
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                               },
                               "profileId": {
+                                "nullable": true,
                                 "type": "string",
                                 "format": "uuid",
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -66677,6 +66376,7 @@
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                               },
                               "profileId": {
+                                "nullable": true,
                                 "type": "string",
                                 "format": "uuid",
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -66819,6 +66519,7 @@
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                               },
                               "profileId": {
+                                "nullable": true,
                                 "type": "string",
                                 "format": "uuid",
                                 "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -67536,6 +67237,7 @@
                             }
                           },
                           "profileId": {
+                            "nullable": true,
                             "type": "string"
                           },
                           "profileName": {
@@ -68396,6 +68098,7 @@
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                         },
                         "profileId": {
+                          "nullable": true,
                           "type": "string",
                           "format": "uuid",
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -68538,6 +68241,7 @@
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                         },
                         "profileId": {
+                          "nullable": true,
                           "type": "string",
                           "format": "uuid",
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -68680,6 +68384,7 @@
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                         },
                         "profileId": {
+                          "nullable": true,
                           "type": "string",
                           "format": "uuid",
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -68822,6 +68527,7 @@
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                         },
                         "profileId": {
+                          "nullable": true,
                           "type": "string",
                           "format": "uuid",
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -70664,6 +70370,7 @@
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                         },
                         "profileId": {
+                          "nullable": true,
                           "type": "string",
                           "format": "uuid",
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -70806,6 +70513,7 @@
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                         },
                         "profileId": {
+                          "nullable": true,
                           "type": "string",
                           "format": "uuid",
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -70948,6 +70656,7 @@
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                         },
                         "profileId": {
+                          "nullable": true,
                           "type": "string",
                           "format": "uuid",
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -71090,6 +70799,7 @@
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                         },
                         "profileId": {
+                          "nullable": true,
                           "type": "string",
                           "format": "uuid",
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -71221,6 +70931,7 @@
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                         },
                         "profileId": {
+                          "nullable": true,
                           "type": "string",
                           "format": "uuid",
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -71352,6 +71063,7 @@
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                         },
                         "profileId": {
+                          "nullable": true,
                           "type": "string",
                           "format": "uuid",
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -71494,6 +71206,7 @@
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                         },
                         "profileId": {
+                          "nullable": true,
                           "type": "string",
                           "format": "uuid",
                           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -72186,6 +71899,21 @@
                           },
                           "nodePort": {
                             "type": "number"
+                          },
+                          "imagePullSecrets": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "additionalProperties": false
+                            }
                           }
                         },
                         "additionalProperties": false
@@ -72811,6 +72539,21 @@
                       },
                       "serviceAccount": {
                         "type": "string"
+                      },
+                      "imagePullSecrets": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "name"
+                          ]
+                        }
                       }
                     }
                   },
@@ -73198,6 +72941,21 @@
                         },
                         "nodePort": {
                           "type": "number"
+                        },
+                        "imagePullSecrets": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          }
                         }
                       },
                       "additionalProperties": false
@@ -73838,6 +73596,21 @@
                         },
                         "nodePort": {
                           "type": "number"
+                        },
+                        "imagePullSecrets": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          }
                         }
                       },
                       "additionalProperties": false
@@ -74457,6 +74230,21 @@
                       },
                       "serviceAccount": {
                         "type": "string"
+                      },
+                      "imagePullSecrets": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "name"
+                          ]
+                        }
                       }
                     }
                   },
@@ -74851,6 +74639,21 @@
                         },
                         "nodePort": {
                           "type": "number"
+                        },
+                        "imagePullSecrets": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          }
                         }
                       },
                       "additionalProperties": false
@@ -79735,6 +79538,22 @@
                                   },
                                   "serviceAccount": {
                                     "type": "string"
+                                  },
+                                  "imagePullSecrets": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "name": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
+                                      },
+                                      "required": [
+                                        "name"
+                                      ],
+                                      "additionalProperties": false
+                                    }
                                   }
                                 },
                                 "additionalProperties": false
@@ -80293,6 +80112,21 @@
                               },
                               "serviceAccount": {
                                 "type": "string"
+                              },
+                              "imagePullSecrets": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "name"
+                                  ]
+                                }
                               }
                             }
                           }
@@ -80582,6 +80416,22 @@
                                 },
                                 "serviceAccount": {
                                   "type": "string"
+                                },
+                                "imagePullSecrets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "name"
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "additionalProperties": false
@@ -81169,6 +81019,22 @@
                                 },
                                 "serviceAccount": {
                                   "type": "string"
+                                },
+                                "imagePullSecrets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "name"
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "additionalProperties": false
@@ -81730,6 +81596,21 @@
                               },
                               "serviceAccount": {
                                 "type": "string"
+                              },
+                              "imagePullSecrets": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "name"
+                                  ]
+                                }
                               }
                             }
                           }
@@ -82069,6 +81950,22 @@
                                 },
                                 "serviceAccount": {
                                   "type": "string"
+                                },
+                                "imagePullSecrets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "name"
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "additionalProperties": false
@@ -82920,6 +82817,22 @@
                                 },
                                 "serviceAccount": {
                                   "type": "string"
+                                },
+                                "imagePullSecrets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "name"
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "additionalProperties": false
@@ -83521,6 +83434,22 @@
                                 },
                                 "serviceAccount": {
                                   "type": "string"
+                                },
+                                "imagePullSecrets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "name"
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "additionalProperties": false
@@ -84127,6 +84056,22 @@
                                 },
                                 "serviceAccount": {
                                   "type": "string"
+                                },
+                                "imagePullSecrets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string",
+                                        "minLength": 1
+                                      }
+                                    },
+                                    "required": [
+                                      "name"
+                                    ],
+                                    "additionalProperties": false
+                                  }
                                 }
                               },
                               "additionalProperties": false
@@ -87507,6 +87452,7 @@
                             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                           },
                           "agentId": {
+                            "nullable": true,
                             "type": "string",
                             "format": "uuid",
                             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
@@ -87880,6 +87826,7 @@
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
                     },
                     "agentId": {
+                      "nullable": true,
                       "type": "string",
                       "format": "uuid",
                       "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"

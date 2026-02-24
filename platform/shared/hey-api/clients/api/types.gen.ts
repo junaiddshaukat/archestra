@@ -7485,9 +7485,6 @@ export type GetAgentsResponses = {
             promptHistory: string | number | boolean | null | {
                 [key: string]: unknown;
             } | Array<unknown> | null;
-            allowedChatops: string | number | boolean | null | {
-                [key: string]: unknown;
-            } | Array<unknown> | null;
             description: string | null;
             incomingEmailEnabled: boolean;
             incomingEmailSecurityMode: 'private' | 'internal' | 'public';
@@ -7560,9 +7557,6 @@ export type CreateAgentData = {
         agentType?: 'profile' | 'mcp_gateway' | 'llm_proxy' | 'agent';
         systemPrompt?: string | null;
         userPrompt?: string | null;
-        allowedChatops?: string | number | boolean | null | {
-            [key: string]: unknown;
-        } | Array<unknown> | null;
         description?: string | null;
         incomingEmailEnabled?: boolean;
         incomingEmailSecurityMode?: 'private' | 'internal' | 'public';
@@ -7658,9 +7652,6 @@ export type CreateAgentResponses = {
         userPrompt: string | null;
         promptVersion: number | null;
         promptHistory: string | number | boolean | null | {
-            [key: string]: unknown;
-        } | Array<unknown> | null;
-        allowedChatops: string | number | boolean | null | {
             [key: string]: unknown;
         } | Array<unknown> | null;
         description: string | null;
@@ -7809,9 +7800,6 @@ export type GetAllAgentsResponses = {
         promptHistory: string | number | boolean | null | {
             [key: string]: unknown;
         } | Array<unknown> | null;
-        allowedChatops: string | number | boolean | null | {
-            [key: string]: unknown;
-        } | Array<unknown> | null;
         description: string | null;
         incomingEmailEnabled: boolean;
         incomingEmailSecurityMode: 'private' | 'internal' | 'public';
@@ -7949,9 +7937,6 @@ export type GetDefaultMcpGatewayResponses = {
         promptHistory: string | number | boolean | null | {
             [key: string]: unknown;
         } | Array<unknown> | null;
-        allowedChatops: string | number | boolean | null | {
-            [key: string]: unknown;
-        } | Array<unknown> | null;
         description: string | null;
         incomingEmailEnabled: boolean;
         incomingEmailSecurityMode: 'private' | 'internal' | 'public';
@@ -8087,9 +8072,6 @@ export type GetDefaultLlmProxyResponses = {
         userPrompt: string | null;
         promptVersion: number | null;
         promptHistory: string | number | boolean | null | {
-            [key: string]: unknown;
-        } | Array<unknown> | null;
-        allowedChatops: string | number | boolean | null | {
             [key: string]: unknown;
         } | Array<unknown> | null;
         description: string | null;
@@ -8310,9 +8292,6 @@ export type GetAgentResponses = {
         promptHistory: string | number | boolean | null | {
             [key: string]: unknown;
         } | Array<unknown> | null;
-        allowedChatops: string | number | boolean | null | {
-            [key: string]: unknown;
-        } | Array<unknown> | null;
         description: string | null;
         incomingEmailEnabled: boolean;
         incomingEmailSecurityMode: 'private' | 'internal' | 'public';
@@ -8376,9 +8355,6 @@ export type UpdateAgentData = {
         agentType?: 'profile' | 'mcp_gateway' | 'llm_proxy' | 'agent';
         systemPrompt?: string | null;
         userPrompt?: string | null;
-        allowedChatops?: string | number | boolean | null | {
-            [key: string]: unknown;
-        } | Array<unknown> | null;
         description?: string | null;
         incomingEmailEnabled?: boolean;
         incomingEmailSecurityMode?: 'private' | 'internal' | 'public';
@@ -8476,9 +8452,6 @@ export type UpdateAgentResponses = {
         userPrompt: string | null;
         promptVersion: number | null;
         promptHistory: string | number | boolean | null | {
-            [key: string]: unknown;
-        } | Array<unknown> | null;
-        allowedChatops: string | number | boolean | null | {
             [key: string]: unknown;
         } | Array<unknown> | null;
         description: string | null;
@@ -8619,9 +8592,6 @@ export type GetAgentVersionsResponses = {
             userPrompt: string | null;
             promptVersion: number | null;
             promptHistory: string | number | boolean | null | {
-                [key: string]: unknown;
-            } | Array<unknown> | null;
-            allowedChatops: string | number | boolean | null | {
                 [key: string]: unknown;
             } | Array<unknown> | null;
             description: string | null;
@@ -8773,9 +8743,6 @@ export type RollbackAgentResponses = {
         userPrompt: string | null;
         promptVersion: number | null;
         promptHistory: string | number | boolean | null | {
-            [key: string]: unknown;
-        } | Array<unknown> | null;
-        allowedChatops: string | number | boolean | null | {
             [key: string]: unknown;
         } | Array<unknown> | null;
         description: string | null;
@@ -14274,7 +14241,7 @@ export type GetChatConversationsResponses = {
         id: string;
         userId: string;
         organizationId: string;
-        agentId: string;
+        agentId: string | null;
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
@@ -14284,6 +14251,7 @@ export type GetChatConversationsResponses = {
             [key: string]: unknown;
         } | Array<unknown> | null;
         artifact: string | null;
+        pinnedAt: string | null;
         createdAt: string;
         updatedAt: string;
         agent: {
@@ -14293,7 +14261,7 @@ export type GetChatConversationsResponses = {
             userPrompt: string | null;
             agentType: 'profile' | 'mcp_gateway' | 'llm_proxy' | 'agent';
             llmApiKeyId: string | null;
-        };
+        } | null;
         messages: Array<unknown>;
     }>;
 };
@@ -14380,7 +14348,7 @@ export type CreateChatConversationResponses = {
         id: string;
         userId: string;
         organizationId: string;
-        agentId: string;
+        agentId: string | null;
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
@@ -14390,6 +14358,7 @@ export type CreateChatConversationResponses = {
             [key: string]: unknown;
         } | Array<unknown> | null;
         artifact: string | null;
+        pinnedAt: string | null;
         createdAt: string;
         updatedAt: string;
         agent: {
@@ -14399,7 +14368,7 @@ export type CreateChatConversationResponses = {
             userPrompt: string | null;
             agentType: 'profile' | 'mcp_gateway' | 'llm_proxy' | 'agent';
             llmApiKeyId: string | null;
-        };
+        } | null;
         messages: Array<unknown>;
     };
 };
@@ -14561,7 +14530,7 @@ export type GetChatConversationResponses = {
         id: string;
         userId: string;
         organizationId: string;
-        agentId: string;
+        agentId: string | null;
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
@@ -14571,6 +14540,7 @@ export type GetChatConversationResponses = {
             [key: string]: unknown;
         } | Array<unknown> | null;
         artifact: string | null;
+        pinnedAt: string | null;
         createdAt: string;
         updatedAt: string;
         agent: {
@@ -14580,7 +14550,7 @@ export type GetChatConversationResponses = {
             userPrompt: string | null;
             agentType: 'profile' | 'mcp_gateway' | 'llm_proxy' | 'agent';
             llmApiKeyId: string | null;
-        };
+        } | null;
         messages: Array<unknown>;
     };
 };
@@ -14595,6 +14565,7 @@ export type UpdateChatConversationData = {
         chatApiKeyId?: string | null;
         agentId?: string;
         artifact?: string | null;
+        pinnedAt?: string | null;
     };
     path: {
         id: string;
@@ -14670,7 +14641,7 @@ export type UpdateChatConversationResponses = {
         id: string;
         userId: string;
         organizationId: string;
-        agentId: string;
+        agentId: string | null;
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
@@ -14680,6 +14651,7 @@ export type UpdateChatConversationResponses = {
             [key: string]: unknown;
         } | Array<unknown> | null;
         artifact: string | null;
+        pinnedAt: string | null;
         createdAt: string;
         updatedAt: string;
         agent: {
@@ -14689,7 +14661,7 @@ export type UpdateChatConversationResponses = {
             userPrompt: string | null;
             agentType: 'profile' | 'mcp_gateway' | 'llm_proxy' | 'agent';
             llmApiKeyId: string | null;
-        };
+        } | null;
         messages: Array<unknown>;
     };
 };
@@ -14860,7 +14832,7 @@ export type GenerateChatConversationTitleResponses = {
         id: string;
         userId: string;
         organizationId: string;
-        agentId: string;
+        agentId: string | null;
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
@@ -14870,6 +14842,7 @@ export type GenerateChatConversationTitleResponses = {
             [key: string]: unknown;
         } | Array<unknown> | null;
         artifact: string | null;
+        pinnedAt: string | null;
         createdAt: string;
         updatedAt: string;
         agent: {
@@ -14879,7 +14852,7 @@ export type GenerateChatConversationTitleResponses = {
             userPrompt: string | null;
             agentType: 'profile' | 'mcp_gateway' | 'llm_proxy' | 'agent';
             llmApiKeyId: string | null;
-        };
+        } | null;
         messages: Array<unknown>;
     };
 };
@@ -14966,7 +14939,7 @@ export type UpdateChatMessageResponses = {
         id: string;
         userId: string;
         organizationId: string;
-        agentId: string;
+        agentId: string | null;
         chatApiKeyId: string | null;
         title: string | null;
         selectedModel: string;
@@ -14976,6 +14949,7 @@ export type UpdateChatMessageResponses = {
             [key: string]: unknown;
         } | Array<unknown> | null;
         artifact: string | null;
+        pinnedAt: string | null;
         createdAt: string;
         updatedAt: string;
         agent: {
@@ -14985,7 +14959,7 @@ export type UpdateChatMessageResponses = {
             userPrompt: string | null;
             agentType: 'profile' | 'mcp_gateway' | 'llm_proxy' | 'agent';
             llmApiKeyId: string | null;
-        };
+        } | null;
         messages: Array<unknown>;
     };
 };
@@ -15851,6 +15825,8 @@ export type UpdateSlackChatOpsConfigData = {
         botToken?: string;
         signingSecret?: string;
         appId?: string;
+        connectionMode?: 'webhook' | 'socket';
+        appLevelToken?: string;
     };
     path?: never;
     query?: never;
@@ -17978,7 +17954,7 @@ export type GetInteractionsResponses = {
     200: {
         data: Array<{
             id: string;
-            profileId: string;
+            profileId: string | null;
             externalAgentId: string | null;
             executionId: string | null;
             userId: string | null;
@@ -18003,7 +17979,7 @@ export type GetInteractionsResponses = {
             externalAgentIdLabel?: string | null;
         } | {
             id: string;
-            profileId: string;
+            profileId: string | null;
             externalAgentId: string | null;
             executionId: string | null;
             userId: string | null;
@@ -18028,7 +18004,7 @@ export type GetInteractionsResponses = {
             externalAgentIdLabel?: string | null;
         } | {
             id: string;
-            profileId: string;
+            profileId: string | null;
             externalAgentId: string | null;
             executionId: string | null;
             userId: string | null;
@@ -18053,7 +18029,7 @@ export type GetInteractionsResponses = {
             externalAgentIdLabel?: string | null;
         } | {
             id: string;
-            profileId: string;
+            profileId: string | null;
             externalAgentId: string | null;
             executionId: string | null;
             userId: string | null;
@@ -18446,7 +18422,7 @@ export type GetInteractionsResponses = {
             externalAgentIdLabel?: string | null;
         } | {
             id: string;
-            profileId: string;
+            profileId: string | null;
             externalAgentId: string | null;
             executionId: string | null;
             userId: string | null;
@@ -18471,7 +18447,7 @@ export type GetInteractionsResponses = {
             externalAgentIdLabel?: string | null;
         } | {
             id: string;
-            profileId: string;
+            profileId: string | null;
             externalAgentId: string | null;
             executionId: string | null;
             userId: string | null;
@@ -18496,7 +18472,7 @@ export type GetInteractionsResponses = {
             externalAgentIdLabel?: string | null;
         } | {
             id: string;
-            profileId: string;
+            profileId: string | null;
             externalAgentId: string | null;
             executionId: string | null;
             userId: string | null;
@@ -18521,7 +18497,7 @@ export type GetInteractionsResponses = {
             externalAgentIdLabel?: string | null;
         } | {
             id: string;
-            profileId: string;
+            profileId: string | null;
             externalAgentId: string | null;
             executionId: string | null;
             userId: string | null;
@@ -18544,7 +18520,7 @@ export type GetInteractionsResponses = {
             createdAt: string;
         } | {
             id: string;
-            profileId: string;
+            profileId: string | null;
             externalAgentId: string | null;
             executionId: string | null;
             userId: string | null;
@@ -18567,7 +18543,7 @@ export type GetInteractionsResponses = {
             createdAt: string;
         } | {
             id: string;
-            profileId: string;
+            profileId: string | null;
             externalAgentId: string | null;
             executionId: string | null;
             userId: string | null;
@@ -18592,7 +18568,7 @@ export type GetInteractionsResponses = {
             externalAgentIdLabel?: string | null;
         } | {
             id: string;
-            profileId: string;
+            profileId: string | null;
             externalAgentId: string | null;
             executionId: string | null;
             userId: string | null;
@@ -18771,7 +18747,7 @@ export type GetInteractionSessionsResponses = {
             firstRequestTime: string;
             lastRequestTime: string;
             models: Array<string>;
-            profileId: string;
+            profileId: string | null;
             profileName: string | null;
             externalAgentIds: Array<string>;
             externalAgentIdLabels: Array<string | null>;
@@ -19024,7 +19000,7 @@ export type GetInteractionResponses = {
      */
     200: {
         id: string;
-        profileId: string;
+        profileId: string | null;
         externalAgentId: string | null;
         executionId: string | null;
         userId: string | null;
@@ -19049,7 +19025,7 @@ export type GetInteractionResponses = {
         externalAgentIdLabel?: string | null;
     } | {
         id: string;
-        profileId: string;
+        profileId: string | null;
         externalAgentId: string | null;
         executionId: string | null;
         userId: string | null;
@@ -19074,7 +19050,7 @@ export type GetInteractionResponses = {
         externalAgentIdLabel?: string | null;
     } | {
         id: string;
-        profileId: string;
+        profileId: string | null;
         externalAgentId: string | null;
         executionId: string | null;
         userId: string | null;
@@ -19099,7 +19075,7 @@ export type GetInteractionResponses = {
         externalAgentIdLabel?: string | null;
     } | {
         id: string;
-        profileId: string;
+        profileId: string | null;
         externalAgentId: string | null;
         executionId: string | null;
         userId: string | null;
@@ -19492,7 +19468,7 @@ export type GetInteractionResponses = {
         externalAgentIdLabel?: string | null;
     } | {
         id: string;
-        profileId: string;
+        profileId: string | null;
         externalAgentId: string | null;
         executionId: string | null;
         userId: string | null;
@@ -19517,7 +19493,7 @@ export type GetInteractionResponses = {
         externalAgentIdLabel?: string | null;
     } | {
         id: string;
-        profileId: string;
+        profileId: string | null;
         externalAgentId: string | null;
         executionId: string | null;
         userId: string | null;
@@ -19542,7 +19518,7 @@ export type GetInteractionResponses = {
         externalAgentIdLabel?: string | null;
     } | {
         id: string;
-        profileId: string;
+        profileId: string | null;
         externalAgentId: string | null;
         executionId: string | null;
         userId: string | null;
@@ -19567,7 +19543,7 @@ export type GetInteractionResponses = {
         externalAgentIdLabel?: string | null;
     } | {
         id: string;
-        profileId: string;
+        profileId: string | null;
         externalAgentId: string | null;
         executionId: string | null;
         userId: string | null;
@@ -19590,7 +19566,7 @@ export type GetInteractionResponses = {
         createdAt: string;
     } | {
         id: string;
-        profileId: string;
+        profileId: string | null;
         externalAgentId: string | null;
         executionId: string | null;
         userId: string | null;
@@ -19613,7 +19589,7 @@ export type GetInteractionResponses = {
         createdAt: string;
     } | {
         id: string;
-        profileId: string;
+        profileId: string | null;
         externalAgentId: string | null;
         executionId: string | null;
         userId: string | null;
@@ -19638,7 +19614,7 @@ export type GetInteractionResponses = {
         externalAgentIdLabel?: string | null;
     } | {
         id: string;
-        profileId: string;
+        profileId: string | null;
         externalAgentId: string | null;
         executionId: string | null;
         userId: string | null;
@@ -19802,6 +19778,9 @@ export type GetInternalMcpCatalogResponses = {
             httpPort?: number;
             httpPath?: string;
             nodePort?: number;
+            imagePullSecrets?: Array<{
+                name: string;
+            }>;
         } | null;
         deploymentSpecYaml: string | null;
         userConfig: {
@@ -19892,6 +19871,9 @@ export type CreateInternalMcpCatalogItemData = {
             httpPath?: string;
             nodePort?: number;
             serviceAccount?: string;
+            imagePullSecrets?: Array<{
+                name: string;
+            }>;
         } | null;
         deploymentSpecYaml?: string | null;
         userConfig?: {
@@ -20047,6 +20029,9 @@ export type CreateInternalMcpCatalogItemResponses = {
             httpPort?: number;
             httpPath?: string;
             nodePort?: number;
+            imagePullSecrets?: Array<{
+                name: string;
+            }>;
         } | null;
         deploymentSpecYaml: string | null;
         userConfig: {
@@ -20287,6 +20272,9 @@ export type GetInternalMcpCatalogItemResponses = {
             httpPort?: number;
             httpPath?: string;
             nodePort?: number;
+            imagePullSecrets?: Array<{
+                name: string;
+            }>;
         } | null;
         deploymentSpecYaml: string | null;
         userConfig: {
@@ -20376,6 +20364,9 @@ export type UpdateInternalMcpCatalogItemData = {
             httpPath?: string;
             nodePort?: number;
             serviceAccount?: string;
+            imagePullSecrets?: Array<{
+                name: string;
+            }>;
         } | null;
         deploymentSpecYaml?: string | null;
         userConfig?: {
@@ -20533,6 +20524,9 @@ export type UpdateInternalMcpCatalogItemResponses = {
             httpPort?: number;
             httpPath?: string;
             nodePort?: number;
+            imagePullSecrets?: Array<{
+                name: string;
+            }>;
         } | null;
         deploymentSpecYaml: string | null;
         userConfig: {
@@ -21891,6 +21885,9 @@ export type GetMcpServerInstallationRequestsResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
@@ -21972,6 +21969,9 @@ export type CreateMcpServerInstallationRequestData = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
     };
@@ -22107,6 +22107,9 @@ export type CreateMcpServerInstallationRequestResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
@@ -22341,6 +22344,9 @@ export type GetMcpServerInstallationRequestResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
@@ -22422,6 +22428,9 @@ export type UpdateMcpServerInstallationRequestData = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse?: string | null;
@@ -22569,6 +22578,9 @@ export type UpdateMcpServerInstallationRequestResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
@@ -22726,6 +22738,9 @@ export type ApproveMcpServerInstallationRequestResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
@@ -22883,6 +22898,9 @@ export type DeclineMcpServerInstallationRequestResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
@@ -23040,6 +23058,9 @@ export type AddMcpServerInstallationRequestNoteResponses = {
                 httpPath?: string;
                 nodePort?: number;
                 serviceAccount?: string;
+                imagePullSecrets?: Array<{
+                    name: string;
+                }>;
             };
         } | null;
         adminResponse: string | null;
@@ -23960,7 +23981,7 @@ export type GetMcpToolCallsResponses = {
     200: {
         data: Array<{
             id: string;
-            agentId: string;
+            agentId: string | null;
             mcpServerName: string;
             method: string;
             /**
@@ -24066,7 +24087,7 @@ export type GetMcpToolCallResponses = {
      */
     200: {
         id: string;
-        agentId: string;
+        agentId: string | null;
         mcpServerName: string;
         method: string;
         /**

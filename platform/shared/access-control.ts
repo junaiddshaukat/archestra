@@ -658,6 +658,8 @@ export const requiredEndpointPermissionsMap: Partial<
   [RouteId.RefreshChatOpsChannelDiscovery]: {
     organization: ["update"],
   },
+  // Config endpoint - any authenticated user can access
+  [RouteId.GetConfig]: {},
 };
 
 /**
@@ -740,6 +742,12 @@ export const requiredPagePermissionsMap: Record<string, Permissions> = {
     organization: ["read"],
   },
   // Agent Triggers
+  "/agent-triggers": {
+    organization: ["update"],
+  },
+  "/agent-triggers/slack": {
+    organization: ["update"],
+  },
   "/agent-triggers/ms-teams": {
     organization: ["update"],
   },
