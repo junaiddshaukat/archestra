@@ -4,6 +4,8 @@ export { cerebrasAdapterFactory } from "./cerebras";
 export { cohereAdapterFactory } from "./cohere";
 export { deepseekAdapterFactory } from "./deepseek";
 export { geminiAdapterFactory } from "./gemini";
+export { groqAdapterFactory } from "./groq";
+export { minimaxAdapterFactory } from "./minimax";
 export { mistralAdapterFactory } from "./mistral";
 export { ollamaAdapterFactory } from "./ollama";
 export { openaiAdapterFactory } from "./openai";

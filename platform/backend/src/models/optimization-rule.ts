@@ -282,11 +282,13 @@ class OptimizationRuleModel {
         cerebras: [],
         mistral: [],
         perplexity: [], // Perplexity optimization rules - no defaults (no tool support)
+        groq: [], // Groq optimization rules - no defaults
         vllm: [], // vLLM optimization rules are deployment-specific, no defaults
         ollama: [], // Ollama optimization rules are deployment-specific, no defaults
         zhipuai: [],
         deepseek: [],
         bedrock: [], // Bedrock optimization rules are deployment-specific, no defaults
+        minimax: [],
       };
 
     // Filter by provider if specified, otherwise get providers from interactions

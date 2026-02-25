@@ -47,10 +47,11 @@ const MODELS_DEV_PROVIDER_MAP: Record<string, SupportedProvider | null> = {
   cohere: "cohere",
   cerebras: "cerebras",
   mistral: "mistral",
-  deepseek: "deepseek",
+  minimax: "minimax",
   // These providers use OpenAI-compatible API in Archestra
   llama: "openai",
-  groq: "openai",
+  deepseek: "deepseek",
+  groq: "groq",
   "fireworks-ai": "openai",
   togetherai: "openai",
   // Explicitly unsupported providers (return null to skip)
@@ -408,11 +409,13 @@ class ModelsDevClient {
       cerebras: ["cerebras/"],
       mistral: ["mistral/"],
       perplexity: ["perplexity/"],
+      groq: ["groq/"],
       bedrock: ["amazon-bedrock/"],
       ollama: ["ollama/"],
       vllm: ["vllm/"],
       zhipuai: ["zhipuai/"],
       deepseek: ["deepseek/"],
+      minimax: ["minimax/"],
     };
 
     const getSourcePriority = (model: CreateModel): number => {
