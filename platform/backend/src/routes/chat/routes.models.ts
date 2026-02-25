@@ -588,42 +588,6 @@ async function fetchMinimaxModels(_apiKey: string): Promise<ModelInfo[]> {
 }
 
 /**
- * Test DeepSeek API key using the same endpoint as chat (POST /chat/completions).
- * This matches the working curl and avoids relying on GET /models which may
- * have different auth or permission requirements.
- */
-async function testDeepSeekApiKey(apiKey: string): Promise<void> {
-  const baseUrl = config.llm.deepseek.baseUrl;
-  const url = `${baseUrl}/chat/completions`;
-
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: "deepseek-chat",
-      messages: [
-        { role: "system", content: "You are a helpful assistant." },
-        { role: "user", content: "Hi" },
-      ],
-      max_tokens: 1,
-      stream: false,
-    }),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    logger.error(
-      { status: response.status, error: errorText },
-      "DeepSeek API key validation failed",
-    );
-    throw new Error(`DeepSeek API key validation failed: ${response.status}`);
-  }
-}
-
-/**
  * Fetch models from DeepSeek API
  */
 async function fetchDeepSeekModels(apiKey: string): Promise<ModelInfo[]> {
@@ -929,16 +893,11 @@ for (const [provider, fetcher] of Object.entries(modelFetchers)) {
 /**
  * Test if an API key is valid by attempting to fetch models from the provider.
  * Throws an error if the key is invalid or the provider is unreachable.
- * DeepSeek is validated via POST /chat/completions (same as user-facing usage).
  */
 export async function testProviderApiKey(
   provider: SupportedProvider,
   apiKey: string,
 ): Promise<void> {
-  if (provider === "deepseek") {
-    await testDeepSeekApiKey(apiKey);
-    return;
-  }
   await modelFetchers[provider](apiKey);
 }
 
