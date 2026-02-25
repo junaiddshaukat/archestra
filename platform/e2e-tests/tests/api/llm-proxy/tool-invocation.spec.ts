@@ -527,6 +527,12 @@ const minimaxConfig = makeOpenAiCompatibleToolConfig({
   model: "MiniMax-M2.1",
 });
 
+const deepseekConfig = makeOpenAiCompatibleToolConfig({
+  providerName: "DeepSeek",
+  endpoint: (agentId) => `/v1/deepseek/${agentId}/chat/completions`,
+  model: "deepseek-chat",
+});
+
 const bedrockConfig: ToolInvocationTestConfig = {
   providerName: "Bedrock",
 
@@ -625,7 +631,7 @@ const testConfigsMap = {
   ollama: ollamaConfig,
   zhipuai: zhipuaiConfig,
   minimax: minimaxConfig,
-  deepseek: null,
+  deepseek: deepseekConfig,
   bedrock: bedrockConfig,
   perplexity: null, // Perplexity does not support tool calling
 } satisfies Record<SupportedProvider, ToolInvocationTestConfig | null>;

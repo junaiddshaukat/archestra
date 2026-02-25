@@ -71,6 +71,7 @@ const PROVIDER_CONFIG: Record<
   deepseek: {
     label: providerDisplayNames.deepseek,
     originalUrl: "https://api.deepseek.com/",
+  },
   minimax: {
     label: providerDisplayNames.minimax,
     originalUrl: "https://api.minimax.io/v1/",

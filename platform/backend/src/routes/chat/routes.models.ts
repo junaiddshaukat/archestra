@@ -608,6 +608,7 @@ async function testDeepSeekApiKey(apiKey: string): Promise<void> {
         { role: "system", content: "You are a helpful assistant." },
         { role: "user", content: "Hi" },
       ],
+      max_tokens: 1,
       stream: false,
     }),
   });
