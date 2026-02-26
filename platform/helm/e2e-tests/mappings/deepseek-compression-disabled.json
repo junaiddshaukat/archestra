@@ -4,15 +4,12 @@
     "urlPath": "/deepseek/chat/completions",
     "headers": {
       "Authorization": {
-        "contains": "deepseek-model-optimization-no-tools"
+        "contains": "deepseek-compression"
       }
     },
     "bodyPatterns": [
       {
-        "contains": "e2e-test-deepseek-baseline"
-      },
-      {
-        "doesNotMatch": ".*\"tools\".*"
+        "contains": "{\\\"files\\\":[{\\\"name\\\":\\\"README.md\\\",\\\"size\\\":1024"
       }
     ]
   },
@@ -22,16 +19,16 @@
       "Content-Type": "application/json"
     },
     "jsonBody": {
-      "id": "chatcmpl-deepseek-model-optimization-no-tools",
+      "id": "chatcmpl-deepseek-compression-disabled",
       "object": "chat.completion",
       "created": 1234567890,
-      "model": "e2e-test-deepseek-baseline",
+      "model": "deepseek-chat",
       "choices": [
         {
           "index": 0,
           "message": {
             "role": "assistant",
-            "content": "Optimized model used without tools.",
+            "content": "I have processed the JSON tool result.",
             "refusal": null
           },
           "finish_reason": "stop",
@@ -39,9 +36,9 @@
         }
       ],
       "usage": {
-        "prompt_tokens": 1200,
-        "completion_tokens": 100,
-        "total_tokens": 1300
+        "prompt_tokens": 150,
+        "completion_tokens": 10,
+        "total_tokens": 160
       }
     }
   }
