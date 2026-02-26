@@ -478,7 +478,11 @@ describe("chat-models", () => {
         json: () =>
           Promise.resolve({
             data: [
-              { id: "deepseek-chat", created: 1700000000, owned_by: "deepseek" },
+              {
+                id: "deepseek-chat",
+                created: 1700000000,
+                owned_by: "deepseek",
+              },
             ],
           }),
       });

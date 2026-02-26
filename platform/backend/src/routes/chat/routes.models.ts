@@ -933,7 +933,12 @@ export async function fetchModelsForProvider({
   // Bedrock uses AWS credentials which may come from default credential chain
   const isBedrockEnabled = provider === "bedrock" && config.llm.bedrock.enabled;
 
-  if (!apiKey && !vertexAiEnabled && !isKeylessProviderEnabled && !isBedrockEnabled) {
+  if (
+    !apiKey &&
+    !vertexAiEnabled &&
+    !isKeylessProviderEnabled &&
+    !isBedrockEnabled
+  ) {
     logger.debug(
       { provider, organizationId },
       "No API key available for provider",
