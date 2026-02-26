@@ -922,23 +922,18 @@ export async function fetchModelsForProvider({
     userTeamIds,
   });
 
+  // Gemini with Vertex AI uses ADC instead of API keys
   const vertexAiEnabled = provider === "gemini" && isVertexAiEnabled();
-  // vLLM and Ollama typically don't require API keys, but need base URL configured
-  const isVllmEnabled = provider === "vllm" && config.llm.vllm.enabled;
-  const isOllamaEnabled = provider === "ollama" && config.llm.ollama.enabled;
+
+  // Some providers don't require API keys but need base URL configured
+  const isKeylessProviderEnabled =
+    (provider === "vllm" && config.llm.vllm.enabled) ||
+    (provider === "ollama" && config.llm.ollama.enabled);
+
   // Bedrock uses AWS credentials which may come from default credential chain
   const isBedrockEnabled = provider === "bedrock" && config.llm.bedrock.enabled;
 
-  // For Gemini with Vertex AI, we don't need an API key - authentication is via ADC
-  // For vLLM and Ollama, API key is optional but base URL must be configured
-  // For Bedrock, we check if it's enabled (may use default AWS credential chain)
-  if (
-    !apiKey &&
-    !vertexAiEnabled &&
-    !isVllmEnabled &&
-    !isOllamaEnabled &&
-    !isBedrockEnabled
-  ) {
+  if (!apiKey && !vertexAiEnabled && !isKeylessProviderEnabled && !isBedrockEnabled) {
     logger.debug(
       { provider, organizationId },
       "No API key available for provider",
@@ -947,53 +942,17 @@ export async function fetchModelsForProvider({
   }
 
   try {
-    let models: ModelInfo[] = [];
-    if (
-      [
-        "anthropic",
-        "cerebras",
-        "cohere",
-        "groq",
-        "mistral",
-        "openai",
-        "perplexity",
-      ].includes(provider)
-    ) {
-      if (apiKey) {
-        models = await modelFetchers[provider](apiKey);
-      }
-    } else if (provider === "minimax") {
-      // MiniMax doesn't support /v1/models endpoint, return hardcoded models
-      // API key validation happens during actual chat requests
+    let models: ModelInfo[];
+
+    if (provider === "gemini" && vertexAiEnabled) {
+      // Vertex AI uses ADC for authentication, not API keys
+      models = await fetchGeminiModelsViaVertexAi();
+    } else {
+      // All other providers use the standard model fetcher with an API key
+      // (keyless providers like vLLM/Ollama/MiniMax/Perplexity pass "EMPTY" as a placeholder)
       models = await modelFetchers[provider](apiKey || "EMPTY");
-    } else if (provider === "gemini") {
-      if (vertexAiEnabled) {
-        // Use Vertex AI SDK for model listing (uses ADC for authentication)
-        models = await fetchGeminiModelsViaVertexAi();
-      } else if (apiKey) {
-        // Use standard Gemini API with API key
-        models = await modelFetchers[provider](apiKey);
-      }
-    } else if (provider === "vllm" && isVllmEnabled) {
-      // vLLM doesn't require API key, pass empty or configured key
-      models = await modelFetchers[provider](apiKey || "EMPTY");
-    } else if (provider === "ollama" && isOllamaEnabled) {
-      // Ollama doesn't require API key, pass empty or configured key
-      models = await modelFetchers[provider](apiKey || "EMPTY");
-    } else if (provider === "zhipuai") {
-      if (apiKey) {
-        models = await modelFetchers[provider](apiKey);
-      }
-    } else if (provider === "deepseek") {
-      if (apiKey) {
-        models = await modelFetchers[provider](apiKey);
-      }
-    } else if (provider === "bedrock" && isBedrockEnabled) {
-      // Bedrock uses AWS credentials via the proxy
-      if (apiKey) {
-        models = await modelFetchers[provider](apiKey);
-      }
     }
+
     logger.info(
       { provider, modelCount: models.length },
       "fetchModelsForProvider:fetched models from provider",
