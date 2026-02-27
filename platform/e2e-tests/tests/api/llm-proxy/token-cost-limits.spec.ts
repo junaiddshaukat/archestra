@@ -196,6 +196,12 @@ const deepseekConfig: TokenCostLimitTestConfig = {
   },
 };
 
+const xaiConfig: TokenCostLimitTestConfig = makeOpenAiCompatibleCostConfig({
+  providerName: "x.ai (Grok)",
+  modelName: "test-xai-cost-limit",
+  provider: "xai",
+});
+
 const cohereConfig: TokenCostLimitTestConfig = {
   providerName: "Cohere",
 
@@ -352,6 +358,7 @@ const testConfigsMap = {
   deepseek: deepseekConfig,
   minimax: minimaxConfig,
   bedrock: bedrockConfig,
+  xai: xaiConfig,
 } satisfies Record<SupportedProvider, TokenCostLimitTestConfig>;
 
 const testConfigs = Object.values(testConfigsMap);

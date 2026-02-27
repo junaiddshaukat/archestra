@@ -425,6 +425,37 @@ The default base URL is `http://localhost:11434/v1`. Override it per-key in the 
 - **No /models endpoint**: MiniMax does not provide a models listing API. Available models are hardcoded in the platform configuration
 - **Chinese and English support**: MiniMax models excel at both Chinese and English language tasks
 
+## xAI (Grok)
+
+[xAI](https://x.ai/) is an AI company founded by Elon Musk, building the Grok series of large language models. Grok models are designed for advanced reasoning, coding, and real-time knowledge with an OpenAI-compatible API.
+
+### Supported xAI APIs
+
+- **Chat Completions API** (`/chat/completions`) - ✅ Fully supported (OpenAI-compatible)
+
+### xAI Connection Details
+
+- **Base URL**: `http://localhost:9000/v1/xai/{profile-id}`
+- **Authentication**: Pass your xAI API key in the `Authorization` header as `Bearer <your-api-key>`
+
+### Environment Variables
+
+| Variable                       | Required | Description                                                                 |
+| ------------------------------ | -------- | --------------------------------------------------------------------------- |
+| `ARCHESTRA_CHAT_XAI_API_KEY`   | No       | Default API key for xAI (can be overridden per conversation/team/org)       |
+| `ARCHESTRA_XAI_BASE_URL`       | No       | xAI API base URL (default: `https://api.x.ai/v1`)                          |
+
+### Available Models
+
+- **Grok-4** - Latest flagship model with strong reasoning and coding capabilities
+- **Grok-4-1-fast-non-reasoning** - Fast inference variant optimized for speed
+
+### Important Notes
+
+- **OpenAI-compatible API**: xAI's API follows the OpenAI Chat Completions format for easy integration.
+- **API Key**: Obtain your API key from the [xAI Console](https://console.x.ai/)
+- **Streaming support**: Full SSE streaming support for real-time token generation.
+
 ## Amazon Bedrock
 
 ### Supported Bedrock APIs

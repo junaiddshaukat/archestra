@@ -102,6 +102,7 @@ const envApiKeyGetters: Record<
   openrouter: () => config.chat.openrouter?.apiKey || undefined,
   perplexity: () => config.chat.perplexity.apiKey,
   groq: () => config.chat.groq.apiKey,
+  xai: () => config.chat.xai.apiKey,
   vllm: () => config.chat.vllm.apiKey,
   zhipuai: () => config.chat.zhipuai.apiKey,
   deepseek: () => config.chat.deepseek.apiKey,
@@ -239,6 +240,7 @@ export const FAST_MODELS: Record<SupportedChatProvider, string> = {
   mistral: "mistral-small-latest", // Mistral's fast model
   perplexity: "sonar", // Perplexity's fast model
   groq: "llama-3.1-8b-instant", // Groq's fast model
+  xai: "grok-4-1-fast-non-reasoning",
 };
 
 /**
@@ -405,6 +407,21 @@ const directModelCreators: Record<SupportedChatProvider, DirectModelCreator> = {
       baseURL: config.llm.groq.baseUrl,
     });
     return client(modelName);
+  },
+
+  xai: ({ apiKey, modelName, baseUrl }) => {
+    if (!apiKey) {
+      throw new ApiError(
+        400,
+        "x.ai API key is required. Please configure ARCHESTRA_CHAT_XAI_API_KEY.",
+      );
+    }
+    // x.ai uses an OpenAI-compatible API
+    const client = createOpenAI({
+      apiKey,
+      baseURL: baseUrl ?? config.llm.xai.baseUrl,
+    });
+    return client.chat(modelName);
   },
 
   vllm: ({ apiKey, modelName, baseUrl }) => {
@@ -688,6 +705,18 @@ const proxiedModelCreators: Record<SupportedChatProvider, ProxiedModelCreator> =
         fetch: createTracedFetch(),
       });
       return client(modelName);
+    },
+
+    xai: ({ apiKey, agentId, modelName, headers }) => {
+      // URL format: /v1/xai/:agentId (SDK appends /chat/completions)
+      // x.ai is OpenAI-compatible, so we use the OpenAI SDK with custom baseURL
+      const client = createOpenAI({
+        apiKey,
+        baseURL: buildProxyBaseUrl("xai", agentId),
+        headers,
+        fetch: createTracedFetch(),
+      });
+      return client.chat(modelName);
     },
 
     vllm: ({ apiKey, agentId, modelName, headers }) => {

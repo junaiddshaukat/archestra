@@ -17,6 +17,7 @@ import {
   Openrouter,
   Perplexity,
   Vllm,
+  Xai,
   Zhipuai,
 } from "./llm-providers";
 import { ToonSkipReasonSchema } from "./tool-result-compression";
@@ -46,6 +47,7 @@ export const InteractionRequestSchema = z.union([
   Zhipuai.API.ChatCompletionRequestSchema,
   DeepSeek.API.ChatCompletionRequestSchema,
   Minimax.API.ChatCompletionRequestSchema,
+  Xai.API.ChatCompletionRequestSchema,
 ]);
 
 export const InteractionResponseSchema = z.union([
@@ -64,6 +66,7 @@ export const InteractionResponseSchema = z.union([
   Zhipuai.API.ChatCompletionResponseSchema,
   DeepSeek.API.ChatCompletionResponseSchema,
   Minimax.API.ChatCompletionResponseSchema,
+  Xai.API.ChatCompletionResponseSchema,
 ]);
 
 /**
@@ -223,6 +226,15 @@ export const SelectInteractionSchema = z.discriminatedUnion("type", [
     processedRequest:
       Minimax.API.ChatCompletionRequestSchema.nullable().optional(),
     response: Minimax.API.ChatCompletionResponseSchema,
+    requestType: RequestTypeSchema.optional(),
+    /** Resolved prompt name if externalAgentId matches a prompt ID */
+    externalAgentIdLabel: z.string().nullable().optional(),
+  }),
+  BaseSelectInteractionSchema.extend({
+    type: z.enum(["xai:chatCompletions"]),
+    request: Xai.API.ChatCompletionRequestSchema,
+    processedRequest: Xai.API.ChatCompletionRequestSchema.nullable().optional(),
+    response: Xai.API.ChatCompletionResponseSchema,
     requestType: RequestTypeSchema.optional(),
     /** Resolved prompt name if externalAgentId matches a prompt ID */
     externalAgentIdLabel: z.string().nullable().optional(),

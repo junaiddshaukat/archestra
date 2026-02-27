@@ -390,6 +390,7 @@ async function seedChatApiKeysFromEnv(): Promise<void> {
     deepseek: config.chat.deepseek.apiKey,
     bedrock: config.chat.bedrock.apiKey,
     minimax: config.chat.minimax.apiKey,
+    xai: config.chat.xai.apiKey,
   };
 
   for (const [provider, apiKeyValue] of Object.entries(providerEnvVars)) {
@@ -483,6 +484,7 @@ function getProviderDisplayName(provider: SupportedProvider): string {
     deepseek: "DeepSeek",
     bedrock: "AWS Bedrock",
     minimax: "MiniMax",
+    xai: "x.ai (Grok)",
   };
   return displayNames[provider];
 }

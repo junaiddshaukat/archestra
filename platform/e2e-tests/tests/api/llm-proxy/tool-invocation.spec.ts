@@ -533,6 +533,12 @@ const deepseekConfig = makeOpenAiCompatibleToolConfig({
   model: "deepseek-chat",
 });
 
+const xaiConfig = makeOpenAiCompatibleToolConfig({
+  providerName: "x.ai (Grok)",
+  endpoint: (agentId) => `/v1/xai/${agentId}/chat/completions`,
+  model: "grok-4",
+});
+
 const bedrockConfig: ToolInvocationTestConfig = {
   providerName: "Bedrock",
 
@@ -643,6 +649,7 @@ const testConfigsMap = {
   bedrock: bedrockConfig,
   openrouter: openrouterConfig,
   perplexity: null, // Perplexity does not support tool calling
+  xai: xaiConfig,
 } satisfies Record<SupportedProvider, ToolInvocationTestConfig | null>;
 
 const testConfigs = Object.values(testConfigsMap).filter(

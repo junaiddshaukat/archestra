@@ -223,6 +223,10 @@ export const RouteId = {
     "minimaxChatCompletionsWithDefaultAgent",
   MinimaxChatCompletionsWithAgent: "minimaxChatCompletionsWithAgent",
 
+  // Proxy Routes - xAI (Grok)
+  XaiChatCompletionsWithDefaultAgent: "xaiChatCompletionsWithDefaultAgent",
+  XaiChatCompletionsWithAgent: "xaiChatCompletionsWithAgent",
+
   // Chat Routes
   StreamChat: "streamChat",
   StopChatStream: "stopChatStream",

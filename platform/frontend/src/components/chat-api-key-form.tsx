@@ -191,6 +191,14 @@ const PROVIDER_CONFIG: Record<
     consoleUrl: "https://www.minimax.io/",
     consoleName: "MiniMax Platform",
   },
+  xai: {
+    name: "x.ai (Grok)",
+    icon: "/icons/xai.png",
+    placeholder: "xai-...",
+    enabled: true,
+    consoleUrl: "https://docs.x.ai/docs/api-reference",
+    consoleName: "x.ai Docs",
+  },
 } as const;
 
 export { PROVIDER_CONFIG };
