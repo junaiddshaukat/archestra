@@ -1,6 +1,7 @@
 import { KbChunkModel, KbDocumentModel } from "@/models";
 import { describe, expect, test } from "@/test";
 import {
+  buildUserAccessControlList,
   didKnowledgeSourceAclInputsChange,
   knowledgeSourceAccessControlService,
 } from "./source-access-control";
@@ -47,6 +48,15 @@ describe("knowledgeSourceAccessControlService", () => {
         },
       }),
     ).toBe(true);
+  });
+
+  test("builds user ACL with normalized email", () => {
+    expect(
+      buildUserAccessControlList({
+        userEmail: " Alice@Example.com ",
+        teamIds: ["team-a"],
+      }),
+    ).toEqual(["org:*", "user_email:alice@example.com", "team:team-a"]);
   });
 
   test("allows org-wide knowledge sources for users with read access", async ({

@@ -476,6 +476,21 @@ class ConnectorSyncService {
           return { ingested: true, documentId: existing.id };
         }
 
+        if (!haveSameAcl(existing.acl, acl)) {
+          await Promise.all([
+            KbDocumentModel.update(existing.id, { acl }),
+            KbChunkModel.updateAclByDocument(existing.id, acl),
+          ]);
+
+          log.debug(
+            {
+              documentId: doc.id,
+              existingDocId: existing.id,
+            },
+            "Document unchanged, refreshed ACL",
+          );
+        }
+
         log.debug(
           {
             documentId: doc.id,
@@ -641,3 +656,16 @@ class ConnectorSyncService {
 }
 
 export const connectorSyncService = new ConnectorSyncService();
+
+function haveSameAcl(
+  current: readonly string[],
+  next: readonly AclEntry[],
+): boolean {
+  if (current.length !== next.length) {
+    return false;
+  }
+
+  const currentSorted = [...current].sort();
+  const nextSorted = [...next].sort();
+  return currentSorted.every((entry, index) => entry === nextSorted[index]);
+}

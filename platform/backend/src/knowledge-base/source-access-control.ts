@@ -106,7 +106,11 @@ export function buildUserAccessControlList(params: {
   userEmail: string;
   teamIds: string[];
 }): AclEntry[] {
-  const acl: AclEntry[] = ["org:*", `user_email:${params.userEmail}`];
+  const normalizedEmail = normalizeEmail(params.userEmail);
+  const acl: AclEntry[] = ["org:*"];
+  if (normalizedEmail) {
+    acl.push(`user_email:${normalizedEmail}`);
+  }
 
   for (const teamId of params.teamIds) {
     acl.push(`team:${teamId}`);
