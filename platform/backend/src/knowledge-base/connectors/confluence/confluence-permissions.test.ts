@@ -17,7 +17,12 @@ function makeResolver(params: {
 
   const sendRequest = vi.fn(async (request: unknown) => {
     const config = request as { url: string; params?: Record<string, unknown> };
-    if (config.url.startsWith("/api/user")) {
+    if (config.url === "/api/user/bulk") {
+      const accountId = config.params?.accountId as string | undefined;
+      const email = accountId ? params.userEmails?.[accountId] : undefined;
+      return { results: email ? [{ email }] : [] };
+    }
+    if (config.url === "/api/user") {
       const accountId =
         (config.params?.accountId as string | undefined) ??
         (config.params?.key as string | undefined) ??

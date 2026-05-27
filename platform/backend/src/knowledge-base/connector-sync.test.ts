@@ -64,6 +64,11 @@ function makeMockConnector(
     title: string;
     content: string;
     sourceUrl?: string;
+    permissions?: {
+      users?: string[];
+      groups?: string[];
+      isPublic?: boolean;
+    };
   }>,
   options?: { hasMore?: boolean },
 ) {
@@ -183,6 +188,69 @@ describe("ConnectorSyncService", () => {
     const run = await ConnectorRunModel.findById(result.runId);
     expect(run?.documentsProcessed).toBe(1);
     expect(run?.documentsIngested).toBe(0); // Skipped because unchanged
+  });
+
+  test("executeSync refreshes ACL for unchanged auto-sync documents", async ({
+    makeOrganization,
+    makeKnowledgeBase,
+    makeKnowledgeBaseConnector,
+  }) => {
+    const org = await makeOrganization();
+    const kb = await makeKnowledgeBase(org.id);
+    const secretId = await createSecret();
+    const connector = await makeKnowledgeBaseConnector(kb.id, org.id, {
+      visibility: "auto-sync-permissions",
+    });
+
+    await KnowledgeBaseConnectorModel.update(connector.id, { secretId });
+
+    const content = "Content of doc 1";
+    const contentHash = createHash("sha256").update(content).digest("hex");
+
+    const existingDoc = await KbDocumentModel.create({
+      organizationId: org.id,
+      sourceId: "ext-1",
+      connectorId: connector.id,
+      title: "Doc 1",
+      content,
+      contentHash,
+      acl: ["user_email:old@example.com"],
+    });
+    await KbChunkModel.insertMany([
+      {
+        documentId: existingDoc.id,
+        content: "chunk 1",
+        chunkIndex: 0,
+        acl: ["user_email:old@example.com"],
+      },
+    ]);
+
+    setupSecret();
+    const mockImpl = makeMockConnector([
+      {
+        id: "ext-1",
+        title: "Doc 1",
+        content,
+        permissions: { users: ["new@example.com"] },
+      },
+    ]);
+    mockGetConnector.mockReturnValue(mockImpl);
+
+    const result = await connectorSyncService.executeSync(connector.id);
+
+    expect(result.status).toBe("success");
+
+    const run = await ConnectorRunModel.findById(result.runId);
+    expect(run?.documentsProcessed).toBe(1);
+    expect(run?.documentsIngested).toBe(0);
+    expect(mockEnqueue).not.toHaveBeenCalledWith(
+      expect.objectContaining({ taskType: "batch_embedding" }),
+    );
+
+    const doc = await KbDocumentModel.findById(existingDoc.id);
+    const chunks = await KbChunkModel.findByDocument(existingDoc.id);
+    expect(doc?.acl).toEqual(["user_email:new@example.com"]);
+    expect(chunks[0]?.acl).toEqual(["user_email:new@example.com"]);
   });
 
   test("executeSync updates document when content hash changes", async ({
